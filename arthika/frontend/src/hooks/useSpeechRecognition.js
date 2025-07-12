@@ -1,5 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 
+// Language code mapping for speech recognition
+const getSpeechRecognitionLang = (language) => {
+  const langMap = {
+    'en': 'en-US',
+    'hi': 'hi-IN',
+    'bn': 'bn-IN',
+    'ta': 'ta-IN',
+    'te': 'te-IN',
+    'mr': 'mr-IN',
+    'gu': 'gu-IN',
+    'kn': 'kn-IN',
+    'ml': 'ml-IN',
+    'pa': 'pa-IN'
+  };
+  return langMap[language] || 'en-US';
+};
+
 export function useSpeechRecognition(language) {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -11,7 +28,7 @@ export function useSpeechRecognition(language) {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = language === 'en' ? 'en-US' : 'hi-IN';
+      recognitionRef.current.lang = getSpeechRecognitionLang(language);
 
       recognitionRef.current.onresult = (event) => {
         let finalTranscript = '';

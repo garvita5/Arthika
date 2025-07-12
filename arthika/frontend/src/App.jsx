@@ -12,13 +12,13 @@ import {
 } from 'chart.js';
 
 // Import components
+import HomePage from './components/HomePage';
 import Header from './components/Header';
-import VoiceInput from './components/VoiceInput';
-import FeatureCards from './components/FeatureCards';
-import AIResponse from './components/AIResponse';
-import TrustScore from './components/TrustScore';
-import FinancialRoadmap from './components/FinancialRoadmap';
-import ActionButtons from './components/ActionButtons';
+import SpeakStep from './components/SpeakStep';
+import AnalyzeStep from './components/AnalyzeStep';
+import RoadmapStep from './components/RoadmapStep';
+import TranslatedAlert from './components/TranslatedAlert';
+import { TranslationProvider, useTranslationContext } from './contexts/TranslationContext';
 
 // Import hooks and services
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
@@ -35,13 +35,15 @@ ChartJS.register(
   ArcElement
 );
 
-function App() {
+function AppContent({ language, onLanguageChange }) {
+  const { getMessage } = useTranslationContext();
   const [aiResponse, setAiResponse] = useState('');
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [language, setLanguage] = useState('en'); // 'en' or 'hi'
   const [trustScore, setTrustScore] = useState(85);
-  const [currentStep, setCurrentStep] = useState('input');
+  const [currentStep, setCurrentStep] = useState('home'); // 'home', 1, 2, 3
   const [financialData, setFinancialData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   
   const synthesisRef = useRef(null);
 
@@ -50,13 +52,41 @@ function App() {
 
   // Handle financial query when transcript changes
   useEffect(() => {
-    if (transcript) {
-      const response = handleFinancialQuery(transcript, language);
-      setAiResponse(response);
-      setCurrentStep('response');
-      setFinancialData(generateFinancialData());
+    if (transcript && currentStep !== 'home') {
+      const processQuery = async () => {
+        try {
+          const response = await handleFinancialQuery(transcript, language);
+          setAiResponse(response);
+          setCurrentStep(2);
+          setFinancialData(generateFinancialData());
+        } catch (error) {
+          console.error('Error processing financial query:', error);
+          setAiResponse(getMessage('error.processing'));
+          setCurrentStep(2);
+          setFinancialData(generateFinancialData());
+        }
+      };
+      
+      processQuery();
     }
-  }, [transcript, language]);
+  }, [transcript, language, currentStep, getMessage]);
+
+  // Language code mapping for speech synthesis
+  const getSpeechSynthesisLang = (language) => {
+    const langMap = {
+      'en': 'en-US',
+      'hi': 'hi-IN',
+      'bn': 'bn-IN',
+      'ta': 'ta-IN',
+      'te': 'te-IN',
+      'mr': 'mr-IN',
+      'gu': 'gu-IN',
+      'kn': 'kn-IN',
+      'ml': 'ml-IN',
+      'pa': 'pa-IN'
+    };
+    return langMap[language] || 'en-US';
+  };
 
   const speakResponse = () => {
     if ('speechSynthesis' in window) {
@@ -65,7 +95,7 @@ function App() {
       }
       
       const utterance = new SpeechSynthesisUtterance(aiResponse);
-      utterance.lang = language === 'en' ? 'en-US' : 'hi-IN';
+      utterance.lang = getSpeechSynthesisLang(language);
       utterance.rate = 0.9;
       utterance.pitch = 1;
       
@@ -85,92 +115,121 @@ function App() {
   };
 
   const exportPlan = () => {
-    // Simulate PDF export
-    alert('Financial plan exported successfully! Check your downloads.');
+    setAlertMessage(getMessage('success.export'));
+    setShowAlert(true);
   };
 
-  const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'hi' : 'en');
+
+
+  const resetApp = () => {
+    setCurrentStep('home');
+    setTranscript('');
+    setAiResponse('');
+    setFinancialData(null);
   };
+
+  const goToNextStep = () => {
+    setCurrentStep(3);
+  };
+
+  const startQuery = async (query) => {
+    try {
+      const response = await handleFinancialQuery(query, language);
+      setAiResponse(response);
+      setCurrentStep(2);
+      setFinancialData(generateFinancialData());
+    } catch (error) {
+      console.error('Error processing query:', error);
+      setAiResponse(getMessage('error.processing'));
+      setCurrentStep(2);
+      setFinancialData(generateFinancialData());
+    }
+  };
+
+  // Memoize startQuery to avoid infinite re-renders
+  const memoizedStartQuery = React.useCallback(startQuery, [language, getMessage]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Header language={language} toggleLanguage={toggleLanguage} />
+      {currentStep === 'home' ? (
+        <HomePage 
+          language={language}
+          onLanguageChange={onLanguageChange}
+          onStartQuery={memoizedStartQuery}
+          isListening={isListening}
+          startListening={startListening}
+          stopListening={stopListening}
+          transcript={transcript}
+        />
+      ) : (
+        <>
+          <Header 
+            currentStep={parseInt(currentStep)} 
+            language={language} 
+            onLanguageChange={onLanguageChange} 
+          />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentStep === 'input' && (
-          <div className="space-y-8">
-            {/* Hero Section */}
-            <div className="text-center space-y-6">
-              <h2 className="text-4xl font-bold text-gray-900">
-                {language === 'en' ? 'Your AI Financial Advisor' : 'आपका AI वित्तीय सलाहकार'}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                {language === 'en' 
-                  ? 'Ask me anything about loans, investments, or financial planning. I\'ll guide you through your financial journey.'
-                  : 'मुझसे लोन, निवेश या वित्तीय योजना के बारे में कुछ भी पूछें। मैं आपकी वित्तीय यात्रा में आपका मार्गदर्शन करूंगा।'
-                }
-              </p>
-            </div>
+          <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Step 1: Speak Your Question */}
+            {currentStep === 1 && (
+              <SpeakStep 
+                isListening={isListening}
+                transcript={transcript}
+                startListening={startListening}
+                stopListening={stopListening}
+                language={language}
+              />
+            )}
 
-            {/* Voice Input Section */}
-            <VoiceInput 
-              isListening={isListening}
-              transcript={transcript}
-              startListening={startListening}
-              stopListening={stopListening}
-              language={language}
-            />
+            {/* Step 2: Get AI Analysis */}
+            {currentStep === 2 && (
+              <AnalyzeStep 
+                aiResponse={aiResponse}
+                isSpeaking={isSpeaking}
+                speakResponse={speakResponse}
+                stopSpeaking={stopSpeaking}
+                exportPlan={exportPlan}
+                language={language}
+                onNextStep={goToNextStep}
+              />
+            )}
 
-            {/* Feature Cards */}
-            <FeatureCards language={language} />
-          </div>
-        )}
+            {/* Step 3: View Your Roadmap */}
+            {currentStep === 3 && (
+              <RoadmapStep 
+                trustScore={trustScore}
+                financialData={financialData}
+                language={language}
+                onReset={resetApp}
+              />
+            )}
+          </main>
+        </>
+      )}
 
-        {currentStep === 'response' && (
-          <div className="space-y-8">
-            {/* Back Button */}
-            <button
-              onClick={() => {
-                setCurrentStep('input');
-                setTranscript('');
-                setAiResponse('');
-                setFinancialData(null);
-              }}
-              className="btn-secondary"
-            >
-              ← {language === 'en' ? 'Back' : 'वापस'}
-            </button>
-
-            {/* AI Response */}
-            <AIResponse 
-              aiResponse={aiResponse}
-              isSpeaking={isSpeaking}
-              speakResponse={speakResponse}
-              stopSpeaking={stopSpeaking}
-              exportPlan={exportPlan}
-              language={language}
-            />
-
-            {/* Trust Score */}
-            <TrustScore 
-              trustScore={trustScore}
-              financialData={financialData}
-              language={language}
-            />
-
-            {/* Financial Roadmap */}
-            <FinancialRoadmap 
-              financialData={financialData}
-              language={language}
-            />
-
-            {/* Action Buttons */}
-            <ActionButtons language={language} />
-          </div>
-        )}
-      </main>
+      {/* Translated Alert */}
+      {showAlert && (
+        <TranslatedAlert
+          message={alertMessage}
+          language={language}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </div>
+  );
+}
+
+function App() {
+  const [language, setLanguage] = useState('en');
+
+  const handleLanguageChange = (newLanguage) => {
+    setLanguage(newLanguage);
+  };
+
+  return (
+    <TranslationProvider language={language}>
+      <AppContent language={language} onLanguageChange={handleLanguageChange} />
+    </TranslationProvider>
   );
 }
 
