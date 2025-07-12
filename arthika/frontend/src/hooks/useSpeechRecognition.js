@@ -47,12 +47,21 @@ export const useSpeechRecognition = (language = 'en') => {
       
       recognition.continuous = true;
       recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
       recognition.lang = getSpeechRecognitionLang(language);
 
       recognition.onstart = () => {
         setIsListening(true);
         setError(null);
         console.log('Speech recognition started');
+        
+        // Auto-stop after 3 seconds of no speech
+        setTimeout(() => {
+          if (isListening) {
+            console.log('Auto-stopping speech recognition after 3 seconds');
+            recognition.stop();
+          }
+        }, 3000);
       };
 
       recognition.onresult = (event) => {
@@ -68,20 +77,47 @@ export const useSpeechRecognition = (language = 'en') => {
           }
         }
 
-        if (finalTranscript) {
-          setTranscript(finalTranscript);
+        // Update transcript with both final and interim results
+        const currentTranscript = finalTranscript || interimTranscript;
+        if (currentTranscript) {
+          setTranscript(currentTranscript);
         }
       };
 
       recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
-        setError(`Speech recognition error: ${event.error}`);
+        
+        // Handle specific error types
+        let errorMessage = 'Speech recognition error';
+        switch (event.error) {
+          case 'no-speech':
+            errorMessage = 'No speech detected. Please try speaking again.';
+            break;
+          case 'audio-capture':
+            errorMessage = 'Microphone access denied. Please allow microphone access.';
+            break;
+          case 'not-allowed':
+            errorMessage = 'Microphone access denied. Please allow microphone access.';
+            break;
+          case 'network':
+            errorMessage = 'Network error. Please check your connection.';
+            break;
+          default:
+            errorMessage = `Speech recognition error: ${event.error}`;
+        }
+        
+        setError(errorMessage);
         setIsListening(false);
       };
 
       recognition.onend = () => {
         setIsListening(false);
         console.log('Speech recognition ended');
+        
+        // If we have transcript, keep it visible
+        if (transcript) {
+          console.log('Final transcript:', transcript);
+        }
       };
 
       recognition.start();

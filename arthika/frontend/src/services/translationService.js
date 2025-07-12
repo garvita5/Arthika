@@ -1,6 +1,5 @@
 // Translation service with CORS proxy and fallback options
 const LIBRE_TRANSLATE_API = 'https://libretranslate.de/translate';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 const BACKUP_API = 'https://api.mymemory.translated.net/get';
 
 // Cache for translations to avoid repeated API calls
@@ -157,14 +156,30 @@ export const translateText = async (text, targetLanguage, sourceLanguage = 'en')
 
   // Try multiple translation approaches
   const translationAttempts = [
-    // Attempt 1: Direct LibreTranslate with CORS proxy
+    // Attempt 1: MyMemory API (no CORS issues)
     async () => {
       try {
-        const response = await fetch(`${CORS_PROXY}${LIBRE_TRANSLATE_API}`, {
+        const url = `${BACKUP_API}?q=${encodeURIComponent(text)}&langpair=${sourceLanguage}|${targetLanguage}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error('MyMemory failed');
+        }
+
+        const data = await response.json();
+        return data.responseData?.translatedText || text;
+      } catch (error) {
+        throw new Error('MyMemory failed');
+      }
+    },
+    
+    // Attempt 2: Direct LibreTranslate (if CORS allows)
+    async () => {
+      try {
+        const response = await fetch(LIBRE_TRANSLATE_API, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5175'
           },
           body: JSON.stringify({
             q: text,
@@ -182,23 +197,6 @@ export const translateText = async (text, targetLanguage, sourceLanguage = 'en')
         return data.translatedText || text;
       } catch (error) {
         throw new Error('LibreTranslate failed');
-      }
-    },
-    
-    // Attempt 2: MyMemory API (no CORS issues)
-    async () => {
-      try {
-        const url = `${BACKUP_API}?q=${encodeURIComponent(text)}&langpair=${sourceLanguage}|${targetLanguage}`;
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error('MyMemory failed');
-        }
-
-        const data = await response.json();
-        return data.responseData?.translatedText || text;
-      } catch (error) {
-        throw new Error('MyMemory failed');
       }
     }
   ];

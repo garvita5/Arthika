@@ -6,8 +6,18 @@ export const handleFinancialQuery = async (query, language, userId = null) => {
     // Use real API instead of mock responses
     const response = await apiService.submitFinancialQuery(query, language, userId);
     
-    // Return the structured response from the backend
-    return response.storyResponse || response;
+    // Handle different response formats
+    if (typeof response === 'string') {
+      return response;
+    } else if (response && response.storyResponse) {
+      return response.storyResponse;
+    } else if (response && response.data) {
+      return response.data;
+    } else if (response && response.message) {
+      return response.message;
+    } else {
+      return JSON.stringify(response);
+    }
   } catch (error) {
     console.error('API Error:', error);
     

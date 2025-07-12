@@ -38,15 +38,7 @@ class QueryController {
 
       res.json({
         success: true,
-        data: {
-          storyResponse: aiResponse.storyResponse,
-          recommendedSteps: aiResponse.recommendedSteps,
-          tags: aiResponse.tags,
-          riskLevel: aiResponse.riskLevel,
-          estimatedCost: aiResponse.estimatedCost,
-          saferAlternatives: aiResponse.saferAlternatives,
-          language: language
-        }
+        data: aiResponse.storyResponse || aiResponse
       });
     } catch (error) {
       console.error('Query controller error:', error);

@@ -51,7 +51,7 @@ function AppContent({ language, onLanguageChange }) {
   const userId = 'user-' + Math.random().toString(36).substr(2, 9);
 
   // Use custom hook for speech recognition
-  const { isListening, transcript, startListening, stopListening, setTranscript } = useSpeechRecognition(language);
+  const { isListening, transcript, startListening, stopListening, setTranscript, error } = useSpeechRecognition(language);
 
   // Handle financial query when transcript changes
   useEffect(() => {
@@ -65,7 +65,7 @@ function AppContent({ language, onLanguageChange }) {
           setFinancialData(data);
         } catch (error) {
           console.error('Error processing financial query:', error);
-          setAiResponse(getMessage('error.processing'));
+          setAiResponse('Sorry, I encountered an error processing your query. Please try again.');
           setCurrentStep(2);
           const data = await generateFinancialData(userId);
           setFinancialData(data);
@@ -74,7 +74,7 @@ function AppContent({ language, onLanguageChange }) {
       
       processQuery();
     }
-  }, [transcript, language, currentStep, getMessage, userId]);
+  }, [transcript, language, currentStep, userId]);
 
   // Language code mapping for speech synthesis
   const getSpeechSynthesisLang = (language) => {
@@ -144,7 +144,7 @@ function AppContent({ language, onLanguageChange }) {
       setFinancialData(data);
     } catch (error) {
       console.error('Error processing query:', error);
-      setAiResponse(getMessage('error.processing'));
+      setAiResponse('Sorry, I encountered an error processing your query. Please try again.');
       setCurrentStep(2);
       const data = await generateFinancialData(userId);
       setFinancialData(data);
@@ -152,7 +152,7 @@ function AppContent({ language, onLanguageChange }) {
   };
 
   // Memoize startQuery to avoid infinite re-renders
-  const memoizedStartQuery = React.useCallback(startQuery, [language, getMessage, userId]);
+  const memoizedStartQuery = React.useCallback(startQuery, [language, userId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -165,6 +165,7 @@ function AppContent({ language, onLanguageChange }) {
           startListening={startListening}
           stopListening={stopListening}
           transcript={transcript}
+          error={error}
         />
       ) : (
         <>
@@ -183,6 +184,7 @@ function AppContent({ language, onLanguageChange }) {
                 startListening={startListening}
                 stopListening={stopListening}
                 language={language}
+                error={error}
               />
             )}
 

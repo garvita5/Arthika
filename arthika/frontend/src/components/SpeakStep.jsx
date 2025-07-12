@@ -7,7 +7,8 @@ function SpeakStep({
   transcript, 
   startListening, 
   stopListening, 
-  language 
+  language,
+  error
 }) {
   return (
     <div className="text-center space-y-8">
@@ -51,9 +52,17 @@ function SpeakStep({
               }
             </p>
             
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-red-800 font-medium">Error:</p>
+                <p className="text-red-700 mt-2">{error}</p>
+              </div>
+            )}
+            
             {transcript && (
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-700">{transcript}</p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 font-medium">You said:</p>
+                <p className="text-gray-700 mt-2">{transcript}</p>
               </div>
             )}
           </div>

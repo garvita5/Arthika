@@ -160,7 +160,7 @@ class ApiService {
   // Health Check
   async healthCheck() {
     try {
-      const response = await apiClient.get('/health');
+      const response = await axios.get('http://localhost:5000/health');
       return response.status === 200;
     } catch (error) {
       console.error('Health check failed:', error);
@@ -171,7 +171,7 @@ class ApiService {
   // API Info
   async getApiInfo() {
     try {
-      const response = await apiClient.get('/');
+      const response = await axios.get('http://localhost:5000/');
       return response.data;
     } catch (error) {
       console.error('Failed to get API info:', error);
