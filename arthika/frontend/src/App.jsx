@@ -46,6 +46,9 @@ function AppContent({ language, onLanguageChange }) {
   const [alertMessage, setAlertMessage] = useState('');
   
   const synthesisRef = useRef(null);
+  
+  // Generate a simple user ID for testing
+  const userId = 'user-' + Math.random().toString(36).substr(2, 9);
 
   // Use custom hook for speech recognition
   const { isListening, transcript, startListening, stopListening, setTranscript } = useSpeechRecognition(language);
@@ -55,21 +58,23 @@ function AppContent({ language, onLanguageChange }) {
     if (transcript && currentStep !== 'home') {
       const processQuery = async () => {
         try {
-          const response = await handleFinancialQuery(transcript, language);
+          const response = await handleFinancialQuery(transcript, language, userId);
           setAiResponse(response);
           setCurrentStep(2);
-          setFinancialData(generateFinancialData());
+          const data = await generateFinancialData(userId);
+          setFinancialData(data);
         } catch (error) {
           console.error('Error processing financial query:', error);
           setAiResponse(getMessage('error.processing'));
           setCurrentStep(2);
-          setFinancialData(generateFinancialData());
+          const data = await generateFinancialData(userId);
+          setFinancialData(data);
         }
       };
       
       processQuery();
     }
-  }, [transcript, language, currentStep, getMessage]);
+  }, [transcript, language, currentStep, getMessage, userId]);
 
   // Language code mapping for speech synthesis
   const getSpeechSynthesisLang = (language) => {
@@ -119,8 +124,6 @@ function AppContent({ language, onLanguageChange }) {
     setShowAlert(true);
   };
 
-
-
   const resetApp = () => {
     setCurrentStep('home');
     setTranscript('');
@@ -134,20 +137,22 @@ function AppContent({ language, onLanguageChange }) {
 
   const startQuery = async (query) => {
     try {
-      const response = await handleFinancialQuery(query, language);
+      const response = await handleFinancialQuery(query, language, userId);
       setAiResponse(response);
       setCurrentStep(2);
-      setFinancialData(generateFinancialData());
+      const data = await generateFinancialData(userId);
+      setFinancialData(data);
     } catch (error) {
       console.error('Error processing query:', error);
       setAiResponse(getMessage('error.processing'));
       setCurrentStep(2);
-      setFinancialData(generateFinancialData());
+      const data = await generateFinancialData(userId);
+      setFinancialData(data);
     }
   };
 
   // Memoize startQuery to avoid infinite re-renders
-  const memoizedStartQuery = React.useCallback(startQuery, [language, getMessage]);
+  const memoizedStartQuery = React.useCallback(startQuery, [language, getMessage, userId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
