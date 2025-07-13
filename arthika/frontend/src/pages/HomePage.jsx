@@ -355,25 +355,7 @@ function HomePage({
                 </div>
               )}
               
-              {/* Voice tips */}
-              {!transcript && !isListening && (
-                <div className="text-sm text-gray-500 space-y-1">
-                  <p>
-                    <TranslatedText language={language}>
-                      💡 Try saying:
-                    </TranslatedText>
-                  </p>
-                  <p className="text-gray-600">
-                    "What if I take a gold loan?"
-                  </p>
-                  <p className="text-gray-600">
-                    "How should I invest my money?"
-                  </p>
-                  <p className="text-gray-600">
-                    "Best savings account for high returns?"
-                  </p>
-                </div>
-              )}
+              {/* Voice tips removed as per user request */}
             </div>
           ) : (
             <form onSubmit={handleTextSubmit} className="space-y-4">

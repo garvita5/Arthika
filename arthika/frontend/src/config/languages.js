@@ -117,4 +117,37 @@ export const headerTranslations = {
 
 export const getTranslation = (language, key) => {
   return headerTranslations[language]?.[key] || headerTranslations.en[key];
+};
+
+// Navigation and Voice Query translations
+export const navigationTranslations = {
+  en: {
+    home: 'Home',
+    query: 'Query',
+    queryResult: 'Query Result',
+    roadmap: 'Roadmap',
+    trustScore: 'Trust Score',
+    schemes: 'Schemes',
+    export: 'Export',
+    ngoAccess: 'NGO Access',
+    voiceQuery: 'Voice Query',
+    navigation: 'Navigation',
+    progress: 'Progress',
+    language: 'Language',
+  },
+  hi: {
+    home: 'मुखपृष्ठ',
+    query: 'सवाल',
+    queryResult: 'सवाल परिणाम',
+    roadmap: 'दिशानिर्देश',
+    trustScore: 'विश्वास स्कोर',
+    schemes: 'योजनाएँ',
+    export: 'निर्यात',
+    ngoAccess: 'एनजीओ पहुँच',
+    voiceQuery: 'ध्वनि प्रश्न',
+    navigation: 'नेविगेशन',
+    progress: 'प्रगति',
+    language: 'भाषा',
+  },
+  // Add other languages as needed
 }; 
