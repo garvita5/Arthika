@@ -247,14 +247,14 @@ const Layout = ({
                     </TranslatedText>
                   </span>
                 </Link>
-                <button className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900">
+                <Link to="/about" className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900">
                   <Info size={16} />
                   <span>
                     <TranslatedText language={language}>
                       About
                     </TranslatedText>
                   </span>
-                </button>
+                </Link>
               </div>
               
               <div className="flex items-center space-x-4">
