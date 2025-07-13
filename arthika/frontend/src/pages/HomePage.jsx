@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, MessageSquare, ChevronDown, Play, Volume2, Phone, Users, Shield, Info, TrendingUp, FileText, Download } from 'lucide-react';
+import { Mic, MicOff, MessageSquare, ChevronDown, Play, Volume2, Phone, Users, Shield, Info, TrendingUp, FileText, Download, Loader2 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
 
 function HomePage({ 
@@ -311,7 +311,7 @@ function HomePage({
                 disabled={isProcessing}
                 className={`microphone-btn ${isListening ? 'recording' : ''} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''} transition-all duration-300 hover:scale-105`}
               >
-                {isListening ? <MicOff size={32} /> : <Mic size={32} />}
+                {isProcessing ? <Loader2 className="animate-spin" size={32} /> : (isListening ? <MicOff size={32} /> : <Mic size={32} />)}
               </button>
               <p className="text-lg font-medium text-gray-700">
                 {isProcessing ? (
@@ -389,9 +389,20 @@ function HomePage({
                 disabled={!textInput.trim() || isProcessing}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <TranslatedText language={language}>
-                  Ask Question
-                </TranslatedText>
+                {isProcessing ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <Loader2 className="animate-spin" size={20} />
+                    <span>
+                      <TranslatedText language={language}>
+                        Processing your query...
+                      </TranslatedText>
+                    </span>
+                  </div>
+                ) : (
+                  <TranslatedText language={language}>
+                    Ask Question
+                  </TranslatedText>
+                )}
               </button>
             </form>
           )}

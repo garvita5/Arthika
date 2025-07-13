@@ -8,4 +8,7 @@ router.post("/", queryController.handleFinancialQuery);
 // GET /api/query/history/:userId - Get query history
 router.get("/history/:userId", queryController.getQueryHistory);
 
+// GET /api/query/status - Get API status
+router.get("/status", queryController.getApiStatus);
+
 module.exports = router; 
