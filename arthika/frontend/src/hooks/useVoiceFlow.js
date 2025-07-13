@@ -60,14 +60,25 @@ export const useVoiceFlow = (language) => {
     setIsProcessing(true);
     
     try {
-      console.log('Processing query:', query);
-      
       // Call query API
       const queryResponse = await apiService.submitFinancialQuery(query, language, userId);
       
       // Extract the story response from the structured data
       const responseData = queryResponse.data || queryResponse;
-      const storyResponse = responseData.storyResponse || responseData.response || 'No response received';
+      
+      // Try multiple possible response formats
+      let storyResponse = '';
+      if (responseData.storyResponse) {
+        storyResponse = responseData.storyResponse;
+      } else if (responseData.response) {
+        storyResponse = responseData.response;
+      } else if (typeof responseData === 'string') {
+        storyResponse = responseData;
+      } else if (responseData.message) {
+        storyResponse = responseData.message;
+      } else {
+        storyResponse = 'No response received';
+      }
       
       setAiResponse(storyResponse);
       
@@ -80,7 +91,6 @@ export const useVoiceFlow = (language) => {
       setShouldNavigate(true);
       
     } catch (error) {
-      console.error('Error processing query:', error);
       setAiResponse(getMessage('error.processing'));
       setRoadmapData(null);
       setTargetRoute('/query');
@@ -171,7 +181,6 @@ export const useVoiceFlow = (language) => {
       URL.revokeObjectURL(url);
       
     } catch (error) {
-      console.error('Export failed:', error);
       setAlertMessage(getMessage('error.export'));
       setShowAlert(true);
     }

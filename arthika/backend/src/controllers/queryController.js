@@ -28,28 +28,42 @@ function generateDynamicRoadmap(queryResponse, question) {
   
   // Parse estimated cost to get numeric values from AI response
   const costMatch = estimatedCost.match(/₹?([\d,]+)/);
-  const baseAmount = costMatch ? parseInt(costMatch[1].replace(/,/g, '')) : 50000;
+  let baseAmount = costMatch ? parseInt(costMatch[1].replace(/,/g, '')) : 50000;
+  
+  // Also try to extract amount from the question itself - improved regex
+  const questionAmountMatch = question.match(/(\d{1,3}(?:,\d{3})*(?:,\d{3})*)/);
+  const questionAmount = questionAmountMatch ? parseInt(questionAmountMatch[1].replace(/,/g, '')) : null;
+  
+  // Use the amount from the question if it's larger than the estimated cost
+  let finalBaseAmount = questionAmount && questionAmount > baseAmount ? questionAmount : baseAmount;
+  
+  // For investment queries, prioritize the amount mentioned in the question
+  const queryLower = question.toLowerCase();
+  if (queryLower.includes('invest') && questionAmount) {
+    finalBaseAmount = questionAmount;
+  }
+  
+  console.log(`Amount detected: Question=${questionAmount}, Estimated=${baseAmount}, Final=${finalBaseAmount}`);
   
   // Determine roadmap type based on AI response tags and content
-  const queryLower = question.toLowerCase();
   const responseLower = storyResponse.toLowerCase();
   let roadmapType = 'investment';
   
-  // Use AI response content to determine roadmap type
-  if (responseLower.includes('loan') || responseLower.includes('debt') || queryLower.includes('loan') || queryLower.includes('debt') || tags.includes('loan')) {
-    roadmapType = 'debt_management';
+  // Use AI response content to determine roadmap type - prioritize investment over debt
+  if (responseLower.includes('invest') || responseLower.includes('mutual fund') || responseLower.includes('stock') || responseLower.includes('equity') || queryLower.includes('invest') || tags.includes('investment')) {
+    roadmapType = 'investment';
   } else if (responseLower.includes('home') || responseLower.includes('house') || responseLower.includes('property') || queryLower.includes('home') || queryLower.includes('house') || tags.includes('housing')) {
     roadmapType = 'home_purchase';
   } else if (responseLower.includes('save') || responseLower.includes('emergency') || queryLower.includes('save') || queryLower.includes('emergency') || tags.includes('savings')) {
     roadmapType = 'savings';
   } else if (responseLower.includes('retirement') || responseLower.includes('pension') || queryLower.includes('retirement') || queryLower.includes('pension') || tags.includes('retirement')) {
     roadmapType = 'retirement';
-  } else if (responseLower.includes('invest') || responseLower.includes('mutual fund') || responseLower.includes('stock') || queryLower.includes('invest') || tags.includes('investment')) {
-    roadmapType = 'investment';
+  } else if (responseLower.includes('loan') || responseLower.includes('debt') || queryLower.includes('loan') || queryLower.includes('debt') || tags.includes('loan')) {
+    roadmapType = 'debt_management';
   }
-
+  
   // Generate roadmap steps based on AI recommended steps
-  const roadmapSteps = generateRoadmapStepsFromAI(roadmapType, baseAmount, recommendedSteps, storyResponse, saferAlternatives, timeframe);
+  const roadmapSteps = generateRoadmapStepsFromAI(roadmapType, finalBaseAmount, recommendedSteps, storyResponse, saferAlternatives, timeframe);
   
   // Calculate summary based on steps
   const totalSavings = roadmapSteps.reduce((sum, step) => sum + (step.savings || 0), 0);
@@ -78,23 +92,31 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
   // Use AI recommended steps if available, otherwise generate based on type
   if (recommendedSteps && recommendedSteps.length > 0) {
     // Create steps from AI recommendations
+    const usedTitles = new Set(); // Track used titles to avoid duplicates
+    
     recommendedSteps.forEach((step, index) => {
-      // Calculate appropriate amounts based on step content
-      let stepAmount = Math.round(baseAmount * (0.2 + index * 0.15));
-      let stepDebt = 0;
-      
-      // Adjust amounts based on step content
-      const stepLower = step.toLowerCase();
-      if (stepLower.includes('emergency') || stepLower.includes('fund')) {
-        stepAmount = Math.round(baseAmount * 0.3);
-      } else if (stepLower.includes('equity') || stepLower.includes('mutual fund')) {
-        stepAmount = Math.round(baseAmount * 0.4);
-      } else if (stepLower.includes('debt') || stepLower.includes('loan')) {
-        stepAmount = Math.round(baseAmount * 0.2);
-        stepDebt = -Math.round(baseAmount * 0.5);
-      } else if (stepLower.includes('gold') || stepLower.includes('diversification')) {
-        stepAmount = Math.round(baseAmount * 0.1);
-      }
+              // Calculate appropriate amounts based on step content
+        let stepAmount = Math.round(baseAmount * (0.2 + index * 0.15));
+        let stepDebt = 0;
+        
+        // Adjust amounts based on step content
+        const stepLower = step.toLowerCase();
+        if (stepLower.includes('emergency') || stepLower.includes('fund')) {
+          stepAmount = Math.round(baseAmount * 0.3);
+        } else if (stepLower.includes('equity') || stepLower.includes('mutual fund')) {
+          stepAmount = Math.round(baseAmount * 0.4);
+        } else if (stepLower.includes('debt') || stepLower.includes('loan')) {
+          stepAmount = Math.round(baseAmount * 0.2);
+          stepDebt = -Math.round(baseAmount * 0.5);
+        } else if (stepLower.includes('gold') || stepLower.includes('diversification')) {
+          stepAmount = Math.round(baseAmount * 0.1);
+        } else if (stepLower.includes('savings') || stepLower.includes('deposit')) {
+          stepAmount = Math.round(baseAmount * 0.25);
+        } else if (stepLower.includes('nps') || stepLower.includes('retirement')) {
+          stepAmount = Math.round(baseAmount * 0.3);
+        } else if (stepLower.includes('liquid') || stepLower.includes('maintain')) {
+          stepAmount = Math.round(baseAmount * 0.1);
+        }
       
       // Create clean title from step content
       let title = step;
@@ -110,10 +132,18 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
         title = 'Savings Plan';
       } else if (stepLower.includes('nps')) {
         title = 'NPS Contribution';
+      } else if (stepLower.includes('liquid') || stepLower.includes('maintain')) {
+        title = 'Liquid Funds';
       } else {
         // Take first few words as title
         title = step.split(' ').slice(0, 3).join(' ');
       }
+      
+      // Avoid duplicate titles
+      if (usedTitles.has(title)) {
+        title = `${title} ${index + 1}`;
+      }
+      usedTitles.add(title);
       
       steps.push({
         id: index + 1,
@@ -191,7 +221,7 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
             title: 'Emergency Fund',
             description: responseLower.includes('emergency') ? 
               'Build emergency fund as recommended' : 
-              `Build ₹${emergencyFundAmount.toLocaleString()} emergency fund first`,
+              `Build ₹${emergencyFundAmount.toLocaleString()} emergency fund first (6 months expenses)`,
             status: 'pending',
             timeline: 'Month 1-3',
             savings: emergencyFundAmount,
@@ -202,7 +232,7 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
             title: 'Equity Investment',
             description: responseLower.includes('equity') || responseLower.includes('mutual fund') ? 
               'Start equity investments as suggested' : 
-              `Start ₹${investmentAmount.toLocaleString()} SIP in equity mutual funds`,
+              `Start ₹${investmentAmount.toLocaleString()} SIP in equity mutual funds for growth`,
             status: 'pending',
             timeline: 'Month 4-9',
             savings: investmentAmount,
@@ -213,7 +243,7 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
             title: 'Debt Instruments',
             description: responseLower.includes('debt instrument') ? 
               'Allocate to debt instruments as recommended' : 
-              'Allocate to debt instruments for stability',
+              `Allocate ₹${Math.round(baseAmount * 0.3).toLocaleString()} to debt instruments for stability`,
             status: 'pending',
             timeline: 'Month 10-15',
             savings: Math.round(baseAmount * 0.3),
@@ -224,7 +254,7 @@ function generateRoadmapStepsFromAI(type, baseAmount, recommendedSteps, storyRes
             title: 'Portfolio Diversification',
             description: responseLower.includes('diversification') || responseLower.includes('gold') ? 
               'Diversify portfolio as suggested' : 
-              'Invest in gold for portfolio diversification',
+              `Invest ₹${Math.round(baseAmount * 0.1).toLocaleString()} in gold for portfolio diversification`,
             status: 'pending',
             timeline: 'Month 16-21',
             savings: Math.round(baseAmount * 0.1),
