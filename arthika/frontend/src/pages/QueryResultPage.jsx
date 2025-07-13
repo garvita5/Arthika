@@ -23,6 +23,23 @@ function QueryResultPage({
 }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [hasSpoken, setHasSpoken] = useState(false);
+  const [isOpenAIAvailable, setIsOpenAIAvailable] = useState(true); // Default to true to avoid showing indicator initially
+
+  // Check API status on component mount
+  useEffect(() => {
+    const checkApiStatus = async () => {
+      try {
+        const apiService = (await import('../services/apiService')).default;
+        const status = await apiService.getApiStatus();
+        setIsOpenAIAvailable(status.data?.openaiAvailable ?? false);
+      } catch (error) {
+        console.error('Failed to check API status:', error);
+        setIsOpenAIAvailable(false);
+      }
+    };
+    
+    checkApiStatus();
+  }, []);
 
   // Auto-speak when response is ready
   useEffect(() => {
@@ -144,6 +161,29 @@ function QueryResultPage({
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
+        {/* Mock Data Indicator */}
+        {!isOpenAIAvailable && (
+          <div className="lg:col-span-3">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center space-x-3">
+                <Info className="text-yellow-600" size={20} />
+                <div className="flex-1">
+                  <h4 className="text-sm font-medium text-yellow-800">
+                    <TranslatedText language={language}>
+                      Demo Mode Active
+                    </TranslatedText>
+                  </h4>
+                  <p className="text-sm text-yellow-700 mt-1">
+                    <TranslatedText language={language}>
+                      This response uses sample data for demonstration. Real AI responses will be available when the API key is configured.
+                    </TranslatedText>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Response */}
         <div className="lg:col-span-2 space-y-6">
           {/* AI Response */}

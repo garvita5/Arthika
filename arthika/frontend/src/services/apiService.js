@@ -52,6 +52,12 @@ class ApiService {
     return response.data;
   }
 
+  // Get API status
+  async getApiStatus() {
+    const response = await apiClient.get('/query/status');
+    return response.data;
+  }
+
   // Get query history
   async getQueryHistory(userId) {
     const response = await apiClient.get(`/query/history/${userId}`);

@@ -64,9 +64,65 @@ function RoadmapPage({ language, roadmapData }) {
   const [selectedPeriod, setSelectedPeriod] = useState('12months');
   const [chartData, setChartData] = useState(null);
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
   // Memoize the data to prevent unnecessary re-renders
   const data = useMemo(() => {
-    return roadmapData || mockRoadmapData;
+    // Handle the actual backend response structure
+    if (roadmapData && roadmapData.data) {
+      // Backend returns { success: true, data: { roadmap, queries, trustScore, totalQueries } }
+      const backendData = roadmapData.data;
+      
+      // Transform backend data to match expected format
+      if (backendData.roadmap) {
+        return {
+          summary: {
+            totalSavings: backendData.roadmap.currentStatus?.savings || 0,
+            totalDebt: -(backendData.roadmap.currentStatus?.loans || 0),
+            netWorth: (backendData.roadmap.currentStatus?.savings || 0) + (backendData.roadmap.currentStatus?.investments || 0) - (backendData.roadmap.currentStatus?.loans || 0),
+            timeline: '12 months'
+          },
+          steps: backendData.roadmap.financialGoals?.map((goal, index) => ({
+            id: goal.id || index + 1,
+            title: goal.title,
+            description: `Target: ${formatCurrency(goal.target)}, Current: ${formatCurrency(goal.current)}`,
+            status: goal.current >= goal.target ? 'completed' : goal.current > 0 ? 'in-progress' : 'pending',
+            timeline: `Month ${index + 1}-${index + 3}`,
+            savings: goal.current,
+            debt: 0
+          })) || []
+        };
+      }
+    }
+    
+    // Handle dynamic roadmap from query response (new structure)
+    if (roadmapData && roadmapData.summary && roadmapData.steps) {
+      // This is the new dynamic roadmap structure from the backend
+      return {
+        summary: roadmapData.summary,
+        steps: roadmapData.steps.map(step => ({
+          ...step,
+          // Clean up the title to avoid duplication
+          title: step.title || 'Financial Step',
+          // Clean up the description to avoid redundancy
+          description: step.description || 'Follow the recommended financial strategy',
+          status: step.status || 'pending'
+        })),
+        type: roadmapData.type,
+        riskLevel: roadmapData.riskLevel,
+        estimatedCost: roadmapData.estimatedCost
+      };
+    }
+    
+    // Fallback to mock data if backend data is not available
+    return mockRoadmapData;
   }, [roadmapData]);
 
   useEffect(() => {
@@ -80,19 +136,36 @@ function RoadmapPage({ language, roadmapData }) {
       for (let i = 1; i <= months; i++) {
         labels.push(`Month ${i}`);
         
-        // Calculate cumulative values
+        // Calculate cumulative values based on actual roadmap steps
         let savings = 0;
         let debt = 0;
         
         data.steps.forEach(step => {
-          const stepMonth = parseInt(step.timeline.split(' ')[1].split('-')[0]);
-          if (i >= stepMonth) {
-            if (step.status === 'completed' || (step.status === 'in-progress' && i >= stepMonth)) {
-              savings += step.savings / 12; // Distribute over months
-              debt += step.debt / 12;
+          // Parse timeline to get month range
+          const timelineMatch = step.timeline.match(/Month (\d+)-(\d+)/);
+          if (timelineMatch) {
+            const startMonth = parseInt(timelineMatch[1]);
+            const endMonth = parseInt(timelineMatch[2]);
+            
+            // If current month is within the step's timeline, add the values
+            if (i >= startMonth && i <= endMonth) {
+              // For savings, add the full amount in the first month of the step
+              if (i === startMonth) {
+                savings += step.savings || 0;
+              }
+              // For debt, add it in the first month of the step
+              if (i === startMonth) {
+                debt += step.debt || 0;
+              }
             }
           }
         });
+        
+        // Add to cumulative totals
+        if (i > 1) {
+          savings += savingsData[i - 2];
+          debt += debtData[i - 2];
+        }
         
         savingsData.push(Math.round(savings));
         debtData.push(Math.round(debt));
@@ -102,7 +175,7 @@ function RoadmapPage({ language, roadmapData }) {
         labels,
         datasets: [
           {
-            label: 'Estimated Savings',
+            label: 'Cumulative Savings',
             data: savingsData,
             borderColor: 'rgb(34, 197, 94)',
             backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -110,7 +183,7 @@ function RoadmapPage({ language, roadmapData }) {
             fill: true
           },
           {
-            label: 'Estimated Debt',
+            label: 'Cumulative Debt',
             data: debtData,
             borderColor: 'rgb(239, 68, 68)',
             backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -140,15 +213,6 @@ function RoadmapPage({ language, roadmapData }) {
       case 'pending': return <Calendar size={16} />;
       default: return <Calendar size={16} />;
     }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
   };
 
   return (
@@ -191,7 +255,7 @@ function RoadmapPage({ language, roadmapData }) {
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <div className="card text-center">
           <div className="text-2xl font-bold text-green-600 mb-2">
-            {formatCurrency(data.summary.totalSavings)}
+            {formatCurrency(data?.summary?.totalSavings || 0)}
           </div>
           <p className="text-sm text-gray-600">
             <TranslatedText language={language}>
@@ -202,7 +266,7 @@ function RoadmapPage({ language, roadmapData }) {
         
         <div className="card text-center">
           <div className="text-2xl font-bold text-red-600 mb-2">
-            {formatCurrency(Math.abs(data.summary.totalDebt))}
+            {formatCurrency(Math.abs(data?.summary?.totalDebt || 0))}
           </div>
           <p className="text-sm text-gray-600">
             <TranslatedText language={language}>
@@ -213,7 +277,7 @@ function RoadmapPage({ language, roadmapData }) {
         
         <div className="card text-center">
           <div className="text-2xl font-bold text-blue-600 mb-2">
-            {formatCurrency(data.summary.netWorth)}
+            {formatCurrency(data?.summary?.netWorth || 0)}
           </div>
           <p className="text-sm text-gray-600">
             <TranslatedText language={language}>
@@ -224,7 +288,7 @@ function RoadmapPage({ language, roadmapData }) {
         
         <div className="card text-center">
           <div className="text-2xl font-bold text-purple-600 mb-2">
-            {data.summary.timeline}
+            {data?.summary?.timeline || '12 months'}
           </div>
           <p className="text-sm text-gray-600">
             <TranslatedText language={language}>
@@ -322,15 +386,33 @@ function RoadmapPage({ language, roadmapData }) {
 
       {/* Roadmap Steps */}
       <div className="space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">
-          <TranslatedText language={language}>
-            Your Financial Journey
-          </TranslatedText>
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-gray-900">
+            <TranslatedText language={language}>
+              Your Financial Journey
+            </TranslatedText>
+          </h2>
+          
+          {/* Dynamic Roadmap Indicator */}
+          {data?.type && (
+            <div className="flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-blue-700 font-medium">
+                <TranslatedText language={language}>
+                  {data.type === 'debt_management' ? 'Debt Management' :
+                   data.type === 'home_purchase' ? 'Home Purchase' :
+                   data.type === 'savings' ? 'Savings Plan' :
+                   data.type === 'retirement' ? 'Retirement Planning' :
+                   'Investment Strategy'}
+                </TranslatedText>
+              </span>
+            </div>
+          )}
+        </div>
         
         <div className="space-y-4">
-          {data.steps.map((step, index) => (
-            <div key={step.id} className="card">
+          {(data?.steps || []).map((step, index) => (
+            <div key={step.id || index} className="card">
               <div className="flex items-start space-x-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${getStatusColor(step.status)}`}>
                   {getStatusIcon(step.status)}
@@ -348,15 +430,15 @@ function RoadmapPage({ language, roadmapData }) {
                     <div className="flex items-center space-x-2">
                       <TrendingUp className="text-green-600" size={16} />
                       <span className="text-green-600 font-medium">
-                        {formatCurrency(step.savings)}
+                        {formatCurrency(step.savings || 0)}
                       </span>
                     </div>
                     
-                    {step.debt < 0 && (
+                    {(step.debt || 0) < 0 && (
                       <div className="flex items-center space-x-2">
                         <TrendingDown className="text-red-600" size={16} />
                         <span className="text-red-600 font-medium">
-                          {formatCurrency(Math.abs(step.debt))}
+                          {formatCurrency(Math.abs(step.debt || 0))}
                         </span>
                       </div>
                     )}

@@ -95,6 +95,15 @@ class OpenAIService {
     } catch (error) {
       console.error('OpenAI API Error:', error);
       
+      // Check if it's a rate limit or quota error
+      if (error.status === 429 || error.code === 'insufficient_quota' || error.type === 'insufficient_quota') {
+        console.log('OpenAI quota exceeded or rate limited. Using mock response.');
+      } else if (error.status === 401 || error.status === 403) {
+        console.log('OpenAI API key invalid or unauthorized. Using mock response.');
+      } else {
+        console.log('OpenAI API error. Using mock response.');
+      }
+      
       // Fallback to mock response
       return this.getMockResponse(question, language);
     }
@@ -114,7 +123,10 @@ class OpenAIService {
         tags: ["loan", "gold", "risk"],
         riskLevel: "medium",
         estimatedCost: "₹3,500-7,500 annually",
-        saferAlternatives: ["Personal loan", "Credit card", "Emergency fund"]
+        saferAlternatives: ["Personal loan", "Credit card", "Emergency fund"],
+        timeframe: "Short-term (1-3 years)",
+        expectedReturns: "N/A (debt)",
+        governmentSchemes: ["PMFBY for crop insurance", "PMJJBY for life insurance"]
       },
       'home loan': {
         storyResponse: `Think of buying a home like planting a tree that will grow for generations. A ₹30 lakh home loan for 20 years is like nurturing this tree - it requires consistent care (monthly EMIs of ₹25,000-30,000). While it seems expensive now, this tree will provide shelter and potentially grow in value over time.`,
@@ -128,7 +140,10 @@ class OpenAIService {
         tags: ["loan", "housing", "investment"],
         riskLevel: "low",
         estimatedCost: "₹25,000-30,000 monthly EMI",
-        saferAlternatives: ["Rent and invest difference", "Smaller property", "Joint ownership"]
+        saferAlternatives: ["Rent and invest difference", "Smaller property", "Joint ownership"],
+        timeframe: "Long-term (15-30 years)",
+        expectedReturns: "Property appreciation 5-8% annually",
+        governmentSchemes: ["PMAY subsidy", "Tax benefits on home loan interest"]
       },
       'investment': {
         storyResponse: `Picture your money as seeds that can grow into a forest. A smart investment strategy is like planting different types of trees - some grow fast (equity), some provide steady shade (debt), and some protect against storms (gold). Start with ₹5,000 monthly SIPs and watch your forest grow over time.`,
@@ -142,17 +157,80 @@ class OpenAIService {
         tags: ["investment", "savings", "planning"],
         riskLevel: "low",
         estimatedCost: "₹5,000 monthly SIP",
-        saferAlternatives: ["Fixed deposits", "PPF", "Government bonds"]
+        saferAlternatives: ["Fixed deposits", "PPF", "Government bonds"],
+        timeframe: "Long-term (10+ years)",
+        expectedReturns: "8-12% annually (equity)",
+        governmentSchemes: ["PPF (7.1% returns)", "NPS (pension scheme)", "Sukanya Samriddhi"]
+      },
+      'savings': {
+        storyResponse: `Think of savings like building a strong foundation for your house. Every brick (savings) you add makes your financial house stronger. Start with ₹10,000 monthly savings - this could grow to ₹15 lakhs in 10 years with compound interest. The key is consistency and starting early.`,
+        recommendedSteps: [
+          "Follow 50-30-20 rule (50% needs, 30% wants, 20% savings)",
+          "Set up automatic transfers to savings account",
+          "Use high-yield savings accounts (4-6% interest)",
+          "Consider recurring deposits for better rates",
+          "Review and increase savings annually"
+        ],
+        tags: ["savings", "planning", "security"],
+        riskLevel: "very low",
+        estimatedCost: "₹10,000 monthly",
+        saferAlternatives: ["PPF", "Fixed deposits", "Government schemes"],
+        timeframe: "Long-term",
+        expectedReturns: "4-6% annually",
+        governmentSchemes: ["PPF", "Sukanya Samriddhi", "NPS"]
+      },
+      'emergency': {
+        storyResponse: `An emergency fund is like having a spare tire in your car - you hope you never need it, but you're glad it's there when you do. Aim to save 6 months of expenses (₹3-6 lakhs for most families). This fund should be easily accessible but separate from your regular spending.`,
+        recommendedSteps: [
+          "Calculate 6 months of essential expenses",
+          "Open a separate high-yield savings account",
+          "Set up automatic monthly transfers",
+          "Keep the money liquid (not locked in FDs)",
+          "Replenish after any emergency use"
+        ],
+        tags: ["emergency", "savings", "security"],
+        riskLevel: "very low",
+        estimatedCost: "₹3-6 lakhs total",
+        saferAlternatives: ["Insurance policies", "Credit cards (emergency only)"],
+        timeframe: "Immediate priority",
+        expectedReturns: "4-6% annually",
+        governmentSchemes: ["PMJJBY", "PMFBY", "Ayushman Bharat"]
+      },
+      'retirement': {
+        storyResponse: `Retirement planning is like planting a tree today that will provide shade for your future self. Even a small monthly investment of ₹5,000 can grow to ₹1 crore in 30 years with compound interest. Start early, invest regularly, and let time work its magic.`,
+        recommendedSteps: [
+          "Start with NPS or EPF contributions",
+          "Invest in equity mutual funds for growth",
+          "Consider real estate for rental income",
+          "Plan for healthcare costs",
+          "Diversify across different asset classes"
+        ],
+        tags: ["retirement", "planning", "long-term"],
+        riskLevel: "low",
+        estimatedCost: "₹5,000-15,000 monthly",
+        saferAlternatives: ["PPF", "Government bonds", "Fixed deposits"],
+        timeframe: "20-30 years",
+        expectedReturns: "8-10% annually",
+        governmentSchemes: ["NPS", "EPF", "Atal Pension Yojana"]
       }
     };
 
     const queryLower = question.toLowerCase();
     let response = mockResponses['investment']; // default response
 
-    if (queryLower.includes('gold') || queryLower.includes('सोना')) {
+    // Enhanced query matching for better responses
+    if (queryLower.includes('gold') || queryLower.includes('सोना') || queryLower.includes('jewelry') || queryLower.includes('ornament')) {
       response = mockResponses['gold loan'];
-    } else if (queryLower.includes('home') || queryLower.includes('house') || queryLower.includes('घर')) {
+    } else if (queryLower.includes('home') || queryLower.includes('house') || queryLower.includes('घर') || queryLower.includes('property') || queryLower.includes('real estate')) {
       response = mockResponses['home loan'];
+    } else if (queryLower.includes('save') || queryLower.includes('savings') || queryLower.includes('बचत') || queryLower.includes('save money')) {
+      response = mockResponses['savings'];
+    } else if (queryLower.includes('emergency') || queryLower.includes('urgent') || queryLower.includes('emergency fund') || queryLower.includes('आपातकाल')) {
+      response = mockResponses['emergency'];
+    } else if (queryLower.includes('retirement') || queryLower.includes('pension') || queryLower.includes('retirement plan') || queryLower.includes('सेवानिवृत्ति')) {
+      response = mockResponses['retirement'];
+    } else if (queryLower.includes('invest') || queryLower.includes('investment') || queryLower.includes('mutual fund') || queryLower.includes('स्टॉक') || queryLower.includes('share')) {
+      response = mockResponses['investment'];
     }
 
     return response;

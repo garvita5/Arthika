@@ -64,11 +64,16 @@ export const useVoiceFlow = (language) => {
       
       // Call query API
       const queryResponse = await apiService.submitFinancialQuery(query, language, userId);
-      setAiResponse(queryResponse.response || queryResponse.message || 'No response received');
       
-      // Call roadmap API with the same query
-      const roadmapResponse = await apiService.getUserRoadmap(userId);
-      setRoadmapData(roadmapResponse);
+      // Extract the story response from the structured data
+      const responseData = queryResponse.data || queryResponse;
+      const storyResponse = responseData.storyResponse || responseData.response || 'No response received';
+      
+      setAiResponse(storyResponse);
+      
+      // Use roadmap data from the query response
+      const roadmapData = responseData.roadmap || null;
+      setRoadmapData(roadmapData);
       
       // Set navigation flag instead of directly navigating
       setTargetRoute('/query');
@@ -172,17 +177,8 @@ export const useVoiceFlow = (language) => {
     }
   }, [aiResponse, roadmapData, userId, getMessage]);
 
-  // Auto-speak when response is ready
-  useEffect(() => {
-    if (aiResponse && !isSpeaking) {
-      // Small delay to ensure UI is ready
-      const timer = setTimeout(() => {
-        speakResponse();
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [aiResponse, isSpeaking, speakResponse]);
+  // Note: Auto-speak is now handled in individual pages to prevent conflicts
+  // and allow better control over when speech starts
 
   return {
     // Speech recognition
