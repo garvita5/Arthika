@@ -40,11 +40,14 @@ class QueryController {
         success: true,
         data: {
           storyResponse: aiResponse.storyResponse,
-          recommendedSteps: aiResponse.recommendedSteps,
-          tags: aiResponse.tags,
-          riskLevel: aiResponse.riskLevel,
-          estimatedCost: aiResponse.estimatedCost,
-          saferAlternatives: aiResponse.saferAlternatives,
+          recommendedSteps: aiResponse.recommendedSteps || [],
+          tags: aiResponse.tags || [],
+          riskLevel: aiResponse.riskLevel || 'medium',
+          estimatedCost: aiResponse.estimatedCost || 'Varies',
+          saferAlternatives: aiResponse.saferAlternatives || [],
+          timeframe: aiResponse.timeframe || 'Varies',
+          expectedReturns: aiResponse.expectedReturns || 'Varies',
+          governmentSchemes: aiResponse.governmentSchemes || [],
           language: language
         }
       });

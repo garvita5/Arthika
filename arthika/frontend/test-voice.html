@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Test - Arthika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .mic-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: #ff4757;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+        .mic-btn:hover {
+            transform: scale(1.1);
+            background: #ff3742;
+        }
+        .mic-btn.recording {
+            background: #2ed573;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .transcript {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice Recognition Test</h1>
+        <p>Test if your browser supports voice recognition for Arthika</p>
+        
+        <div class="status" id="status">Click the microphone to start</div>
+        
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+            🎤
+        </button>
+        
+        <div class="transcript" id="transcript">
+            <strong>Transcript:</strong> <span id="transcriptText">No speech detected yet</span>
+        </div>
+        
+        <div class="transcript" id="interim">
+            <strong>Listening:</strong> <span id="interimText">No interim results</span>
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Test Phrases:</h3>
+            <ul>
+                <li>"What if I take a gold loan?"</li>
+                <li>"How should I invest my money?"</li>
+                <li>"Best savings account for high returns?"</li>
+                <li>"What are the risks of taking a personal loan?"</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let recognition = null;
+        let isListening = false;
+
+        // Check if speech recognition is supported
+        function isSupported() {
+            return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+        }
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if (!isSupported()) {
+                showError('Speech recognition not supported in this browser');
+                return null;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isListening = true;
+                updateStatus('Listening... Speak now!');
+                updateMicButton(true);
+                hideError();
+            };
+
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                let interimTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                if (finalTranscript) {
+                    document.getElementById('transcriptText').textContent = finalTranscript;
+                }
+                if (interimTranscript) {
+                    document.getElementById('interimText').textContent = interimTranscript;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                if (event.error === 'no-speech') {
+                    updateStatus('No speech detected. Try speaking louder.');
+                } else {
+                    showError(`Speech recognition error: ${event.error}`);
+                }
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                updateStatus('Click the microphone to start');
+                updateMicButton(false);
+                document.getElementById('interimText').textContent = 'No interim results';
+            };
+
+            return recognition;
+        }
+
+        function toggleMic() {
+            if (!recognition) {
+                recognition = initSpeechRecognition();
+                if (!recognition) return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            try {
+                recognition.start();
+            } catch (error) {
+                showError('Failed to start speech recognition');
+            }
+        }
+
+        function stopListening() {
+            try {
+                recognition.stop();
+            } catch (error) {
+                console.error('Failed to stop speech recognition:', error);
+            }
+        }
+
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+
+        function updateMicButton(recording) {
+            const btn = document.getElementById('micBtn');
+            if (recording) {
+                btn.classList.add('recording');
+                btn.textContent = '⏹️';
+            } else {
+                btn.classList.remove('recording');
+                btn.textContent = '🎤';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            if (!isSupported()) {
+                showError('Speech recognition not supported in this browser. Please use Chrome, Edge, or Safari.');
+            }
+        };
+    </script>
+</body>
+</html> 

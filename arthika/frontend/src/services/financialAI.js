@@ -6,8 +6,21 @@ export const handleFinancialQuery = async (query, language, userId = null) => {
     // Use real API instead of mock responses
     const response = await apiService.submitFinancialQuery(query, language, userId);
     
-    // Return the structured response from the backend
-    return response.storyResponse || response;
+    // Handle the backend response format
+    if (response.success && response.data) {
+      // Extract the story response from the backend data
+      const storyResponse = response.data.storyResponse || response.data;
+      return storyResponse;
+    } else if (response.storyResponse) {
+      // Direct response format
+      return response.storyResponse;
+    } else if (typeof response === 'string') {
+      // String response
+      return response;
+    } else {
+      // Fallback to the entire response
+      return JSON.stringify(response);
+    }
   } catch (error) {
     console.error('API Error:', error);
     
@@ -49,11 +62,11 @@ export const generateFinancialData = async (userId = null) => {
       const trustScore = await apiService.getTrustScore(userId);
       
       return {
-        roadmap: roadmapData.roadmap,
+        roadmap: roadmapData.data?.roadmap || roadmapData.roadmap,
         trust: {
           labels: ['Credit Score', 'Income Stability', 'Savings Rate', 'Investment Knowledge'],
           datasets: [{
-            data: [trustScore.trustScore || 75, 90, 70, 65],
+            data: [trustScore.data?.trustScore || trustScore.trustScore || 75, 90, 70, 65],
             backgroundColor: [
               'rgba(34, 197, 94, 0.8)',
               'rgba(59, 130, 246, 0.8)',

@@ -1,231 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { TranslationProvider } from './contexts/TranslationContext';
+
+// Import pages
+import HomePage from './pages/HomePage';
+import QueryResultPage from './pages/QueryResultPage';
+import RoadmapPage from './pages/RoadmapPage';
+import TrustScorePage from './pages/TrustScorePage';
+import SchemesPage from './pages/SchemesPage';
+import ExportPage from './pages/ExportPage';
+import NGOPage from './pages/NGOPage';
 
 // Import components
-import HomePage from './components/HomePage';
-import Header from './components/Header';
-import SpeakStep from './components/SpeakStep';
-import AnalyzeStep from './components/AnalyzeStep';
-import RoadmapStep from './components/RoadmapStep';
-import TranslatedAlert from './components/TranslatedAlert';
-import { TranslationProvider, useTranslationContext } from './contexts/TranslationContext';
+import Layout from './components/Layout';
+import { useVoiceFlow } from './hooks/useVoiceFlow';
 
-// Import hooks and services
-import { useSpeechRecognition } from './hooks/useSpeechRecognition';
-import { handleFinancialQuery, generateFinancialData } from './services/financialAI';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
-
-function AppContent({ language, onLanguageChange }) {
-  const { getMessage } = useTranslationContext();
-  const [aiResponse, setAiResponse] = useState('');
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [trustScore, setTrustScore] = useState(85);
-  const [currentStep, setCurrentStep] = useState('home'); // 'home', 1, 2, 3
-  const [financialData, setFinancialData] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  
-  const synthesisRef = useRef(null);
-  
-  // Generate a simple user ID for testing
-  const userId = 'user-' + Math.random().toString(36).substr(2, 9);
-
-  // Use custom hook for speech recognition
-  const { isListening, transcript, startListening, stopListening, setTranscript } = useSpeechRecognition(language);
-
-  // Handle financial query when transcript changes
-  useEffect(() => {
-    if (transcript && currentStep !== 'home') {
-      const processQuery = async () => {
-        try {
-          const response = await handleFinancialQuery(transcript, language, userId);
-          setAiResponse(response);
-          setCurrentStep(2);
-          const data = await generateFinancialData(userId);
-          setFinancialData(data);
-        } catch (error) {
-          console.error('Error processing financial query:', error);
-          setAiResponse(getMessage('error.processing'));
-          setCurrentStep(2);
-          const data = await generateFinancialData(userId);
-          setFinancialData(data);
-        }
-      };
-      
-      processQuery();
-    }
-  }, [transcript, language, currentStep, getMessage, userId]);
-
-  // Language code mapping for speech synthesis
-  const getSpeechSynthesisLang = (language) => {
-    const langMap = {
-      'en': 'en-US',
-      'hi': 'hi-IN',
-      'bn': 'bn-IN',
-      'ta': 'ta-IN',
-      'te': 'te-IN',
-      'mr': 'mr-IN',
-      'gu': 'gu-IN',
-      'kn': 'kn-IN',
-      'ml': 'ml-IN',
-      'pa': 'pa-IN'
-    };
-    return langMap[language] || 'en-US';
-  };
-
-  const speakResponse = () => {
-    if ('speechSynthesis' in window) {
-      if (synthesisRef.current) {
-        window.speechSynthesis.cancel();
-      }
-      
-      const utterance = new SpeechSynthesisUtterance(aiResponse);
-      utterance.lang = getSpeechSynthesisLang(language);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      
-      synthesisRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  const stopSpeaking = () => {
-    if (synthesisRef.current) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    }
-  };
-
-  const exportPlan = () => {
-    setAlertMessage(getMessage('success.export'));
-    setShowAlert(true);
-  };
-
-  const resetApp = () => {
-    setCurrentStep('home');
-    setTranscript('');
-    setAiResponse('');
-    setFinancialData(null);
-  };
-
-  const goToNextStep = () => {
-    setCurrentStep(3);
-  };
-
-  const startQuery = async (query) => {
-    try {
-      const response = await handleFinancialQuery(query, language, userId);
-      setAiResponse(response);
-      setCurrentStep(2);
-      const data = await generateFinancialData(userId);
-      setFinancialData(data);
-    } catch (error) {
-      console.error('Error processing query:', error);
-      setAiResponse(getMessage('error.processing'));
-      setCurrentStep(2);
-      const data = await generateFinancialData(userId);
-      setFinancialData(data);
-    }
-  };
-
-  // Memoize startQuery to avoid infinite re-renders
-  const memoizedStartQuery = React.useCallback(startQuery, [language, getMessage, userId]);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {currentStep === 'home' ? (
-        <HomePage 
-          language={language}
-          onLanguageChange={onLanguageChange}
-          onStartQuery={memoizedStartQuery}
-          isListening={isListening}
-          startListening={startListening}
-          stopListening={stopListening}
-          transcript={transcript}
-        />
-      ) : (
-        <>
-          <Header 
-            currentStep={parseInt(currentStep)} 
-            language={language} 
-            onLanguageChange={onLanguageChange} 
-          />
-
-          <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Step 1: Speak Your Question */}
-            {currentStep === 1 && (
-              <SpeakStep 
-                isListening={isListening}
-                transcript={transcript}
-                startListening={startListening}
-                stopListening={stopListening}
-                language={language}
-              />
-            )}
-
-            {/* Step 2: Get AI Analysis */}
-            {currentStep === 2 && (
-              <AnalyzeStep 
-                aiResponse={aiResponse}
-                isSpeaking={isSpeaking}
-                speakResponse={speakResponse}
-                stopSpeaking={stopSpeaking}
-                exportPlan={exportPlan}
-                language={language}
-                onNextStep={goToNextStep}
-              />
-            )}
-
-            {/* Step 3: View Your Roadmap */}
-            {currentStep === 3 && (
-              <RoadmapStep 
-                trustScore={trustScore}
-                financialData={financialData}
-                language={language}
-                onReset={resetApp}
-              />
-            )}
-          </main>
-        </>
-      )}
-
-      {/* Translated Alert */}
-      {showAlert && (
-        <TranslatedAlert
-          message={alertMessage}
-          language={language}
-          onClose={() => setShowAlert(false)}
-        />
-      )}
-    </div>
-  );
-}
-
-function App() {
+function AppContent() {
   const [language, setLanguage] = useState('en');
+  const navigate = useNavigate();
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
@@ -233,8 +25,134 @@ function App() {
 
   return (
     <TranslationProvider language={language}>
-      <AppContent language={language} onLanguageChange={handleLanguageChange} />
+      <AppWithVoiceFlow 
+        language={language}
+        onLanguageChange={handleLanguageChange}
+        navigate={navigate}
+      />
     </TranslationProvider>
+  );
+}
+
+function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
+  const { 
+    isListening, 
+    transcript, 
+    interimTranscript, 
+    startListening, 
+    stopListening,
+    isProcessing,
+    processQuery,
+    aiResponse,
+    roadmapData,
+    trustScore,
+    resetVoiceFlow,
+    shouldNavigate,
+    targetRoute,
+    setShouldNavigate
+  } = useVoiceFlow(language);
+
+  // Handle navigation when shouldNavigate is true
+  useEffect(() => {
+    if (shouldNavigate && targetRoute) {
+      navigate(targetRoute);
+      setShouldNavigate(false);
+    }
+  }, [shouldNavigate, targetRoute, navigate, setShouldNavigate]);
+
+  return (
+    <Layout 
+      language={language} 
+      onLanguageChange={onLanguageChange}
+      isListening={isListening}
+      startListening={startListening}
+      stopListening={stopListening}
+      transcript={transcript}
+      interimTranscript={interimTranscript}
+      isProcessing={isProcessing}
+      processQuery={processQuery}
+    >
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <HomePage 
+              language={language}
+              isListening={isListening}
+              startListening={startListening}
+              stopListening={stopListening}
+              transcript={transcript}
+              interimTranscript={interimTranscript}
+              isProcessing={isProcessing}
+              processQuery={processQuery}
+            />
+          } 
+        />
+        <Route 
+          path="/query" 
+          element={
+            <QueryResultPage 
+              language={language}
+              aiResponse={aiResponse}
+              roadmapData={roadmapData}
+              trustScore={trustScore}
+              resetFlow={resetVoiceFlow}
+            />
+          } 
+        />
+        <Route 
+          path="/roadmap" 
+          element={
+            <RoadmapPage 
+              language={language}
+              roadmapData={roadmapData}
+            />
+          } 
+        />
+        <Route 
+          path="/score" 
+          element={
+            <TrustScorePage 
+              language={language}
+              trustScore={trustScore}
+            />
+          } 
+        />
+        <Route 
+          path="/schemes" 
+          element={
+            <SchemesPage 
+              language={language}
+            />
+          } 
+        />
+        <Route 
+          path="/export" 
+          element={
+            <ExportPage 
+              language={language}
+            />
+          } 
+        />
+        <Route 
+          path="/ngos" 
+          element={
+            <NGOPage 
+              language={language}
+            />
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Layout>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

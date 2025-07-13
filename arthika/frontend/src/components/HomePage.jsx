@@ -10,7 +10,9 @@ function HomePage({
   isListening, 
   startListening, 
   stopListening,
-  transcript 
+  transcript,
+  interimTranscript,
+  isProcessing
 }) {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [inputMethod, setInputMethod] = useState('voice'); // 'voice' or 'text'
@@ -48,6 +50,8 @@ function HomePage({
   };
 
   const handleStartQuery = () => {
+    if (isProcessing) return; // Prevent multiple calls while processing
+    
     if (inputMethod === 'voice') {
       if (isListening) {
         stopListening();
@@ -61,6 +65,8 @@ function HomePage({
       }
     }
   };
+
+  const displayText = transcript || interimTranscript;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -335,27 +341,70 @@ function HomePage({
               <div className="text-center space-y-4">
                 <button
                   onClick={handleStartQuery}
-                  className={`microphone-btn ${isListening ? 'recording' : ''}`}
+                  disabled={isProcessing}
+                  className={`microphone-btn ${isListening ? 'recording' : ''} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isListening ? <MicOff size={32} /> : <Mic size={32} />}
                 </button>
                 <p className="text-lg font-medium text-gray-700">
-                  {isListening 
-                    ? (
-                      <TranslatedText language={language}>
-                        Listening... Speak now!
-                      </TranslatedText>
-                    )
-                    : (
-                      <TranslatedText language={language}>
-                        Click to start speaking
-                      </TranslatedText>
-                    )
-                  }
+                  {isProcessing ? (
+                    <TranslatedText language={language}>
+                      Processing your question...
+                    </TranslatedText>
+                  ) : isListening ? (
+                    <TranslatedText language={language}>
+                      Listening... Speak now!
+                    </TranslatedText>
+                  ) : (
+                    <TranslatedText language={language}>
+                      Click to start speaking
+                    </TranslatedText>
+                  )}
                 </p>
-                {transcript && (
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-gray-700">{transcript}</p>
+                
+                {/* Real-time transcript display */}
+                {(transcript || interimTranscript) && (
+                  <div className="bg-gray-50 rounded-lg p-4 min-h-[80px]">
+                    {transcript && (
+                      <div className="mb-2">
+                        <p className="text-sm text-gray-500 mb-1">
+                          <TranslatedText language={language}>
+                            Final transcript:
+                          </TranslatedText>
+                        </p>
+                        <p className="text-gray-700 font-medium">{transcript}</p>
+                      </div>
+                    )}
+                    {interimTranscript && (
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">
+                          <TranslatedText language={language}>
+                            Listening...
+                          </TranslatedText>
+                        </p>
+                        <p className="text-gray-600 italic">{interimTranscript}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Voice tips */}
+                {!transcript && !isListening && (
+                  <div className="text-sm text-gray-500 space-y-1">
+                    <p>
+                      <TranslatedText language={language}>
+                        💡 Try saying:
+                      </TranslatedText>
+                    </p>
+                    <p className="text-gray-600">
+                      "What if I take a gold loan?"
+                    </p>
+                    <p className="text-gray-600">
+                      "How should I invest my money?"
+                    </p>
+                    <p className="text-gray-600">
+                      "Best savings account for high returns?"
+                    </p>
                   </div>
                 )}
               </div>
