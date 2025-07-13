@@ -75,6 +75,25 @@ function RoadmapPage({ language, roadmapData }) {
 
   // Memoize the data to prevent unnecessary re-renders
   const data = useMemo(() => {
+    // Handle dynamic roadmap from query response (new structure)
+    if (roadmapData && roadmapData.summary && roadmapData.steps) {
+      // This is the new dynamic roadmap structure from the backend
+      return {
+        summary: roadmapData.summary,
+        steps: roadmapData.steps.map(step => ({
+          ...step,
+          // Clean up the title to avoid duplication
+          title: step.title || 'Financial Step',
+          // Clean up the description to avoid redundancy
+          description: step.description || 'Follow the recommended financial strategy',
+          status: step.status || 'pending'
+        })),
+        type: roadmapData.type,
+        riskLevel: roadmapData.riskLevel,
+        estimatedCost: roadmapData.estimatedCost
+      };
+    }
+    
     // Handle the actual backend response structure
     if (roadmapData && roadmapData.data) {
       // Backend returns { success: true, data: { roadmap, queries, trustScore, totalQueries } }
@@ -102,28 +121,45 @@ function RoadmapPage({ language, roadmapData }) {
       }
     }
     
-    // Handle dynamic roadmap from query response (new structure)
-    if (roadmapData && roadmapData.summary && roadmapData.steps) {
-      // This is the new dynamic roadmap structure from the backend
-      return {
-        summary: roadmapData.summary,
-        steps: roadmapData.steps.map(step => ({
-          ...step,
-          // Clean up the title to avoid duplication
-          title: step.title || 'Financial Step',
-          // Clean up the description to avoid redundancy
-          description: step.description || 'Follow the recommended financial strategy',
-          status: step.status || 'pending'
-        })),
-        type: roadmapData.type,
-        riskLevel: roadmapData.riskLevel,
-        estimatedCost: roadmapData.estimatedCost
-      };
-    }
-    
     // Fallback to mock data if backend data is not available
     return mockRoadmapData;
   }, [roadmapData]);
+
+  // Show "no roadmap" state if no data is available
+  if (!roadmapData || (!roadmapData.summary && !roadmapData.data)) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center space-y-6">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+            <TrendingUp className="text-gray-400" size={32} />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">
+              <TranslatedText language={language}>
+                No Roadmap Available
+              </TranslatedText>
+            </h2>
+            <p className="text-gray-600 max-w-md mx-auto">
+              <TranslatedText language={language}>
+                You need to ask a financial question first to generate your personalized roadmap.
+              </TranslatedText>
+            </p>
+          </div>
+          <Link 
+            to="/" 
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span>
+              <TranslatedText language={language}>
+                Ask a Question
+              </TranslatedText>
+            </span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     // Generate chart data based on selected period
