@@ -10,6 +10,7 @@ import TrustScorePage from './pages/TrustScorePage';
 import SchemesPage from './pages/SchemesPage';
 import ExportPage from './pages/ExportPage';
 import NGOPage from './pages/NGOPage';
+import AboutPage from './pages/AboutPage';
 
 // Import components
 import Layout from './components/Layout';
@@ -141,6 +142,10 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
               language={language}
             />
           } 
+        />
+        <Route 
+          path="/about" 
+          element={<AboutPage language={language} />} 
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
