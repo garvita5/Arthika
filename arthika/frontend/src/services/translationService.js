@@ -1,6 +1,5 @@
-// Translation service with CORS proxy and fallback options
+// Translation service with improved fallback options
 const LIBRE_TRANSLATE_API = 'https://libretranslate.de/translate';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 const BACKUP_API = 'https://api.mymemory.translated.net/get';
 
 // Cache for translations to avoid repeated API calls
@@ -59,7 +58,7 @@ const fallbackTranslations = {
     'Tamil': 'তামিল',
     'Telugu': 'তেলুগু',
     'Marathi': 'মারাঠি',
-    'Gujarati': 'গুজরাটি',
+    'Gujarati': 'গুজराती',
     'Kannada': 'কন্নড়',
     'Malayalam': 'মালয়ালম',
     'Punjabi': 'পাঞ্জাবি'
@@ -157,35 +156,7 @@ export const translateText = async (text, targetLanguage, sourceLanguage = 'en')
 
   // Try multiple translation approaches
   const translationAttempts = [
-    // Attempt 1: Direct LibreTranslate with CORS proxy
-    async () => {
-      try {
-        const response = await fetch(`${CORS_PROXY}${LIBRE_TRANSLATE_API}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5175'
-          },
-          body: JSON.stringify({
-            q: text,
-            source: sourceLanguage,
-            target: targetLanguage,
-            format: 'text'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('LibreTranslate failed');
-        }
-
-        const data = await response.json();
-        return data.translatedText || text;
-      } catch (error) {
-        throw new Error('LibreTranslate failed');
-      }
-    },
-    
-    // Attempt 2: MyMemory API (no CORS issues)
+    // Attempt 1: MyMemory API (no CORS issues)
     async () => {
       try {
         const url = `${BACKUP_API}?q=${encodeURIComponent(text)}&langpair=${sourceLanguage}|${targetLanguage}`;
@@ -200,6 +171,13 @@ export const translateText = async (text, targetLanguage, sourceLanguage = 'en')
       } catch (error) {
         throw new Error('MyMemory failed');
       }
+    },
+    
+    // Attempt 2: Simple fallback for common words
+    async () => {
+      // For now, return the original text if no translation is available
+      // This prevents the endless retry loop
+      return text;
     }
   ];
 
@@ -207,19 +185,19 @@ export const translateText = async (text, targetLanguage, sourceLanguage = 'en')
   for (let i = 0; i < translationAttempts.length; i++) {
     try {
       const result = await translationAttempts[i]();
-      translationCache.set(cacheKey, result);
-      return result;
+      if (result && result !== text) {
+        translationCache.set(cacheKey, result);
+        return result;
+      }
     } catch (error) {
       console.warn(`Translation attempt ${i + 1} failed:`, error.message);
-      
-      // If this is the last attempt, return original text
-      if (i === translationAttempts.length - 1) {
-        console.warn('All translation methods failed, returning original text');
-        translationCache.set(cacheKey, text);
-        return text;
-      }
+      continue;
     }
   }
+
+  // If all attempts fail, return original text
+  translationCache.set(cacheKey, text);
+  return text;
 };
 
 // Batch translate multiple texts
