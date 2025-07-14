@@ -75,10 +75,10 @@ function HomePage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">₹</span>
+              <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md">
+                <img src={require('../assets/arthika-logo.png')} alt="Arthika Logo" className="w-14 h-14 object-contain" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Arthika</h1>
+              <h1 className="text-3xl font-extrabold text-gray-900 ml-2">Arthika</h1>
             </div>
             
             <div className="flex items-center space-x-4">
@@ -185,23 +185,57 @@ function HomePage({
           </div>
         )}
 
+        {/* Top Feature Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {[
+            {
+              icon: <svg className="w-12 h-12 mx-auto mb-3 text-cyan-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8" /></svg>,
+              title: 'View Roadmap',
+              desc: 'See your financial journey',
+            },
+            {
+              icon: <svg className="w-12 h-12 mx-auto mb-3 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>,
+              title: 'Trust Score',
+              desc: 'Check your financial health',
+            },
+            {
+              icon: <svg className="w-12 h-12 mx-auto mb-3 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M16 3v4" /><path d="M8 3v4" /></svg>,
+              title: 'Government Schemes',
+              desc: 'Find available benefits',
+            },
+            {
+              icon: <svg className="w-12 h-12 mx-auto mb-3 text-indigo-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 17v-6" /><path d="M7 12h10" /><path d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+              title: 'Export Plan',
+              desc: 'Download your financial plan',
+            },
+          ].map((item, idx) => (
+            <div
+              key={item.title}
+              className="rounded-3xl bg-white/70 backdrop-blur-md shadow-xl p-8 flex flex-col items-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-blue-100"
+              style={{ minHeight: '220px' }}
+            >
+              {item.icon}
+              <h3 className="text-xl font-bold text-gray-900 mb-1 text-center">{item.title}</h3>
+              <p className="text-gray-500 text-base text-center">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
         {/* Use Case Tiles */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {useCases.map((useCase, index) => (
-            <div key={index} className="card hover:shadow-xl transition-shadow cursor-pointer">
-              <div className="text-center space-y-4">
-                <div className="text-4xl mb-4">{useCase.icon}</div>
-                <h3 className="font-semibold text-lg text-gray-900">
-                  <TranslatedText language={language}>
-                    {useCase.title}
-                  </TranslatedText>
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  <TranslatedText language={language}>
-                    {useCase.description}
-                  </TranslatedText>
-                </p>
-              </div>
+            <div
+              key={index}
+              className="rounded-3xl bg-white/80 backdrop-blur-md shadow-xl p-8 flex flex-col items-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-blue-100"
+              style={{ minHeight: '220px' }}
+            >
+              <div className="text-5xl mb-4 drop-shadow-sm">{useCase.icon}</div>
+              <h3 className="font-bold text-lg text-gray-900 mb-1 text-center">
+                <TranslatedText language={language}>{useCase.title}</TranslatedText>
+              </h3>
+              <p className="text-gray-500 text-base text-center">
+                <TranslatedText language={language}>{useCase.description}</TranslatedText>
+              </p>
             </div>
           ))}
         </div>

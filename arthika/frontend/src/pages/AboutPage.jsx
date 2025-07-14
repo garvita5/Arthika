@@ -12,6 +12,7 @@ import {
   Clock
 } from 'lucide-react';
 import { aboutTranslations } from '../config/aboutTranslations';
+import TranslatedText from '../components/TranslatedText';
 
 const AboutPage = ({ language }) => {
   const translations = aboutTranslations[language] || aboutTranslations.en;

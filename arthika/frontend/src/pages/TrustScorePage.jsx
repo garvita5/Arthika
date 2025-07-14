@@ -21,13 +21,13 @@ function TrustScorePage({ language, trustScore = 85 }) {
   // Show "no trust score" state if no score is available
   if (!trustScore && trustScore !== 0) {
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center space-y-6">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-            <Shield className="text-gray-400" size={32} />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in">
+        <div className="card text-center space-y-8">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+            <Shield className="text-gray-400" size={40} />
           </div>
           <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900">
               <TranslatedText language={language}>
                 No Trust Score Available
               </TranslatedText>
@@ -40,9 +40,9 @@ function TrustScorePage({ language, trustScore = 85 }) {
           </div>
           <Link 
             to="/" 
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="btn-primary inline-flex items-center space-x-2 px-8 py-4 text-lg"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={22} />
             <span>
               <TranslatedText language={language}>
                 Ask a Question
@@ -138,14 +138,14 @@ function TrustScorePage({ language, trustScore = 85 }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-10">
         <Link 
           to="/" 
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center space-x-2 text-gray-600 hover:text-cyan-700 transition-colors text-lg font-medium"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={22} />
           <span>
             <TranslatedText language={language}>
               Back to Home
@@ -156,7 +156,7 @@ function TrustScorePage({ language, trustScore = 85 }) {
         <button
           onClick={recalculateScore}
           disabled={isLoading}
-          className="flex items-center space-x-2 px-4 py-2 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors disabled:opacity-50"
+          className="btn-secondary flex items-center space-x-2 px-6 py-3 text-base disabled:opacity-50"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           <span>
