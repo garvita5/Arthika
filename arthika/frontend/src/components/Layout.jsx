@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
@@ -9,10 +9,12 @@ import {
   Download, 
   Users,
   Phone,
-  Info
+  Info,
+  Menu
 } from 'lucide-react';
 import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
+import logo from '../assets/logo.png';
 
 const Layout = ({ 
   children, 
@@ -27,6 +29,7 @@ const Layout = ({
   processQuery
 }) => {
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigationItems = [
     { path: '/', label: 'Home', icon: Home },
@@ -50,90 +53,67 @@ const Layout = ({
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
       <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">₹</span>
+        <div>
+          <div className="flex items-center justify-between min-h-[8rem] w-full">
+            {/* Logo only, large */}
+            <div className="flex items-center flex-shrink-0" style={{minWidth: '0'}}>
+              <div className="w-36 h-36 flex items-center justify-center" style={{background: 'transparent'}}>
+                <img src={logo} alt="Arthika Logo" className="w-full h-full object-contain" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Arthika</h1>
-            </Link>
-            
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                    }`}
-                  >
-                    <Icon size={16} />
-                    <span>
-                      <TranslatedText language={language}>
-                        {item.label}
-                      </TranslatedText>
-                    </span>
-                  </Link>
-                );
-              })}
-            </nav>
-
+            </div>
             {/* Right side controls */}
-            <div className="flex items-center space-x-4">
-              {/* Voice Query Button */}
+            <div className="flex items-center gap-4 ml-auto flex-shrink-0" style={{ alignSelf: 'center' }}>
               <button
                 onClick={handleVoiceQuery}
                 disabled={isProcessing}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isListening
-                    ? 'bg-red-100 text-red-700 animate-pulse'
-                    : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
-                } ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-base font-semibold transition-colors duration-200 shadow-sm
+                  ${isListening ? 'bg-red-100 text-red-700 animate-pulse' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}
+                  ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <MessageSquare size={16} />
+                <MessageSquare size={20} />
                 <span>
                   <TranslatedText language={language}>
                     {isListening ? 'Listening...' : 'Voice Query'}
                   </TranslatedText>
                 </span>
               </button>
-
-              {/* Language Selector */}
-              <LanguageSelector 
-                currentLanguage={language} 
-                onLanguageChange={onLanguageChange} 
-              />
+              <div className="flex items-center">
+                <LanguageSelector 
+                  currentLanguage={language} 
+                  onLanguageChange={onLanguageChange} 
+                />
+              </div>
             </div>
           </div>
-
-          {/* Mobile Navigation */}
-          <div className="md:hidden py-2 border-t">
-            <div className="flex items-center justify-between">
-              <div className="flex space-x-1 overflow-x-auto">
+        </div>
+        {/* Sidebar Overlay (unchanged) */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50">
+            <div className="absolute inset-0 bg-black opacity-30" onClick={() => setSidebarOpen(false)}></div>
+            <aside className="fixed top-0 left-0 h-full w-72 bg-white shadow-lg z-50 flex flex-col p-6">
+              <div className="flex items-center justify-between mb-8">
+                <img src={logo} alt="Arthika Logo" className="w-20 h-20 object-contain" />
+                <button
+                  className="p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+                  onClick={() => setSidebarOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <nav className="flex flex-col gap-3">
                 {navigationItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.path;
-                  
                   return (
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium transition-colors whitespace-nowrap ${
-                        isActive
-                          ? 'bg-primary-100 text-primary-700'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-lg font-medium transition-all duration-200
+                        ${isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-700 hover:text-primary-700 hover:bg-primary-50'}`}
+                      onClick={() => setSidebarOpen(false)}
                     >
-                      <Icon size={12} />
+                      <Icon size={22} />
                       <span>
                         <TranslatedText language={language}>
                           {item.label}
@@ -142,64 +122,48 @@ const Layout = ({
                     </Link>
                   );
                 })}
-              </div>
-            </div>
+                <Link to="/about" className="flex items-center gap-3 px-4 py-3 rounded-lg text-lg font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50" onClick={() => setSidebarOpen(false)}>
+                  <Info size={22} />
+                  <span>
+                    <TranslatedText language={language}>About</TranslatedText>
+                  </span>
+                </Link>
+              </nav>
+            </aside>
           </div>
-        </div>
+        )}
       </header>
-
-      {/* Voice Status Bar */}
-      {(isListening || transcript || interimTranscript) && (
-        <div className="bg-blue-50 border-b border-blue-200 px-4 py-2">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className={`w-2 h-2 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-gray-400'}`} />
-              <span className="text-sm text-gray-700">
-                <TranslatedText language={language}>
-                  {isListening ? 'Listening...' : 'Processing...'}
-                </TranslatedText>
-              </span>
-            </div>
-            
-            {transcript && (
-              <div className="text-sm text-gray-600 max-w-md truncate">
-                "{transcript}"
-              </div>
-            )}
-            
-            {interimTranscript && !transcript && (
-              <div className="text-sm text-gray-500 max-w-md truncate italic">
-                "{interimTranscript}"
-              </div>
-            )}
-          </div>
-        </div>
+      {/* Fixed Menu Icon Button (top-left under header, all pages, hidden when sidebar is open) */}
+      {!sidebarOpen && (
+        <button
+          className="fixed left-6 z-50 hover:bg-gray-100 focus:outline-none"
+          style={{top: '9rem', background: 'transparent', padding: 0, border: 'none', boxShadow: 'none'}}
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu size={32} />
+        </button>
       )}
-
       {/* Main Content */}
       <main className="flex-1">
         {children}
       </main>
-
       {/* Footer */}
       <footer className="bg-white border-t mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Left Column */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">₹</span>
+              <div className="flex items-center">
+                <div className="w-20 h-20 flex items-center justify-center" style={{background: 'transparent'}}>
+                  <img src={logo} alt="Arthika Logo" className="w-full h-full object-contain" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900">Arthika</h3>
               </div>
-              
               <p className="text-gray-600 text-sm">
                 <TranslatedText language={language}>
                   Also available via phone call (IVR) or in local centers
                 </TranslatedText>
               </p>
-              
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <Phone size={16} />
@@ -219,7 +183,6 @@ const Layout = ({
                 </div>
               </div>
             </div>
-
             {/* Right Column */}
             <div className="space-y-4">
               <div className="flex flex-wrap gap-4">
@@ -256,7 +219,6 @@ const Layout = ({
                   </span>
                 </Link>
               </div>
-              
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-600">
                   <TranslatedText language={language}>
@@ -270,7 +232,6 @@ const Layout = ({
               </div>
             </div>
           </div>
-          
           <div className="border-t mt-8 pt-8 text-center">
             <p className="text-sm text-gray-500">
               © 2024 Arthika. <TranslatedText language={language}>All rights reserved.</TranslatedText>
