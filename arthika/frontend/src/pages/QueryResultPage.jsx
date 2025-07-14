@@ -99,7 +99,7 @@ function QueryResultPage({ language, resetFlow }) {
     if ('speechSynthesis' in window && queryResult && queryResult.storyResponse) {
       window.speechSynthesis.cancel();
       const utterance = new window.SpeechSynthesisUtterance(queryResult.storyResponse);
-      utterance.lang = language === 'en' ? 'en-US' : ${language}-IN;
+      utterance.lang = language === 'en' ? 'en-US' : `${language}-IN`;
       utterance.rate = 0.9;
       utterance.pitch = 1;
       utterance.onstart = () => setIsSpeaking(true);
@@ -154,7 +154,7 @@ function QueryResultPage({ language, resetFlow }) {
               <span><TranslatedText language={language}>Back to Home</TranslatedText></span>
             </Link>
             <div className="flex items-center space-x-4">
-              <button onClick={toggleSpeaking} className={flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${isSpeaking ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}}>
+              <button onClick={toggleSpeaking} className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${isSpeaking ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}`}>
                 {isSpeaking ? <Pause size={16} /> : <Play size={16} />}
                 <span><TranslatedText language={language}>{isSpeaking ? 'Pause' : 'Listen'}</TranslatedText></span>
               </button>
@@ -238,9 +238,9 @@ function QueryResultPage({ language, resetFlow }) {
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-4">
-                    <div className={px-3 py-1 rounded-full text-sm font-medium ${getTrustScoreColor(fallbackResult.trustScore || 75)}}>{(fallbackResult.trustScore || 75)}/100</div>
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${getTrustScoreColor(fallbackResult.trustScore || 75)}`}>{(fallbackResult.trustScore || 75)}/100</div>
                     <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div className={h-2 rounded-full transition-all duration-500 ${fallbackResult.trustScore >= 80 ? 'bg-green-500' : fallbackResult.trustScore >= 60 ? 'bg-orange-500' : 'bg-red-500'}} style={{ width: ${fallbackResult.trustScore || 75}% }}></div>
+                      <div className={`h-2 rounded-full transition-all duration-500 ${fallbackResult.trustScore >= 80 ? 'bg-green-500' : fallbackResult.trustScore >= 60 ? 'bg-orange-500' : 'bg-red-500'}`} style={{ width: `${fallbackResult.trustScore || 75}%` }}></div>
                     </div>
                   </div>
                   <div className="text-sm text-gray-600">
@@ -331,7 +331,7 @@ function QueryResultPage({ language, resetFlow }) {
           <span><TranslatedText language={language}>Back to Home</TranslatedText></span>
         </Link>
         <div className="flex items-center space-x-4">
-          <button onClick={toggleSpeaking} className={flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${isSpeaking ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}}>
+          <button onClick={toggleSpeaking} className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${isSpeaking ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}`}>
             {isSpeaking ? <Pause size={16} /> : <Play size={16} />}
             <span><TranslatedText language={language}>{isSpeaking ? 'Pause' : 'Listen'}</TranslatedText></span>
           </button>
@@ -414,9 +414,9 @@ function QueryResultPage({ language, resetFlow }) {
             </div>
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <div className={px-3 py-1 rounded-full text-sm font-medium ${getTrustScoreColor(trustScore)}}>{trustScore}/100</div>
+                <div className={`px-3 py-1 rounded-full text-sm font-medium ${getTrustScoreColor(trustScore)}`}>{trustScore}/100</div>
                 <div className="flex-1 bg-gray-200 rounded-full h-2">
-                  <div className={h-2 rounded-full transition-all duration-500 ${trustScore >= 80 ? 'bg-green-500' : trustScore >= 60 ? 'bg-orange-500' : 'bg-red-500'}} style={{ width: ${trustScore}% }}></div>
+                  <div className={`h-2 rounded-full transition-all duration-500 ${trustScore >= 80 ? 'bg-green-500' : trustScore >= 60 ? 'bg-orange-500' : 'bg-red-500'}`} style={{ width: `${trustScore}%` }}></div>
                 </div>
               </div>
               <div className="text-sm text-gray-600">
@@ -463,4 +463,4 @@ function QueryResultPage({ language, resetFlow }) {
   );
 }
 
-export default QueryResultPage;
+export default QueryResultPage; 

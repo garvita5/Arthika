@@ -259,7 +259,7 @@ const Layout = ({
           </div>
           <div className="border-t mt-8 pt-8 text-center">
             <p className="text-sm text-gray-500">
-              © 2025 Arthika. <TranslatedText language={language}>All rights reserved.</TranslatedText>
+              © 2024 Arthika. <TranslatedText language={language}>All rights reserved.</TranslatedText>
             </p>
           </div>
         </div>
@@ -268,4 +268,4 @@ const Layout = ({
   );
 };
 
-export default Layout;
+export default Layout; 
