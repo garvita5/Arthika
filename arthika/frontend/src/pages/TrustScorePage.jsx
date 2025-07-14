@@ -18,6 +18,42 @@ function TrustScorePage({ language, trustScore = 85 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [reminders, setReminders] = useState([]);
 
+  // Show "no trust score" state if no score is available
+  if (!trustScore && trustScore !== 0) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center space-y-6">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+            <Shield className="text-gray-400" size={32} />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">
+              <TranslatedText language={language}>
+                No Trust Score Available
+              </TranslatedText>
+            </h2>
+            <p className="text-gray-600 max-w-md mx-auto">
+              <TranslatedText language={language}>
+                You need to ask a financial question first to calculate your trust score.
+              </TranslatedText>
+            </p>
+          </div>
+          <Link 
+            to="/" 
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span>
+              <TranslatedText language={language}>
+                Ask a Question
+              </TranslatedText>
+            </span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // Mock reminders data
   const mockReminders = [
     {

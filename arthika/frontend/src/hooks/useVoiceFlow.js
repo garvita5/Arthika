@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import apiService from '../services/apiService';
+import { saveUserQuery } from '../services/apiService';
 import { useTranslationContext } from '../contexts/TranslationContext';
 
 export const useVoiceFlow = (language) => {
@@ -22,8 +23,9 @@ export const useVoiceFlow = (language) => {
   const processingRef = useRef(false);
   const lastProcessedTranscriptRef = useRef('');
   
-  // Generate user ID
-  const userId = useRef('user-' + Math.random().toString(36).substr(2, 9)).current;
+  // Get userId from localStorage if available
+  const storedUser = typeof window !== 'undefined' ? localStorage.getItem('arthikaUser') : null;
+  const userId = storedUser ? JSON.parse(storedUser).uid : useRef('user-' + Math.random().toString(36).substr(2, 9)).current;
 
   // Speech recognition hook
   const {
@@ -60,16 +62,30 @@ export const useVoiceFlow = (language) => {
     setIsProcessing(true);
     
     try {
-      console.log('Processing query:', query);
-      
       // Call query API
       const queryResponse = await apiService.submitFinancialQuery(query, language, userId);
       
       // Extract the story response from the structured data
       const responseData = queryResponse.data || queryResponse;
-      const storyResponse = responseData.storyResponse || responseData.response || 'No response received';
+      
+      // Try multiple possible response formats
+      let storyResponse = '';
+      if (responseData.storyResponse) {
+        storyResponse = responseData.storyResponse;
+      } else if (responseData.response) {
+        storyResponse = responseData.response;
+      } else if (typeof responseData === 'string') {
+        storyResponse = responseData;
+      } else if (responseData.message) {
+        storyResponse = responseData.message;
+      } else {
+        storyResponse = 'No response received';
+      }
       
       setAiResponse(storyResponse);
+      
+      // Save query and answer to Firestore
+      await saveUserQuery({ userId, question: query, answer: storyResponse, language });
       
       // Use roadmap data from the query response
       const roadmapData = responseData.roadmap || null;
@@ -80,7 +96,6 @@ export const useVoiceFlow = (language) => {
       setShouldNavigate(true);
       
     } catch (error) {
-      console.error('Error processing query:', error);
       setAiResponse(getMessage('error.processing'));
       setRoadmapData(null);
       setTargetRoute('/query');
@@ -171,7 +186,6 @@ export const useVoiceFlow = (language) => {
       URL.revokeObjectURL(url);
       
     } catch (error) {
-      console.error('Export failed:', error);
       setAlertMessage(getMessage('error.export'));
       setShowAlert(true);
     }

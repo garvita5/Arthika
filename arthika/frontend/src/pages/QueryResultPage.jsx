@@ -10,7 +10,8 @@ import {
   ArrowLeft,
   CheckCircle,
   AlertCircle,
-  Info
+  Info,
+  MessageSquare
 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
 
@@ -100,13 +101,33 @@ function QueryResultPage({
   if (!aiResponse) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="text-gray-600">
-            <TranslatedText language={language}>
-              Processing your query...
-            </TranslatedText>
-          </p>
+        <div className="text-center space-y-6">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+            <MessageSquare className="text-gray-400" size={32} />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">
+              <TranslatedText language={language}>
+                No Query Asked
+              </TranslatedText>
+            </h2>
+            <p className="text-gray-600 max-w-md mx-auto">
+              <TranslatedText language={language}>
+                You haven't asked a financial question yet. Go back to the home page to start your financial journey.
+              </TranslatedText>
+            </p>
+          </div>
+          <Link 
+            to="/" 
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span>
+              <TranslatedText language={language}>
+                Ask a Question
+              </TranslatedText>
+            </span>
+          </Link>
         </div>
       </div>
     );
