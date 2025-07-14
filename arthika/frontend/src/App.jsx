@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { TranslationProvider } from './contexts/TranslationContext';
+import { QueryProvider } from './contexts/QueryContext';
 
 // Import pages
 import HomePage from './pages/HomePage';
@@ -169,9 +170,11 @@ function App() {
   }
 
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <QueryProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </QueryProvider>
   );
 }
 
