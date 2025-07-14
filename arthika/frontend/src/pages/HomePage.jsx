@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, MessageSquare, ChevronDown, Play, Volume2, Phone, Users, Shield, Info, TrendingUp, FileText, Download, Loader2 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
+import logo from '../assets/arthika-logo.png';
 
 function HomePage({ 
   language,
@@ -100,42 +101,36 @@ function HomePage({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Hero Section */}
-      <div className="text-center space-y-8 mb-12">
+      <div className="gradient-bg rounded-3xl shadow-xl p-10 md:p-20 text-center space-y-10 mb-16 animate-fade-in">
+        <div className="flex flex-col items-center mb-4">
+          <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md mb-2">
+            <img src={logo} alt="Arthika Logo" className="w-20 h-20 object-contain" />
+          </div>
+        </div>
         <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight tracking-tight" style={{letterSpacing: '-0.5px'}}>
             <TranslatedText language={language}>
               Understand your money in your language
             </TranslatedText>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-2xl md:text-3xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             <TranslatedText language={language}>
               Get clear, simple advice on loans, savings, and more — no jargon, just stories.
             </TranslatedText>
           </p>
         </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center mt-6">
           <button
-            onClick={() => {
-              setInputMethod('voice');
-              startListening();
-              micSectionRef.current?.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
-              });
-            }}
-            className="btn-primary text-lg px-8 py-4 flex items-center justify-center space-x-2"
+            onClick={handleStartQuery}
+            className="btn-primary text-xl px-10 py-5 shadow-lg"
           >
-            <Mic size={24} />
-            <span>
-              <TranslatedText language={language}>
-                Start Voice Query
-              </TranslatedText>
-            </span>
+            <TranslatedText language={language}>
+              Start a Query
+            </TranslatedText>
           </button>
           <button
             onClick={() => setShowHowItWorks(!showHowItWorks)}
-            className="btn-secondary text-lg px-8 py-4"
+            className="btn-secondary text-xl px-10 py-5 shadow"
           >
             <TranslatedText language={language}>
               How It Works
@@ -233,17 +228,17 @@ function HomePage({
       </div>
 
       {/* Use Case Tiles */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
         {useCases.map((useCase, index) => (
-          <div key={index} className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-            <div className="text-center space-y-4">
-              <div className="text-4xl mb-4">{useCase.icon}</div>
-              <h3 className="font-semibold text-lg text-gray-900">
+          <div key={index} className="card animate-slide-in cursor-pointer hover:shadow-2xl transition-all duration-300">
+            <div className="text-center space-y-6">
+              <div className="text-5xl mb-4">{useCase.icon}</div>
+              <h3 className="font-semibold text-xl text-gray-800">
                 <TranslatedText language={language}>
                   {useCase.title}
                 </TranslatedText>
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-500 text-base">
                 <TranslatedText language={language}>
                   {useCase.description}
                 </TranslatedText>
@@ -254,15 +249,15 @@ function HomePage({
       </div>
 
       {/* Voice Input Section */}
-      <div ref={micSectionRef} className="card max-w-2xl mx-auto mb-12">
-        <div className="space-y-6">
+      <div ref={micSectionRef} className="card max-w-2xl mx-auto mb-16 animate-fade-in">
+        <div className="space-y-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight" style={{letterSpacing: '-0.5px'}}>
               <TranslatedText language={language}>
                 Ask Your Question
               </TranslatedText>
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-500 text-lg">
               <TranslatedText language={language}>
                 Choose how you want to ask your financial question
               </TranslatedText>
@@ -273,9 +268,9 @@ function HomePage({
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => setInputMethod('voice')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-colors shadow-sm text-lg font-medium ${
                 inputMethod === 'voice' 
-                  ? 'bg-primary-100 text-primary-700' 
+                  ? 'bg-cyan-100 text-cyan-700' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -288,9 +283,9 @@ function HomePage({
             </button>
             <button
               onClick={() => setInputMethod('text')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-colors shadow-sm text-lg font-medium ${
                 inputMethod === 'text' 
-                  ? 'bg-primary-100 text-primary-700' 
+                  ? 'bg-cyan-100 text-cyan-700' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -358,18 +353,18 @@ function HomePage({
               {/* Voice tips removed as per user request */}
             </div>
           ) : (
-            <form onSubmit={handleTextSubmit} className="space-y-4">
+            <div className="space-y-4">
               <textarea
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Type your question here..."
-                className="input-field h-32 resize-none"
+                className="input-field h-32 resize-none text-lg"
                 disabled={isProcessing}
               />
               <button
-                type="submit"
+                onClick={handleStartQuery}
                 disabled={!textInput.trim() || isProcessing}
-                className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full text-xl py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -386,7 +381,7 @@ function HomePage({
                   </TranslatedText>
                 )}
               </button>
-            </form>
+            </div>
           )}
 
           <div className="text-sm text-gray-500 text-center">
