@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, MessageSquare, ChevronDown, Play, Volume2, Phone, Users, Shield, Info, TrendingUp, FileText, Download, Loader2 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
+import apiService from '../services/apiService';
+import { useNavigate } from 'react-router-dom';
+import { useQueryContext } from '../contexts/QueryContext';
 
 function HomePage({ 
   language,
@@ -16,6 +19,9 @@ function HomePage({
   const [inputMethod, setInputMethod] = useState('voice');
   const [textInput, setTextInput] = useState('');
   const micSectionRef = useRef(null);
+  const navigate = useNavigate();
+  const [loadingPreset, setLoadingPreset] = useState(false);
+  const { setQueryResult, resetQueryResult, userId } = useQueryContext();
 
   const useCases = [
     {
@@ -96,6 +102,29 @@ function HomePage({
   };
 
   const displayText = transcript || interimTranscript;
+
+  // Handler for preset command tiles
+  const handlePresetCommand = async (presetText) => {
+    setLoadingPreset(true);
+    try {
+      resetQueryResult(); // Clear previous result
+      const response = await apiService.submitFinancialQuery(presetText, language, userId);
+      console.log('API response from /api/query:', response);
+      if (response && response.data) {
+        setQueryResult(response.data); // Set new result in context
+        console.log('Set new query result in context:', response.data);
+        const normalizedQuestion = presetText.trim().toLowerCase();
+        setTimeout(() => navigate(`/query?question=${encodeURIComponent(normalizedQuestion)}`), 50);
+      } else {
+        alert('No data received from backend.');
+      }
+    } catch (error) {
+      alert('Failed to get response. Please try again.');
+      console.error('API error:', error);
+    } finally {
+      setLoadingPreset(false);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -235,7 +264,10 @@ function HomePage({
       {/* Use Case Tiles */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+          <div key={index} className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+            onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
+            style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
+          >
             <div className="text-center space-y-4">
               <div className="text-4xl mb-4">{useCase.icon}</div>
               <h3 className="font-semibold text-lg text-gray-900">

@@ -11,6 +11,7 @@ import {
   Share2
 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
+import { useQueryContext } from '../contexts/QueryContext';
 
 // Mock data moved outside component to prevent recreation on every render
 const mockRoadmapData = {
@@ -60,7 +61,9 @@ const mockRoadmapData = {
   }
 };
 
-function RoadmapPage({ language, roadmapData }) {
+function RoadmapPage({ language }) {
+  const { queryResult } = useQueryContext();
+  const roadmapData = queryResult?.roadmap;
   const [selectedPeriod, setSelectedPeriod] = useState('12months');
   const [chartData, setChartData] = useState(null);
 
