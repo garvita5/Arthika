@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import apiService from '../services/apiService';
+import { saveUserQuery } from '../services/apiService';
 import { useTranslationContext } from '../contexts/TranslationContext';
 
 export const useVoiceFlow = (language) => {
@@ -22,8 +23,9 @@ export const useVoiceFlow = (language) => {
   const processingRef = useRef(false);
   const lastProcessedTranscriptRef = useRef('');
   
-  // Generate user ID
-  const userId = useRef('user-' + Math.random().toString(36).substr(2, 9)).current;
+  // Get userId from localStorage if available
+  const storedUser = typeof window !== 'undefined' ? localStorage.getItem('arthikaUser') : null;
+  const userId = storedUser ? JSON.parse(storedUser).uid : useRef('user-' + Math.random().toString(36).substr(2, 9)).current;
 
   // Speech recognition hook
   const {
@@ -81,6 +83,9 @@ export const useVoiceFlow = (language) => {
       }
       
       setAiResponse(storyResponse);
+      
+      // Save query and answer to Firestore
+      await saveUserQuery({ userId, question: query, answer: storyResponse, language });
       
       // Use roadmap data from the query response
       const roadmapData = responseData.roadmap || null;
