@@ -112,6 +112,22 @@ const Layout = ({
                 currentLanguage={language} 
                 onLanguageChange={onLanguageChange} 
               />
+
+              {/* Log Out Button */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem('arthikaUser');
+                  window.location.reload();
+                }}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
+                <span>
+                  <TranslatedText language={language}>
+                    Log Out
+                  </TranslatedText>
+                </span>
+              </button>
             </div>
           </div>
 

@@ -35,6 +35,26 @@ apiClient.interceptors.response.use(
   }
 );
 
+// FIREBASE QUERY STORAGE
+import { db } from './firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
+export async function saveUserQuery({ userId, question, answer, language }) {
+  try {
+    const docRef = await addDoc(collection(db, 'queries'), {
+      userId,
+      question,
+      answer,
+      language,
+      createdAt: serverTimestamp(),
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error saving user query:', error);
+    throw error;
+  }
+}
+
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;

@@ -15,6 +15,7 @@ import AboutPage from './pages/AboutPage';
 // Import components
 import Layout from './components/Layout';
 import { useVoiceFlow } from './hooks/useVoiceFlow';
+import AuthForm from './components/AuthForm';
 
 function AppContent() {
   const [language, setLanguage] = useState('en');
@@ -154,6 +155,19 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
 }
 
 function App() {
+  const [user, setUser] = React.useState(() => {
+    const stored = localStorage.getItem('arthikaUser');
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  const handleAuthSuccess = (userObj) => {
+    setUser(userObj);
+  };
+
+  if (!user) {
+    return <AuthForm onAuthSuccess={handleAuthSuccess} />;
+  }
+
   return (
     <Router>
       <AppContent />
