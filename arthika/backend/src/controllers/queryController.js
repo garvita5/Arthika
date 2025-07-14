@@ -29,14 +29,14 @@ function generateDynamicRoadmap(queryResponse, question) {
   // Parse estimated cost to get numeric values from AI response
   const costMatch = estimatedCost.match(/₹?([\d,]+)/);
   let baseAmount = costMatch ? parseInt(costMatch[1].replace(/,/g, '')) : 50000;
-  
-  // Also try to extract amount from the question itself - improved regex
-  const questionAmountMatch = question.match(/(\d{1,3}(?:,\d{3})*(?:,\d{3})*)/);
-  const questionAmount = questionAmountMatch ? parseInt(questionAmountMatch[1].replace(/,/g, '')) : null;
-  
+
+  // Extract all numbers from the question and pick the largest
+  const questionAmounts = (question.match(/\d{1,3}(?:,\d{3})*(?:,\d{3})*|\d+/g) || []).map(s => parseInt(s.replace(/,/g, '')));
+  const questionAmount = questionAmounts.length > 0 ? Math.max(...questionAmounts) : null;
+
   // Use the amount from the question if it's larger than the estimated cost
   let finalBaseAmount = questionAmount && questionAmount > baseAmount ? questionAmount : baseAmount;
-  
+
   // For investment queries, prioritize the amount mentioned in the question
   const queryLower = question.toLowerCase();
   if (queryLower.includes('invest') && questionAmount) {
@@ -419,51 +419,81 @@ class QueryController {
         });
       }
 
-      console.log(`Processing query: "${question}" in ${language} for user: ${userId}`);
+      const normalizedQuestion = question.trim().toLowerCase();
+      console.log(`Original question: "${question}", Normalized: "${normalizedQuestion}"`);
 
-      // Generate AI response
-      const aiResponse = await openaiService.generateFinancialStory(question, language);
-
-      // Add debugging and error handling
-      console.log('AI Response:', JSON.stringify(aiResponse, null, 2));
-      
-      if (!aiResponse) {
-        throw new Error('AI response is undefined');
+      // 1. Check if query already exists for this user
+      let existingQuery = null;
+      if (userId) {
+        existingQuery = await databaseService.findQueryByUserAndQuestion(userId, normalizedQuestion);
+      }
+      if (existingQuery) {
+        console.log(`[CACHE HIT] userId: ${userId}, question: "${normalizedQuestion}"`);
+        // Support both old and new formats
+        const resp = existingQuery.response || existingQuery;
+        return res.json({
+          success: true,
+          data: {
+            storyResponse: resp.storyResponse || resp.response || 'No response available',
+            recommendedSteps: resp.recommendedSteps || [],
+            tags: resp.tags || [],
+            riskLevel: resp.riskLevel || 'medium',
+            estimatedCost: resp.estimatedCost || 'Varies',
+            saferAlternatives: resp.saferAlternatives || [],
+            timeframe: resp.timeframe || 'Varies',
+            expectedReturns: resp.expectedReturns || 'Varies',
+            governmentSchemes: resp.governmentSchemes || [],
+            language: language,
+            roadmap: existingQuery.roadmap
+          }
+        });
       }
 
-      // Generate dynamic roadmap based on the response
+      // 2. If not found, call OpenAI or use mock
+      let aiResponse = null;
+      let usedOpenAI = false;
+      try {
+        aiResponse = await openaiService.generateFinancialStory(question, language);
+        usedOpenAI = openaiService.isAvailable;
+      } catch (err) {
+        console.error('OpenAI error, using mock:', err);
+        aiResponse = openaiService.getMockResponse(question, language);
+        usedOpenAI = false;
+      }
+
+      // 3. Generate dynamic roadmap
       const dynamicRoadmap = generateDynamicRoadmap(aiResponse, question);
 
-      // Save query to database if userId is provided
+      // 4. Save query to database if userId is provided
       if (userId) {
         try {
+          // Always save under 'response' key for consistency
+          const safeAI = typeof aiResponse === 'object' && aiResponse !== null ? aiResponse : {};
           await databaseService.saveQuery(userId, {
-            question,
+            question: normalizedQuestion,
             language,
-            response: aiResponse,
+            response: safeAI,
             roadmap: dynamicRoadmap,
             timestamp: new Date().toISOString()
           });
-
-          // Update trust score
           await databaseService.calculateTrustScore(userId);
         } catch (dbError) {
           console.error('Database error:', dbError);
-          // Continue even if database save fails
         }
       }
 
-      // Ensure consistent response format
+      // 5. Return response (robust to missing fields)
+      const safeAI = typeof aiResponse === 'object' && aiResponse !== null ? aiResponse : {};
       const formattedResponse = {
-        storyResponse: aiResponse.storyResponse || aiResponse.response || 'No response available',
-        recommendedSteps: aiResponse.recommendedSteps || [],
-        tags: aiResponse.tags || [],
-        riskLevel: aiResponse.riskLevel || 'medium',
-        estimatedCost: aiResponse.estimatedCost || 'Varies',
-        saferAlternatives: aiResponse.saferAlternatives || [],
-        timeframe: aiResponse.timeframe || 'Varies',
-        expectedReturns: aiResponse.expectedReturns || 'Varies',
-        governmentSchemes: aiResponse.governmentSchemes || [],
+        storyResponse: safeAI.storyResponse || safeAI.response || 'No response available',
+        recommendedSteps: safeAI.recommendedSteps || [],
+        tags: safeAI.tags || [],
+        riskLevel: safeAI.riskLevel || 'medium',
+        estimatedCost: safeAI.estimatedCost || 'Varies',
+        saferAlternatives: safeAI.saferAlternatives || [],
+        timeframe: safeAI.timeframe || 'Varies',
+        expectedReturns: safeAI.expectedReturns || 'Varies',
+        governmentSchemes: safeAI.governmentSchemes || [],
         language: language,
         roadmap: dynamicRoadmap
       };
@@ -535,6 +565,31 @@ class QueryController {
       res.status(500).json({
         success: false,
         error: 'Failed to check API status',
+        message: error.message
+      });
+    }
+  }
+
+  // GET /api/user-queries?userId=abc123
+  async getUserQueries(req, res) {
+    try {
+      const { userId } = req.query;
+      if (!userId) {
+        return res.status(400).json({
+          success: false,
+          error: 'User ID is required'
+        });
+      }
+      const queries = await databaseService.getUserQueries(userId);
+      res.json({
+        success: true,
+        data: queries
+      });
+    } catch (error) {
+      console.error('Get user queries error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch user queries',
         message: error.message
       });
     }

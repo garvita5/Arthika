@@ -108,6 +108,34 @@ class DatabaseService {
     }
   }
 
+  // Find a query by userId and question (case-insensitive, trimmed)
+  async findQueryByUserAndQuestion(userId, question) {
+    if (!userId || !question) return null;
+    const normalizedQuestion = question.trim().toLowerCase();
+
+    if (this.useMock) {
+      const queries = Array.from(mockDatabase.queries.values())
+        .filter(q => q.userId === userId && q.question && q.question.trim().toLowerCase() === normalizedQuestion);
+      return queries.length > 0 ? queries[0] : null;
+    }
+
+    try {
+      const snapshot = await this.db.collection('queries')
+        .where('userId', '==', userId)
+        .get();
+      for (const doc of snapshot.docs) {
+        const data = doc.data();
+        if (data.question && data.question.trim().toLowerCase() === normalizedQuestion) {
+          return data;
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error('Error finding query by user and question:', error);
+      return null;
+    }
+  }
+
   // Roadmap operations
   async saveRoadmap(userId, roadmapData) {
     if (this.useMock) {

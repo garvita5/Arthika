@@ -18,6 +18,7 @@ class OpenAIService {
     try {
       // If OpenAI is not available, return mock response
       if (!this.isAvailable) {
+        console.log('[MOCK] Using mock response for OpenAI');
         return this.getMockResponse(question, language);
       }
 
@@ -62,6 +63,9 @@ class OpenAIService {
       - Make the response practical and actionable
       - Use cultural context and relatable examples`;
 
+      console.log('[OPENAI] Using real OpenAI API');
+      console.log('OpenAI prompt:', userPrompt);
+
       const completion = await this.openai.chat.completions.create({
         model: "gpt-3.5-turbo", // Using GPT-3.5-turbo which is more widely available
         messages: [
@@ -73,6 +77,7 @@ class OpenAIService {
       });
 
       const response = completion.choices[0].message.content;
+      console.log('OpenAI raw response:', response);
       
       // Try to parse JSON response, fallback to text if needed
       try {
