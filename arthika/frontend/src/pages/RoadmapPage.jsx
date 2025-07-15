@@ -78,58 +78,57 @@ function RoadmapPage({ language }) {
 
   // Memoize the data to prevent unnecessary re-renders
   const data = useMemo(() => {
-    // Handle dynamic roadmap from query response (new structure)
-    if (roadmapData && roadmapData.summary && roadmapData.steps) {
-      // This is the new dynamic roadmap structure from the backend
-      return {
-        summary: roadmapData.summary,
-        steps: roadmapData.steps.map(step => ({
-          ...step,
-          // Clean up the title to avoid duplication
-          title: step.title || 'Financial Step',
-          // Clean up the description to avoid redundancy
-          description: step.description || 'Follow the recommended financial strategy',
-          status: step.status || 'pending'
-        })),
-        type: roadmapData.type,
-        riskLevel: roadmapData.riskLevel,
-        estimatedCost: roadmapData.estimatedCost
-      };
+    // If no roadmapData at all (first visit, no question asked), show mock data
+    if (!queryResult) {
+      return mockRoadmapData;
     }
-    
-    // Handle the actual backend response structure
-    if (roadmapData && roadmapData.data) {
-      // Backend returns { success: true, data: { roadmap, queries, trustScore, totalQueries } }
-      const backendData = roadmapData.data;
-      
-      // Transform backend data to match expected format
-      if (backendData.roadmap) {
+    // If roadmapData is present and valid, use it
+    if (roadmapData && (roadmapData.summary || roadmapData.steps || roadmapData.data)) {
+      // Handle dynamic roadmap from query response (new structure)
+      if (roadmapData.summary && roadmapData.steps) {
         return {
-          summary: {
-            totalSavings: backendData.roadmap.currentStatus?.savings || 0,
-            totalDebt: -(backendData.roadmap.currentStatus?.loans || 0),
-            netWorth: (backendData.roadmap.currentStatus?.savings || 0) + (backendData.roadmap.currentStatus?.investments || 0) - (backendData.roadmap.currentStatus?.loans || 0),
-            timeline: '12 months'
-          },
-          steps: backendData.roadmap.financialGoals?.map((goal, index) => ({
-            id: goal.id || index + 1,
-            title: goal.title,
-            description: `Target: ${formatCurrency(goal.target)}, Current: ${formatCurrency(goal.current)}`,
-            status: goal.current >= goal.target ? 'completed' : goal.current > 0 ? 'in-progress' : 'pending',
-            timeline: `Month ${index + 1}-${index + 3}`,
-            savings: goal.current,
-            debt: 0
-          })) || []
+          summary: roadmapData.summary,
+          steps: roadmapData.steps.map(step => ({
+            ...step,
+            title: step.title || 'Financial Step',
+            description: step.description || 'Follow the recommended financial strategy',
+            status: step.status || 'pending'
+          })),
+          type: roadmapData.type,
+          riskLevel: roadmapData.riskLevel,
+          estimatedCost: roadmapData.estimatedCost
         };
       }
+      // Handle the actual backend response structure
+      if (roadmapData.data) {
+        const backendData = roadmapData.data;
+        if (backendData.roadmap) {
+          return {
+            summary: {
+              totalSavings: backendData.roadmap.currentStatus?.savings || 0,
+              totalDebt: -(backendData.roadmap.currentStatus?.loans || 0),
+              netWorth: (backendData.roadmap.currentStatus?.savings || 0) + (backendData.roadmap.currentStatus?.investments || 0) - (backendData.roadmap.currentStatus?.loans || 0),
+              timeline: '12 months'
+            },
+            steps: backendData.roadmap.financialGoals?.map((goal, index) => ({
+              id: goal.id || index + 1,
+              title: goal.title,
+              description: `Target: ${formatCurrency(goal.target)}, Current: ${formatCurrency(goal.current)}`,
+              status: goal.current >= goal.target ? 'completed' : goal.current > 0 ? 'in-progress' : 'pending',
+              timeline: `Month ${index + 1}-${index + 3}`,
+              savings: goal.current,
+              debt: 0
+            })) || []
+          };
+        }
+      }
     }
-    
-    // Fallback to mock data if backend data is not available
-    return mockRoadmapData;
-  }, [roadmapData]);
+    // If roadmapData is present but not valid, show 'No Roadmap Available'
+    return undefined;
+  }, [queryResult, roadmapData]);
 
   // Show "no roadmap" state if no data is available
-  if (!roadmapData || (!roadmapData.summary && !roadmapData.data)) {
+  if (!data) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in">
         <div className="card text-center space-y-8">
