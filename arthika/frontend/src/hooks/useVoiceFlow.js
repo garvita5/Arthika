@@ -92,13 +92,13 @@ export const useVoiceFlow = (language) => {
       setRoadmapData(roadmapData);
       
       // Set navigation flag instead of directly navigating
-      setTargetRoute('/query');
+      setTargetRoute(`/answer?question=${encodeURIComponent(query)}`);
       setShouldNavigate(true);
       
     } catch (error) {
       setAiResponse(getMessage('error.processing'));
       setRoadmapData(null);
-      setTargetRoute('/query');
+      setTargetRoute(`/answer?question=${encodeURIComponent(query)}`);
       setShouldNavigate(true);
     } finally {
       setIsProcessing(false);

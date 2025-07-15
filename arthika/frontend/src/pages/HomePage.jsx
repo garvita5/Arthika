@@ -89,15 +89,22 @@ function HomePage({
       }
     } else {
       if (textInput.trim()) {
-        processQuery(textInput);
+        navigate(`/answer?question=${encodeURIComponent(textInput)}`);
       }
     }
   };
 
-  const handleTextSubmit = (e) => {
+  const handleTextSubmit = async (e) => {
     e.preventDefault();
     if (textInput.trim()) {
-      processQuery(textInput);
+      resetQueryResult();
+      const response = await apiService.submitFinancialQuery(textInput, language, userId);
+      if (response) {
+        setQueryResult({ question: textInput, ...response });
+        navigate(`/answer?question=${encodeURIComponent(textInput.trim())}`);
+      } else {
+        alert('No data received from backend.');
+      }
     }
   };
 
@@ -109,12 +116,9 @@ function HomePage({
     try {
       resetQueryResult(); // Clear previous result
       const response = await apiService.submitFinancialQuery(presetText, language, userId);
-      console.log('API response from /api/query:', response);
-      if (response && response.data) {
-        setQueryResult(response.data); // Set new result in context
-        console.log('Set new query result in context:', response.data);
-        const normalizedQuestion = presetText.trim().toLowerCase();
-        setTimeout(() => navigate(`/query?question=${encodeURIComponent(normalizedQuestion)}`), 50);
+      if (response) {
+        setQueryResult({ question: presetText, ...response }); // Store question + answer
+        navigate(`/answer?question=${encodeURIComponent(presetText.trim())}`);
       } else {
         alert('No data received from backend.');
       }
@@ -130,20 +134,20 @@ function HomePage({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Hero Section */}
       <div className="text-center space-y-8 mb-12">
-        <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+        <div className="space-y-6 bg-gradient-to-br from-cyan-50 to-blue-100 rounded-3xl shadow-lg px-6 py-10 mx-auto max-w-3xl border border-blue-100">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight drop-shadow-sm">
             <TranslatedText language={language}>
               Understand your money in your language
             </TranslatedText>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             <TranslatedText language={language}>
               Get clear, simple advice on loans, savings, and more — no jargon, just stories.
             </TranslatedText>
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <button
             onClick={() => {
               setInputMethod('voice');
@@ -153,7 +157,7 @@ function HomePage({
                 block: 'center' 
               });
             }}
-            className="btn-primary text-lg px-8 py-4 flex items-center justify-center space-x-2"
+            className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white text-lg px-8 py-4 flex items-center justify-center space-x-2 rounded-full shadow-lg hover:from-cyan-500 hover:to-blue-600 transition-all duration-200"
           >
             <Mic size={24} />
             <span>
@@ -164,7 +168,7 @@ function HomePage({
           </button>
           <button
             onClick={() => setShowHowItWorks(!showHowItWorks)}
-            className="btn-secondary text-lg px-8 py-4"
+            className="bg-white/80 border border-blue-200 text-blue-700 text-lg px-8 py-4 rounded-full shadow hover:bg-blue-50 transition-all duration-200"
           >
             <TranslatedText language={language}>
               How It Works
@@ -175,7 +179,7 @@ function HomePage({
 
       {/* How It Works Section */}
       {showHowItWorks && (
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-12 animate-fade-in">
+        <div className="bg-white/80 rounded-2xl shadow-xl p-8 mb-12 animate-fade-in border border-blue-100">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             <TranslatedText language={language}>
               How Arthika Works
@@ -183,8 +187,8 @@ function HomePage({
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mic className="text-primary-600" size={24} />
+              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow">
+                <Mic className="text-cyan-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
                 <TranslatedText language={language}>
@@ -198,8 +202,8 @@ function HomePage({
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Play className="text-success-600" size={24} />
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow">
+                <Play className="text-green-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
                 <TranslatedText language={language}>
@@ -213,7 +217,7 @@ function HomePage({
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow">
                 <Volume2 className="text-purple-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
@@ -232,61 +236,57 @@ function HomePage({
       )}
 
       {/* Quick Actions Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
         {quickActions.map((action, index) => {
           const Icon = action.icon;
           return (
             <a
               key={index}
               href={action.path}
-              className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-8 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[210px] min-h-[210px]"
             >
-              <div className="text-center space-y-4">
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors">
-                  <Icon className="text-primary-600" size={24} />
-                </div>
-                <h3 className="font-semibold text-lg text-gray-900">
-                  <TranslatedText language={language}>
-                    {action.title}
-                  </TranslatedText>
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  <TranslatedText language={language}>
-                    {action.description}
-                  </TranslatedText>
-                </p>
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
+                <Icon className="text-cyan-600" size={36} />
               </div>
+              <h3 className="font-semibold text-xl text-gray-900 mb-2">
+                <TranslatedText language={language}>
+                  {action.title}
+                </TranslatedText>
+              </h3>
+              <p className="text-gray-600 text-base">
+                <TranslatedText language={language}>
+                  {action.description}
+                </TranslatedText>
+              </p>
             </a>
           );
         })}
       </div>
 
       {/* Use Case Tiles */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-8 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[210px] min-h-[210px]"
             onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
             style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
           >
-            <div className="text-center space-y-4">
-              <div className="text-4xl mb-4">{useCase.icon}</div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                <TranslatedText language={language}>
-                  {useCase.title}
-                </TranslatedText>
-              </h3>
-              <p className="text-gray-600 text-sm">
-                <TranslatedText language={language}>
-                  {useCase.description}
-                </TranslatedText>
-              </p>
-            </div>
+            <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
+            <h3 className="font-semibold text-xl text-gray-900 mb-2">
+              <TranslatedText language={language}>
+                {useCase.title}
+              </TranslatedText>
+            </h3>
+            <p className="text-gray-600 text-base">
+              <TranslatedText language={language}>
+                {useCase.description}
+              </TranslatedText>
+            </p>
           </div>
         ))}
       </div>
 
       {/* Voice Input Section */}
-      <div ref={micSectionRef} className="card max-w-2xl mx-auto mb-12">
+      <div ref={micSectionRef} className="bg-white/80 border border-blue-100 card max-w-2xl mx-auto mb-12 rounded-2xl shadow-xl p-8">
         <div className="space-y-6">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -307,7 +307,7 @@ function HomePage({
               onClick={() => setInputMethod('voice')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                 inputMethod === 'voice' 
-                  ? 'bg-primary-100 text-primary-700' 
+                  ? 'bg-cyan-100 text-cyan-700' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -322,7 +322,7 @@ function HomePage({
               onClick={() => setInputMethod('text')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                 inputMethod === 'text' 
-                  ? 'bg-primary-100 text-primary-700' 
+                  ? 'bg-cyan-100 text-cyan-700' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -341,7 +341,7 @@ function HomePage({
               <button
                 onClick={handleStartQuery}
                 disabled={isProcessing}
-                className={`microphone-btn ${isListening ? 'recording' : ''} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''} transition-all duration-300 hover:scale-105`}
+                className={`microphone-btn ${isListening ? 'recording' : ''} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''} transition-all duration-300 hover:scale-105 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-lg`}
               >
                 {isProcessing ? <Loader2 className="animate-spin" size={32} /> : (isListening ? <MicOff size={32} /> : <Mic size={32} />)}
               </button>
@@ -360,7 +360,6 @@ function HomePage({
                   </TranslatedText>
                 )}
               </p>
-              
               {/* Real-time transcript display */}
               {(transcript || interimTranscript) && (
                 <div className="bg-gray-50 rounded-lg p-4 min-h-[80px] animate-fade-in">
@@ -386,8 +385,6 @@ function HomePage({
                   )}
                 </div>
               )}
-              
-              {/* Voice tips removed as per user request */}
             </div>
           ) : (
             <form onSubmit={handleTextSubmit} className="space-y-4">
@@ -395,13 +392,13 @@ function HomePage({
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Type your question here..."
-                className="input-field h-32 resize-none"
+                className="input-field h-32 resize-none bg-white/80 border border-blue-200 rounded-xl shadow focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                 disabled={isProcessing}
               />
               <button
                 type="submit"
                 disabled={!textInput.trim() || isProcessing}
-                className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white btn-primary w-full rounded-full py-3 text-lg font-semibold shadow-lg hover:from-cyan-500 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -421,7 +418,7 @@ function HomePage({
             </form>
           )}
 
-          <div className="text-sm text-gray-500 text-center">
+          <div className="text-sm text-gray-500 text-center mt-2">
             <TranslatedText language={language}>
               Try asking: "What if I take a gold loan?" or "How should I invest my money?"
             </TranslatedText>

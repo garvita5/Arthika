@@ -33,30 +33,20 @@ function QueryResultPage({ language, resetFlow }) {
       try {
         // Use a fallback userId if none is provided
         const effectiveUserId = userId || 'default-user';
-        console.log('Fetching result for question:', question, 'userId:', effectiveUserId);
         const resp = await apiService.submitFinancialQuery(question, language, effectiveUserId);
-        console.log('API response:', resp);
-        console.log('Response type:', typeof resp);
-        console.log('Response keys:', Object.keys(resp || {}));
-        if (resp && resp.success && resp.data) {
-          console.log('Using success.data path');
-          setQueryResult(resp.data);
-        } else if (resp && resp.data) {
-          console.log('Using direct data path');
-          setQueryResult(resp.data);
-        } else if (resp && resp.storyResponse) {
-          console.log('Using direct response');
+        console.log('API response:', resp); // Debug log
+        // Always use the response as-is if it contains storyResponse
+        if (resp && resp.storyResponse) {
           setQueryResult(resp);
+        } else if (resp && resp.data && resp.data.storyResponse) {
+          setQueryResult(resp.data);
         } else {
-          console.log('No valid data found in response');
           setError('No data received from backend.');
         }
       } catch (err) {
         setError('Failed to fetch result.');
-        console.error('API error:', err);
       } finally {
         setLoading(false);
-        console.log('Loading set to false');
       }
     }
     if (question) fetchResult();
@@ -440,11 +430,11 @@ function QueryResultPage({ language, resetFlow }) {
                     </div>
                   </div>
                 ))}
-                <div className="text-center pt-2">
+                  <div className="text-center pt-2">
                   <Link to="/roadmap" className="text-sm text-primary-600 hover:text-primary-700 font-semibold">
                     <TranslatedText language={language}>View Full Roadmap →</TranslatedText>
-                  </Link>
-                </div>
+                    </Link>
+                  </div>
               </div>
             </div>
           )}

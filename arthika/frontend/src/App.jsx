@@ -12,6 +12,7 @@ import SchemesPage from './pages/SchemesPage';
 import ExportPage from './pages/ExportPage';
 import NGOPage from './pages/NGOPage';
 import AboutPage from './pages/AboutPage';
+import AnswerPage from './pages/AnswerPage';
 
 // Import components
 import Layout from './components/Layout';
@@ -92,16 +93,8 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
           } 
         />
         <Route 
-          path="/query" 
-          element={
-            <QueryResultPage 
-              language={language}
-              aiResponse={aiResponse}
-              roadmapData={roadmapData}
-              trustScore={trustScore}
-              resetFlow={resetVoiceFlow}
-            />
-          } 
+          path="/answer" 
+          element={<AnswerPage language={language} />} 
         />
         <Route 
           path="/roadmap" 
