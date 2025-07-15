@@ -247,17 +247,17 @@ function HomePage({
             >
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
                 <Icon className="text-cyan-600" size={36} />
-              </div>
+                </div>
               <h3 className="font-semibold text-xl text-gray-900 mb-2">
-                <TranslatedText language={language}>
-                  {action.title}
-                </TranslatedText>
-              </h3>
+                  <TranslatedText language={language}>
+                    {action.title}
+                  </TranslatedText>
+                </h3>
               <p className="text-gray-600 text-base">
-                <TranslatedText language={language}>
-                  {action.description}
-                </TranslatedText>
-              </p>
+                  <TranslatedText language={language}>
+                    {action.description}
+                  </TranslatedText>
+                </p>
             </a>
           );
         })}
@@ -272,15 +272,15 @@ function HomePage({
           >
             <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
             <h3 className="font-semibold text-xl text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                {useCase.title}
-              </TranslatedText>
-            </h3>
+                <TranslatedText language={language}>
+                  {useCase.title}
+                </TranslatedText>
+              </h3>
             <p className="text-gray-600 text-base">
-              <TranslatedText language={language}>
-                {useCase.description}
-              </TranslatedText>
-            </p>
+                <TranslatedText language={language}>
+                  {useCase.description}
+                </TranslatedText>
+              </p>
           </div>
         ))}
       </div>
@@ -410,9 +410,9 @@ function HomePage({
                     </span>
                   </div>
                 ) : (
-                  <TranslatedText language={language}>
-                    Ask Question
-                  </TranslatedText>
+                <TranslatedText language={language}>
+                  Ask Question
+                </TranslatedText>
                 )}
               </button>
             </form>
