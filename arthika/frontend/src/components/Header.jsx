@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, Wifi, WifiOff } from 'lucide-react';
 import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import { useTranslationContext } from '../contexts/TranslationContext';
+import rupeeLogo from '../assets/rupee1.png';
 
 function Header({ currentStep, language, onLanguageChange }) {
   const { translationError } = useTranslationContext();
@@ -12,11 +13,11 @@ function Header({ currentStep, language, onLanguageChange }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">₹</span>
+            <img src={rupeeLogo} alt="Arthika Logo" className="w-16 h-16 object-contain" />
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-gray-900 leading-tight">Arthika</span>
+              <span className="text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>Financial Clarity. Indian Simplicity.</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Arthika</h1>
-            
             {/* Translation Status Indicator */}
             {language !== 'en' && (
               <div className="flex items-center space-x-1 ml-2">
@@ -31,7 +32,7 @@ function Header({ currentStep, language, onLanguageChange }) {
               </div>
             )}
           </div>
-          
+
           {/* 3-Step Process Indicator */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -46,9 +47,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                 </TranslatedText>
               </span>
             </div>
-            
             <ArrowRight size={16} className="text-gray-400" />
-            
             <div className="flex items-center space-x-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                 currentStep >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
@@ -61,9 +60,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                 </TranslatedText>
               </span>
             </div>
-            
             <ArrowRight size={16} className="text-gray-400" />
-            
             <div className="flex items-center space-x-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                 currentStep >= 3 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
