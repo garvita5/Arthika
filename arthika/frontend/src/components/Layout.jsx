@@ -16,6 +16,30 @@ import {
 import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import rupeeLogo from '../assets/rupee1.png';
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
+
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 const navigationItems = [
   { path: '/', label: 'Home', icon: Home },
