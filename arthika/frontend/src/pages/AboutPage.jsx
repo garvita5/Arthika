@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { aboutTranslations } from '../config/aboutTranslations';
 import TranslatedText from '../components/TranslatedText';
+import rupeeLogo from '../assets/rupee1.png';
 
 const AboutPage = ({ language }) => {
   const translations = aboutTranslations[language] || aboutTranslations.en;
@@ -83,8 +84,8 @@ const AboutPage = ({ language }) => {
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="w-20 h-20 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-white font-bold text-3xl">₹</span>
+            <div className="w-20 h-20 flex items-center justify-center mx-auto mb-6">
+              <img src={rupeeLogo} alt="Arthika Logo" className="w-20 h-20 object-contain" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {translations.hero.title}
@@ -177,38 +178,6 @@ const AboutPage = ({ language }) => {
                 <div className="text-gray-600">
                   {stat.label}
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {translations.team.title}
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {translations.team.subtitle}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-6 text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users size={24} className="text-primary-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-primary-600 font-medium mb-3">
-                  {member.role}
-                </p>
-                <p className="text-gray-600">
-                  {member.description}
-                </p>
               </div>
             ))}
           </div>
