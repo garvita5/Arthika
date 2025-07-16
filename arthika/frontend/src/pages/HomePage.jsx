@@ -13,7 +13,8 @@ function HomePage({
   transcript,
   interimTranscript,
   isProcessing,
-  processQuery
+  processQuery,
+  setTranscript // <-- add this prop if not already present
 }) {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [inputMethod, setInputMethod] = useState('voice');
@@ -21,7 +22,7 @@ function HomePage({
   const micSectionRef = useRef(null);
   const navigate = useNavigate();
   const [loadingPreset, setLoadingPreset] = useState(false);
-  const { setQueryResult, resetQueryResult, userId } = useQueryContext();
+  const { setQueryResult, resetQueryResult, userEmail } = useQueryContext();
 
   const useCases = [
     {
@@ -98,9 +99,10 @@ function HomePage({
     e.preventDefault();
     if (textInput.trim()) {
       resetQueryResult();
-      const response = await apiService.submitFinancialQuery(textInput, language, userId);
+      const response = await apiService.submitFinancialQuery(textInput, language, userEmail);
       if (response) {
         setQueryResult({ question: textInput, ...response });
+        if (typeof setTranscript === 'function') setTranscript(); // Clear transcript
         navigate(`/answer?question=${encodeURIComponent(textInput.trim())}`);
       } else {
         alert('No data received from backend.');
@@ -115,9 +117,10 @@ function HomePage({
     setLoadingPreset(true);
     try {
       resetQueryResult(); // Clear previous result
-      const response = await apiService.submitFinancialQuery(presetText, language, userId);
+      const response = await apiService.submitFinancialQuery(presetText, language, userEmail);
       if (response) {
         setQueryResult({ question: presetText, ...response }); // Store question + answer
+        if (typeof setTranscript === 'function') setTranscript(); // Clear transcript
         navigate(`/answer?question=${encodeURIComponent(presetText.trim())}`);
       } else {
         alert('No data received from backend.');
@@ -133,10 +136,10 @@ function HomePage({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Hero Section */}
-      <div className="text-center space-y-8 mb-12">
-        <div className="relative space-y-8 bg-gradient-to-br from-blue-100/80 via-cyan-50 to-blue-200/80 rounded-[2.5rem] shadow-2xl px-8 py-14 mx-auto max-w-3xl border-2 border-blue-200/60 ring-4 ring-cyan-100/40 backdrop-blur-md">
+      <div className=" text-center space-y-8 mb-12">
+        <div className="relative space-y-8 bg-gradient-to-br from-blue-100/80 via-cyan-50 to-blue-200/80 rounded-[2.5rem] shadow-2xl px-8 py-14 mx-auto max-w-4xl border-2 border-blue-200/60 ring-4 ring-cyan-100/40 backdrop-blur-md">
           <div className="flex flex-col items-center">
-            <div className="w-16 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 mb-6 animate-fade-in" />
+            <div className="w-30 h-6 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 mb-6 animate-fade-in flex items-center justify-center" />
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight drop-shadow-lg tracking-tight mb-4 animate-fade-in">
               <TranslatedText language={language}>
                 Understand your money in your language
@@ -230,7 +233,7 @@ function HomePage({
               </h3>
               <p className="text-gray-600">
                 <TranslatedText language={language}>
-                  See your financial roadmap with charts and actionable recommendations.
+                  See your financial roadmap with actionable recommendations.
                 </TranslatedText>
               </p>
             </div>

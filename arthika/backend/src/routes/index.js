@@ -18,6 +18,17 @@ router.use("/score", trustScoreRoutes);
 router.use("/legal", legalRoutes);
 router.use("/feedback", feedbackRoutes);
 
+// Feedback endpoint
+router.post('/feedback', (req, res) => {
+  const { message, email } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Feedback message is required.' });
+  }
+  // Here you would store feedback in a database or send an email
+  console.log('Feedback received:', { message, email });
+  res.status(200).json({ success: true, message: 'Thank you for your feedback!' });
+});
+
 // API info endpoint
 router.get("/", (req, res) => {
   res.json({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { QueryProvider } from './contexts/QueryContext';
 
@@ -13,6 +13,7 @@ import ExportPage from './pages/ExportPage';
 import NGOPage from './pages/NGOPage';
 import AboutPage from './pages/AboutPage';
 import AnswerPage from './pages/AnswerPage';
+import AllQueriesPage from './pages/AllQueriesPage';
 
 // Import components
 import Layout from './components/Layout';
@@ -53,13 +54,18 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
     resetVoiceFlow,
     shouldNavigate,
     targetRoute,
-    setShouldNavigate
+    setShouldNavigate,
+    setTranscript
   } = useVoiceFlow(language);
 
   // Handle navigation when shouldNavigate is true
   useEffect(() => {
     if (shouldNavigate && targetRoute) {
-      navigate(targetRoute);
+      if (window.location.pathname === '/answer') {
+        navigate(targetRoute, { replace: true });
+      } else {
+        navigate(targetRoute);
+      }
       setShouldNavigate(false);
     }
   }, [shouldNavigate, targetRoute, navigate, setShouldNavigate]);
@@ -75,6 +81,7 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
       interimTranscript={interimTranscript}
       isProcessing={isProcessing}
       processQuery={processQuery}
+      setTranscript={setTranscript}
     >
       <Routes>
         <Route 
@@ -142,10 +149,23 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
           path="/about" 
           element={<AboutPage language={language} />} 
         />
+        <Route 
+          path="/all-queries" 
+          element={<AllQueriesPage />} 
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
   );
+}
+
+// ScrollToTop component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+  return null;
 }
 
 function App() {
@@ -163,8 +183,9 @@ function App() {
   }
 
   return (
-    <QueryProvider>
+    <QueryProvider userEmail={user?.email}>
       <Router>
+        <ScrollToTop />
         <AppContent />
       </Router>
     </QueryProvider>

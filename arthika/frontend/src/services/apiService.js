@@ -37,12 +37,12 @@ apiClient.interceptors.response.use(
 
 // FIREBASE QUERY STORAGE
 import { db } from './firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
-export async function saveUserQuery({ userId, question, answer, language }) {
+export async function saveUserQuery({ email, question, answer, language }) {
   try {
     const docRef = await addDoc(collection(db, 'queries'), {
-      userId,
+      userEmail: email,
       question,
       answer,
       language,
@@ -51,6 +51,21 @@ export async function saveUserQuery({ userId, question, answer, language }) {
     return docRef.id;
   } catch (error) {
     console.error('Error saving user query:', error);
+    throw error;
+  }
+}
+
+export async function getQueriesByEmail(email) {
+  try {
+    const q = query(collection(db, 'queries'), where('userEmail', '==', email));
+    const querySnapshot = await getDocs(q);
+    const results = [];
+    querySnapshot.forEach((doc) => {
+      results.push({ id: doc.id, ...doc.data() });
+    });
+    return results;
+  } catch (error) {
+    console.error('Error fetching queries by email:', error);
     throw error;
   }
 }

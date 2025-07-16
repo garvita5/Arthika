@@ -249,15 +249,15 @@ function SchemesPage({ language }) {
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-600">
           <TranslatedText language={language}>
-            Showing {filteredSchemes.length} of {schemes.length} schemes
+            {`Showing ${filteredSchemes.length} of ${schemes.length} schemes`}
           </TranslatedText>
         </p>
       </div>
 
       {/* Schemes Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 justify-center">
         {filteredSchemes.map((scheme) => (
-          <div key={scheme.id} className="card hover:shadow-lg transition-shadow">
+          <div key={scheme.id} className="card hover:shadow-lg transition-shadow min-w-[340px] max-w-[500px] mx-auto">
             <div className="space-y-4">
               {/* Header */}
               <div className="flex items-start justify-between">

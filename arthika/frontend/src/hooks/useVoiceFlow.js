@@ -23,9 +23,9 @@ export const useVoiceFlow = (language) => {
   const processingRef = useRef(false);
   const lastProcessedTranscriptRef = useRef('');
   
-  // Get userId from localStorage if available
+  // Get userEmail from localStorage if available
   const storedUser = typeof window !== 'undefined' ? localStorage.getItem('arthikaUser') : null;
-  const userId = storedUser ? JSON.parse(storedUser).uid : useRef('user-' + Math.random().toString(36).substr(2, 9)).current;
+  const userEmail = storedUser ? JSON.parse(storedUser).email : '';
 
   // Speech recognition hook
   const {
@@ -63,7 +63,7 @@ export const useVoiceFlow = (language) => {
     
     try {
       // Call query API
-      const queryResponse = await apiService.submitFinancialQuery(query, language, userId);
+      const queryResponse = await apiService.submitFinancialQuery(query, language, userEmail);
       
       // Extract the story response from the structured data
       const responseData = queryResponse.data || queryResponse;
@@ -85,7 +85,7 @@ export const useVoiceFlow = (language) => {
       setAiResponse(storyResponse);
       
       // Save query and answer to Firestore
-      await saveUserQuery({ userId, question: query, answer: storyResponse, language });
+      await saveUserQuery({ email: userEmail, question: query, answer: storyResponse, language });
       
       // Use roadmap data from the query response
       const roadmapData = responseData.roadmap || null;
@@ -106,11 +106,12 @@ export const useVoiceFlow = (language) => {
       setIsProcessing(false);
       processingRef.current = false;
     }
-  }, [language, userId, getMessage, stopListening]);
+  }, [language, userEmail, getMessage, stopListening]);
 
   // Auto-process transcript when it changes
   useEffect(() => {
     if (transcript && transcript !== lastProcessedTranscriptRef.current) {
+      setTranscript(); // Clear transcript before processing new query
       lastProcessedTranscriptRef.current = transcript;
       processQuery(transcript);
     }
@@ -166,7 +167,7 @@ export const useVoiceFlow = (language) => {
     try {
       // Simulate PDF export
       const response = await apiService.submitFeedback({
-        userId,
+        email: userEmail,
         type: 'export',
         data: { aiResponse, roadmapData }
       });
@@ -191,7 +192,7 @@ export const useVoiceFlow = (language) => {
       setAlertMessage(getMessage('error.export'));
       setShowAlert(true);
     }
-  }, [aiResponse, roadmapData, userId, getMessage]);
+  }, [aiResponse, roadmapData, userEmail, getMessage]);
 
   // Note: Auto-speak is now handled in individual pages to prevent conflicts
   // and allow better control over when speech starts

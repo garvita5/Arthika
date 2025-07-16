@@ -14,7 +14,7 @@ function useQueryParam(name) {
 }
 
 function QueryResultPage({ language, resetFlow }) {
-  const { userId } = useQueryContext();
+  const { userEmail } = useQueryContext();
   const question = useQueryParam('question');
   const [queryResult, setQueryResult] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,9 +31,7 @@ function QueryResultPage({ language, resetFlow }) {
       setLoading(true);
       setError(null);
       try {
-        // Use a fallback userId if none is provided
-        const effectiveUserId = userId || 'default-user';
-        const resp = await apiService.submitFinancialQuery(question, language, effectiveUserId);
+        const resp = await apiService.submitFinancialQuery(question, language, userEmail);
         console.log('API response:', resp); // Debug log
         // Always use the response as-is if it contains storyResponse
         if (resp && resp.storyResponse) {
@@ -50,7 +48,7 @@ function QueryResultPage({ language, resetFlow }) {
       }
     }
     if (question) fetchResult();
-  }, [question, userId, language]);
+  }, [question, userEmail, language]);
 
   // Fetch user's past queries
   useEffect(() => {
@@ -58,31 +56,35 @@ function QueryResultPage({ language, resetFlow }) {
       setLoadingPast(true);
       setErrorPast(null);
       try {
-        const resp = await apiService.getUserQueries(userId);
-        setPastQueries(resp.data || []);
+        const results = await apiService.getQueriesByEmail(userEmail);
+        setPastQueries(results || []);
       } catch (err) {
         setErrorPast('Could not load past queries');
       } finally {
         setLoadingPast(false);
       }
     }
-    if (userId) fetchPast();
-  }, [userId, queryResult]);
+    if (userEmail) fetchPast();
+  }, [userEmail, queryResult]);
 
   // Handle click on a past query
   const handlePastQueryClick = (q) => {
     setQueryResult(q.response ? { ...q.response, roadmap: q.roadmap } : q);
   };
 
-  // Text-to-speech logic (same as before)
+  // Text-to-speech logic (auto-speak on first result)
+  useEffect(() => {
+    setHasSpoken(false); // Reset hasSpoken when question changes
+  }, [question]);
+
   useEffect(() => {
     if (queryResult && queryResult.storyResponse && !hasSpoken) {
-      const timer = setTimeout(() => {
-        speakResponse();
-        setHasSpoken(true);
-      }, 1000);
-      return () => clearTimeout(timer);
+      speakResponse();
+      setHasSpoken(true);
     }
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
   }, [queryResult, hasSpoken]);
 
   const speakResponse = () => {
