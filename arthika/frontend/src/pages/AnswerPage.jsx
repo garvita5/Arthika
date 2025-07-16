@@ -50,6 +50,10 @@ function AnswerPage({ language = 'en' }) {
   const utteranceRef = useRef(null);
 
   useEffect(() => {
+    setHasSpoken(false);
+  }, [question]);
+
+  useEffect(() => {
     async function fetchAnswer() {
       setLoading(true);
       setError(null);
