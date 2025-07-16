@@ -134,17 +134,20 @@ function HomePage({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Hero Section */}
       <div className="text-center space-y-8 mb-12">
-        <div className="space-y-6 bg-gradient-to-br from-cyan-50 to-blue-100 rounded-3xl shadow-lg px-6 py-10 mx-auto max-w-3xl border border-blue-100">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight drop-shadow-sm">
-            <TranslatedText language={language}>
-              Understand your money in your language
-            </TranslatedText>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            <TranslatedText language={language}>
-              Get clear, simple advice on loans, savings, and more — no jargon, just stories.
-            </TranslatedText>
-          </p>
+        <div className="relative space-y-8 bg-gradient-to-br from-blue-100/80 via-cyan-50 to-blue-200/80 rounded-[2.5rem] shadow-2xl px-8 py-14 mx-auto max-w-3xl border-2 border-blue-200/60 ring-4 ring-cyan-100/40 backdrop-blur-md">
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 mb-6 animate-fade-in" />
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight drop-shadow-lg tracking-tight mb-4 animate-fade-in">
+              <TranslatedText language={language}>
+                Understand your money in your language
+              </TranslatedText>
+            </h1>
+            <p className="text-xl md:text-2xl text-cyan-900/90 max-w-2xl mx-auto leading-relaxed font-medium animate-fade-in">
+              <TranslatedText language={language}>
+                Get clear, simple advice on loans, savings, and more — no jargon, just stories.
+              </TranslatedText>
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
@@ -236,14 +239,14 @@ function HomePage({
       )}
 
       {/* Quick Actions Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+      <div className="flex flex-wrap justify-center gap-12 mb-16">
         {quickActions.map((action, index) => {
           const Icon = action.icon;
           return (
             <a
               key={index}
               href={action.path}
-              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-8 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[210px] min-h-[210px]"
+              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
                 <Icon className="text-cyan-600" size={36} />
@@ -264,9 +267,9 @@ function HomePage({
       </div>
 
       {/* Use Case Tiles */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div className="flex flex-wrap justify-center gap-12 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-8 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[210px] min-h-[210px]"
+          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
             onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
             style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
           >

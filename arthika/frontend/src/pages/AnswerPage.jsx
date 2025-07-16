@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
 import apiService from '../services/apiService';
@@ -45,6 +45,9 @@ function AnswerPage({ language = 'en' }) {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [hasSpoken, setHasSpoken] = useState(false);
+  const utteranceRef = useRef(null);
 
   useEffect(() => {
     async function fetchAnswer() {
@@ -67,14 +70,53 @@ function AnswerPage({ language = 'en' }) {
     if (question) fetchAnswer();
   }, [question, language, queryResult]);
 
+  // Auto-speak answer after it loads
+  useEffect(() => {
+    if (response?.data?.storyResponse && !hasSpoken) {
+      speakAnswer();
+      setHasSpoken(true);
+    }
+    // Stop speech on unmount
+    return () => {
+      stopSpeaking();
+    };
+    // eslint-disable-next-line
+  }, [response?.data?.storyResponse]);
+
+  const speakAnswer = () => {
+    if ('speechSynthesis' in window && response?.data?.storyResponse) {
+      stopSpeaking();
+      const utterance = new window.SpeechSynthesisUtterance(response.data.storyResponse);
+      utterance.lang = language === 'en' ? 'en-US' : `${language}-IN`;
+      utterance.rate = 0.95;
+      utterance.pitch = 1;
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  };
+  const replaySpeaking = () => {
+    setHasSpoken(false);
+    speakAnswer();
+  };
+
   if (loading) return <div className="p-12 text-center text-lg">Loading...</div>;
   if (error) return <div className="p-12 text-center text-red-600">{error}</div>;
 
   const story = response?.data?.storyResponse;
   const steps = response?.data?.roadmap?.steps;
   const roadmap = response?.data?.roadmap;
-  const tags = response?.data?.tags;
+  // const tags = response?.data?.tags;
   const showExitPlanner = /exit plan|exit strategy/i.test(question || '');
+  const schemes = response?.data?.schemes || response?.data?.governmentSchemes;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 space-y-10">
@@ -87,14 +129,52 @@ function AnswerPage({ language = 'en' }) {
         <div className="text-lg md:text-xl text-gray-800 text-center leading-relaxed whitespace-pre-line mb-2">
           {story || <span className="text-gray-400">No answer available.</span>}
         </div>
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4 justify-center">
-            {tags.map((tag, idx) => (
-              <span key={idx} className="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs font-medium shadow-sm">{tag}</span>
-            ))}
+        {/* Speech Controls */}
+        {story && (
+          <div className="flex gap-3 mt-4">
+            {!isSpeaking && (
+              <button onClick={speakAnswer} className="px-4 py-2 rounded-lg bg-cyan-100 text-cyan-700 font-semibold hover:bg-cyan-200 transition">Listen</button>
+            )}
+            {isSpeaking && (
+              <button onClick={stopSpeaking} className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">Stop</button>
+            )}
+            <button onClick={replaySpeaking} className="px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition">Replay</button>
           </div>
         )}
       </div>
+
+      {/* Government Schemes Section */}
+      {schemes && schemes.length > 0 && (
+        <div className="bg-blue-50 rounded-3xl shadow-lg p-8 border border-blue-100">
+          <div className="flex items-center gap-3 mb-4">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-blue-500"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h6" /></svg>
+            <h3 className="text-xl md:text-2xl font-semibold text-blue-800">Government Schemes for You</h3>
+          </div>
+          <div className="space-y-4">
+            {schemes.map((scheme, idx) => {
+              if (typeof scheme === 'string') {
+                return (
+                  <div key={idx} className="bg-white rounded-xl shadow p-4 border border-blue-100">
+                    <div className="font-semibold text-blue-700 text-lg mb-1">{scheme}</div>
+                  </div>
+                );
+              } else if (scheme && (scheme.name || scheme.title || scheme.description)) {
+                return (
+                  <div key={idx} className="bg-white rounded-xl shadow p-4 border border-blue-100">
+                    <div className="font-semibold text-blue-700 text-lg mb-1">{scheme.name || scheme.title}</div>
+                    {scheme.description && <div className="text-gray-700 mb-1">{scheme.description}</div>}
+                    {scheme.link && (
+                      <a href={scheme.link} target="_blank" rel="noopener noreferrer" className="text-cyan-700 underline text-sm">Learn more</a>
+                    )}
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Roadmap Flowchart */}
       {roadmap && steps && steps.length > 0 && (

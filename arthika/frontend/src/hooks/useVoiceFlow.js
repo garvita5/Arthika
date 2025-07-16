@@ -94,17 +94,19 @@ export const useVoiceFlow = (language) => {
       // Set navigation flag instead of directly navigating
       setTargetRoute(`/answer?question=${encodeURIComponent(query)}`);
       setShouldNavigate(true);
+      stopListening();
       
     } catch (error) {
       setAiResponse(getMessage('error.processing'));
       setRoadmapData(null);
       setTargetRoute(`/answer?question=${encodeURIComponent(query)}`);
       setShouldNavigate(true);
+      stopListening();
     } finally {
       setIsProcessing(false);
       processingRef.current = false;
     }
-  }, [language, userId, getMessage]);
+  }, [language, userId, getMessage, stopListening]);
 
   // Auto-process transcript when it changes
   useEffect(() => {

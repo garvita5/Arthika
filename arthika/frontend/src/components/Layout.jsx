@@ -48,6 +48,7 @@ const navigationItems = [
   { path: '/schemes', label: 'Schemes', icon: FileText },
   { path: '/export', label: 'Export', icon: Download },
   { path: '/ngos', label: 'NGO Access', icon: Users },
+  { path: '/about', label: 'About', icon: Info },
 ];
 
 const Layout = ({ 
@@ -79,7 +80,7 @@ const Layout = ({
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex">
       {/* Floating Sidebar - Desktop & Tablet */}
       <aside
-        className={`hidden md:flex fixed top-6 left-6 z-40 h-[90vh] flex-col items-center bg-white shadow-xl rounded-3xl transition-all duration-300 ${sidebarHovered ? '' : ''}`}
+        className={`hidden md:flex fixed top-24 left-6 z-40 h-[80vh] flex-col items-center bg-white shadow-xl rounded-3xl transition-all duration-300 ${sidebarHovered ? '' : ''}`}
         style={{
           width: sidebarHovered ? sidebarWidthExpanded : sidebarWidthCollapsed,
           transition: 'width 0.3s cubic-bezier(.4,0,.2,1)'
@@ -87,13 +88,6 @@ const Layout = ({
         onMouseEnter={() => setSidebarHovered(true)}
         onMouseLeave={() => setSidebarHovered(false)}
       >
-        {/* Logo always visible */}
-        <div className={`flex items-center mt-6 mb-8 transition-all duration-300 ${sidebarHovered ? 'justify-start px-6' : 'justify-center'}`} style={{ minHeight: 48 }}>
-          <img src={rupeeLogo} alt="Arthika Logo" className="w-16 h-16 object-contain" />
-          {sidebarHovered && (
-            <span className="ml-3 text-xl font-bold text-gray-900 transition-opacity duration-300 opacity-100">Arthika</span>
-          )}
-              </div>
         {/* Nav Items */}
         <nav className="flex flex-col gap-2 flex-1 w-full items-center">
               {navigationItems.map((item) => {
@@ -116,11 +110,7 @@ const Layout = ({
                   </Link>
                 );
               })}
-          <Link to="/about" className="flex items-center w-full px-4 py-3 rounded-xl text-gray-700 hover:text-primary-700 hover:bg-primary-50 mb-4">
-            <Info size={24} />
-            <span className={`ml-3 whitespace-nowrap font-medium text-base transition-all duration-200 ${!sidebarHovered ? 'opacity-0 ml-0 pointer-events-none' : 'opacity-100 ml-3 pointer-events-auto'}`}>About</span>
-          </Link>
-            </nav>
+          </nav>
       </aside>
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
@@ -130,13 +120,11 @@ const Layout = ({
         className={`fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-xl rounded-r-3xl flex flex-col items-center transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         style={{ transition: 'transform 0.3s cubic-bezier(.4,0,.2,1)' }}
       >
-        <div className="flex items-center mt-8 mb-8 px-6 w-full">
-          <img src={rupeeLogo} alt="Arthika Logo" className="w-16 h-16 object-contain" />
-          <span className="ml-3 text-xl font-bold text-gray-900">Arthika</span>
+        <div className="flex items-center justify-end mt-8 mb-8 px-6 w-full">
           <button className="ml-auto p-2" onClick={() => setSidebarOpen(false)}>
             <X size={28} />
-              </button>
-            </div>
+          </button>
+        </div>
         <nav className="flex flex-col gap-2 flex-1 w-full items-center">
                 {navigationItems.map((item) => {
                   const Icon = item.icon;
@@ -153,10 +141,6 @@ const Layout = ({
                     </Link>
                   );
                 })}
-          <Link to="/about" className="flex items-center w-full px-4 py-3 rounded-xl text-gray-700 hover:text-primary-700 hover:bg-primary-50 mb-4" onClick={() => setSidebarOpen(false)}>
-            <Info size={24} />
-            <span className="ml-3 whitespace-nowrap font-medium text-base">About</span>
-          </Link>
         </nav>
       </aside>
       {/* Main Content Area */}
@@ -165,7 +149,7 @@ const Layout = ({
         style={{ marginLeft: '0', transition: 'margin-left 0.3s cubic-bezier(.4,0,.2,1)' }}
       >
         {/* Navbar */}
-        <header className="flex flex-wrap items-center justify-between bg-white shadow-sm border border-gray-200 rounded-2xl px-4 sm:px-6 md:px-8 py-2 sticky top-4 z-30 mx-2 sm:mx-4 mt-2
+        <header className="flex flex-wrap items-center justify-between bg-white shadow-sm border border-gray-200 rounded-2xl px-4 sm:px-6 md:px-8 py-2 z-30 mx-2 sm:mx-4 mt-2
           max-w-full md:max-w-[calc(100vw-320px)] md:ml-[112px] lg:ml-[128px] xl:ml-[144px] 2xl:ml-[160px]">
           <div className="flex items-center gap-3 min-w-[56px]">
             <button className="md:hidden mr-2 p-2" onClick={() => setSidebarOpen(true)}>
