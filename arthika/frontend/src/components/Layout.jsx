@@ -81,11 +81,11 @@ const Layout = ({
   // Responsive sidebar: overlay on mobile, fixed on desktop
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex">
-      {/* Floating Sidebar - Desktop & Tablet (now only on xl and up) */}
+      {/* Floating Sidebar - Desktop & Tablet */}
       <aside
-        className={`hidden xl:flex fixed mt-24 left-6 z-40 h-[57vh] flex-col items-center bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200 shadow-2xl rounded-3xl backdrop-blur-lg bg-opacity-80 transition-all duration-300 overflow-hidden`}
+        className={`hidden lg:flex fixed mt-24 left-6 z-40 h-[57vh] flex-col items-center bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200 shadow-2xl rounded-3xl backdrop-blur-lg bg-opacity-80 transition-all duration-300 overflow-hidden ${sidebarHovered ? '' : ''}`}
         style={{
-          width: sidebarHovered ? 220 : 70, // wider for xl
+          width: sidebarHovered ? sidebarWidthExpanded : sidebarWidthCollapsed,
           transition: 'width 0.3s cubic-bezier(.4,0,.2,1)',
           height: '57vh',
         }}
@@ -93,7 +93,7 @@ const Layout = ({
         onMouseLeave={() => setSidebarHovered(false)}
       >
         {/* Nav Items */}
-        <nav className="flex flex-col gap-3 flex-1 w-full items-center pt-2 pb-2">
+        <nav className="flex flex-col gap-1 flex-1 w-full items-center pt-2 pb-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -101,13 +101,13 @@ const Layout = ({
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center w-full px-2 py-3 rounded-full transition-all duration-200 my-1 ${isActive ? 'bg-white/80 text-primary-700 shadow-lg ring-2 ring-blue-200' : 'text-gray-700 hover:text-primary-700 hover:bg-white/60 hover:shadow-md'} ${!sidebarHovered ? 'justify-center' : ''}`}
+                className={`flex items-center w-full px-2 py-2 rounded-full transition-all duration-200 my-0.5 ${isActive ? 'bg-white/80 text-primary-700 shadow-lg ring-2 ring-blue-200' : 'text-gray-700 hover:text-primary-700 hover:bg-white/60 hover:shadow-md'} ${!sidebarHovered ? 'justify-center' : ''}`}
                 style={{ minWidth: 0 }}
               >
-                <span className={`${!sidebarHovered ? 'mx-auto' : ''}`}><Icon size={sidebarHovered ? 32 : 28} /></span>
+                <span className={`${!sidebarHovered ? 'mx-auto' : ''}`}><Icon size={22} /></span>
                 <span
-                  className={`ml-4 whitespace-nowrap font-medium text-lg transition-all duration-200 ${!sidebarHovered ? 'opacity-0 ml-0 pointer-events-none' : 'opacity-100 ml-4 pointer-events-auto'}`}
-                  style={{ minWidth: !sidebarHovered ? 0 : 90, maxWidth: !sidebarHovered ? 0 : 180 }}
+                  className={`ml-3 whitespace-nowrap font-medium text-sm transition-all duration-200 ${!sidebarHovered ? 'opacity-0 ml-0 pointer-events-none' : 'opacity-100 ml-3 pointer-events-auto'}`}
+                  style={{ minWidth: !sidebarHovered ? 0 : 70, maxWidth: !sidebarHovered ? 0 : 140 }}
                 >
                   <TranslatedText language={language}>{item.label}</TranslatedText>
                 </span>
@@ -116,20 +116,20 @@ const Layout = ({
           })}
         </nav>
       </aside>
-      {/* Sidebar Overlay for <xl (including 768x1024) */}
+      {/* Sidebar Overlay for md and below (iPad Mini, Air, and smaller) */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 xl:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-xl rounded-r-3xl flex flex-col items-center transition-transform duration-300 xl:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-xl rounded-r-3xl flex flex-col items-center transition-transform duration-300 lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         style={{ transition: 'transform 0.3s cubic-bezier(.4,0,.2,1)' }}
       >
         <div className="flex items-center justify-end mt-8 mb-8 px-6 w-full">
           <button className="ml-auto p-2" onClick={() => setSidebarOpen(false)}>
-            <X size={32} />
+            <X size={28} />
           </button>
         </div>
-        <nav className="flex flex-col gap-3 flex-1 w-full items-center">
+        <nav className="flex flex-col gap-2 flex-1 w-full items-center">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -137,11 +137,11 @@ const Layout = ({
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center w-full px-4 py-4 rounded-xl transition-all duration-200 my-1 ${isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-700 hover:text-primary-700 hover:bg-primary-50'}`}
+                className={`flex items-center w-full px-4 py-3 rounded-xl transition-all duration-200 my-1 ${isActive ? 'bg-primary-100 text-primary-700' : 'text-gray-700 hover:text-primary-700 hover:bg-primary-50'}`}
                 onClick={() => setSidebarOpen(false)}
               >
-                <Icon size={28} />
-                <span className="ml-4 whitespace-nowrap font-medium text-lg">{item.label}</span>
+                <Icon size={24} />
+                <span className="ml-3 whitespace-nowrap font-medium text-base">{item.label}</span>
               </Link>
             );
           })}
@@ -165,11 +165,10 @@ const Layout = ({
       >
         {/* Navbar */}
         <header className="flex flex-wrap items-center justify-between bg-white shadow-sm border border-gray-200 rounded-2xl px-4 sm:px-6 md:px-8 py-2 z-30 mx-2 sm:mx-4 mt-7
-          max-w-full xl:max-w-[calc(100vw-320px)] xl:ml-[144px] 2xl:ml-[180px]">
+          max-w-full lg:max-w-[calc(100vw-320px)] lg:ml-[128px] xl:ml-[144px] 2xl:ml-[160px]">
           <div className="flex items-center gap-3 min-w-[56px]">
-            {/* Menu button for <xl */}
-            <button className="xl:hidden mr-2 p-2" onClick={() => setSidebarOpen(true)}>
-              <Menu size={32} />
+            <button className="lg:hidden mr-2 p-2" onClick={() => setSidebarOpen(true)}>
+              <Menu size={28} />
             </button>
             <img src={rupeeLogo} alt="Arthika Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
             <div className="flex flex-col ml-2">
@@ -191,13 +190,13 @@ const Layout = ({
               </span>
             </button>
             <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
-            {/* Logout button only for xl and up */}
+            {/* Logout button only for lg and up */}
             <button
               onClick={() => {
                 localStorage.removeItem('arthikaUser');
                 window.location.reload();
               }}
-              className="hidden xl:flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700 transition-colors"
+              className="hidden lg:flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
               <span>
