@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, MessageSquare, ChevronDown, Play, Volume2, Phone, Users, Shield, Info, TrendingUp, FileText, Download, Loader2 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
 import apiService from '../services/apiService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
 
-function HomePage({ 
+function HomePage({
   language,
-  isListening, 
-  startListening, 
+  isListening,
+  startListening,
   stopListening,
   transcript,
   interimTranscript,
@@ -76,16 +76,16 @@ function HomePage({
 
   const handleStartQuery = () => {
     if (isProcessing) return;
-    
+
     if (inputMethod === 'voice') {
       if (isListening) {
         stopListening();
       } else {
         startListening();
         // Smooth scroll to mic section
-        micSectionRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
+        micSectionRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
         });
       }
     } else {
@@ -158,9 +158,9 @@ function HomePage({
             onClick={() => {
               setInputMethod('voice');
               startListening();
-              micSectionRef.current?.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
+              micSectionRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
               });
             }}
             className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white text-lg px-8 py-4 flex items-center justify-center space-x-2 rounded-full shadow-lg hover:from-cyan-500 hover:to-blue-600 transition-all duration-200"
@@ -246,25 +246,25 @@ function HomePage({
         {quickActions.map((action, index) => {
           const Icon = action.icon;
           return (
-            <a
+            <Link
               key={index}
-              href={action.path}
+              to={action.path}
               className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
                 <Icon className="text-cyan-600" size={36} />
-                </div>
+              </div>
               <h3 className="font-semibold text-xl text-gray-900 mb-2">
-                  <TranslatedText language={language}>
-                    {action.title}
-                  </TranslatedText>
-                </h3>
+                <TranslatedText language={language}>
+                  {action.title}
+                </TranslatedText>
+              </h3>
               <p className="text-gray-600 text-base">
-                  <TranslatedText language={language}>
-                    {action.description}
-                  </TranslatedText>
-                </p>
-            </a>
+                <TranslatedText language={language}>
+                  {action.description}
+                </TranslatedText>
+              </p>
+            </Link>
           );
         })}
       </div>
@@ -278,15 +278,15 @@ function HomePage({
           >
             <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
             <h3 className="font-semibold text-xl text-gray-900 mb-2">
-                <TranslatedText language={language}>
-                  {useCase.title}
-                </TranslatedText>
-              </h3>
+              <TranslatedText language={language}>
+                {useCase.title}
+              </TranslatedText>
+            </h3>
             <p className="text-gray-600 text-base">
-                <TranslatedText language={language}>
-                  {useCase.description}
-                </TranslatedText>
-              </p>
+              <TranslatedText language={language}>
+                {useCase.description}
+              </TranslatedText>
+            </p>
           </div>
         ))}
       </div>
@@ -311,11 +311,10 @@ function HomePage({
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => setInputMethod('voice')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                inputMethod === 'voice' 
-                  ? 'bg-cyan-100 text-cyan-700' 
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'voice'
+                  ? 'bg-cyan-100 text-cyan-700'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               <Mic size={20} />
               <span>
@@ -326,11 +325,10 @@ function HomePage({
             </button>
             <button
               onClick={() => setInputMethod('text')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                inputMethod === 'text' 
-                  ? 'bg-cyan-100 text-cyan-700' 
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'text'
+                  ? 'bg-cyan-100 text-cyan-700'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               <MessageSquare size={20} />
               <span>
@@ -416,9 +414,9 @@ function HomePage({
                     </span>
                   </div>
                 ) : (
-                <TranslatedText language={language}>
-                  Ask Question
-                </TranslatedText>
+                  <TranslatedText language={language}>
+                    Ask Question
+                  </TranslatedText>
                 )}
               </button>
             </form>

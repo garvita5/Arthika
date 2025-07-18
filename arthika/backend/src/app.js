@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
+const path = require('path'); // Added for SPA routing
 
 const app = express();
 
@@ -52,6 +53,17 @@ app.get("/", (req, res) => {
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
+// SPA Routing - Serve React app for all non-API routes
+app.get('*', (req, res) => {
+  // Skip API routes
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  
+  // For all other routes, serve the React app
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Error handler
