@@ -119,8 +119,20 @@ function AnswerPage({ language = 'en' }) {
   const steps = response?.data?.roadmap?.steps;
   const roadmap = response?.data?.roadmap;
   // const tags = response?.data?.tags;
-  const showExitPlanner = /exit plan|exit strategy/i.test(question || '');
+  // Expanded keywords for distress/negative situations
+  const distressKeywords = [
+    'exit plan', 'exit strategy', 'abuse', 'abusive', 'harassed', 'harassment', 'debt trap',
+    'depression', 'suicide', 'distress', 'help', 'trouble', 'threat', 'violence', 'unsafe',
+    'danger', 'blackmail', 'coercion', 'pressure', 'mental health', 'crisis', 'overwhelmed',
+    'hopeless', 'helpless', 'lost', 'fear', 'scared', 'panic', 'anxiety', 'stress', 'emergency'
+  ];
+  const showExitPlanner = distressKeywords.some(word => (question || '').toLowerCase().includes(word));
   const schemes = response?.data?.schemes || response?.data?.governmentSchemes;
+  const riskLevel = response?.data?.riskLevel;
+  const estimatedCost = response?.data?.estimatedCost;
+  const saferAlternatives = response?.data?.saferAlternatives;
+  const timeframe = response?.data?.timeframe;
+  const expectedReturns = response?.data?.expectedReturns;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 space-y-10">
@@ -196,6 +208,16 @@ function AnswerPage({ language = 'en' }) {
             </div>
           )}
           <RoadmapFlowchart steps={steps} />
+        </div>
+      )}
+
+      {/* Summary Card for Additional Info */}
+      {(saferAlternatives && saferAlternatives.length > 0) && (
+        <div className="bg-yellow-50 rounded-3xl shadow-lg p-8 border border-yellow-200">
+          <h3 className="text-lg font-semibold text-yellow-900 mb-4 flex items-center gap-2">🛡️ Safer Alternatives</h3>
+          <div className="space-y-2 text-yellow-900 text-base">
+            <div>{saferAlternatives.join('; ')}</div>
+          </div>
         </div>
       )}
 
