@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (import.meta.env.PROD 
+    ? 'https://arthika-backend.onrender.com/api'  // Replace with your actual backend URL
+    : 'http://localhost:5000/api'
+  );
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
