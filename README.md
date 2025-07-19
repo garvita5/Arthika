@@ -180,25 +180,26 @@ Arthika is your intelligent financial companion that understands your money ques
 - Ask follow-up questions if needed
 
 ## Project Structure
+
+```text
 arthika/
-├── backend/ # Server-side code
-│ ├── src/
-│ │ ├── controllers/ # Handles your requests
-│ │ ├── services/ # AI and database logic
-│ │ ├── routes/ # API endpoints
-│ │ └── middlewares/ # Security and validation
-│ └── package.json
-├── frontend/ # User interface
-│ ├── src/
-│ │ ├── components/ # Reusable UI parts
-│ │ ├── pages/ # Different screens
-│ │ ├── hooks/ # Custom functionality
-│ │ ├── services/ # API connections
-│ │ └── contexts/ # Data sharing
-│ └── package.json
+├── backend/                 # Server-side code
+│   ├── src/
+│   │   ├── controllers/     # Handles your requests
+│   │   ├── services/        # AI and database logic
+│   │   ├── routes/          # API endpoints
+│   │   └── middlewares/     # Security and validation
+│   └── package.json
+├── frontend/                # User interface
+│   ├── src/
+│   │   ├── components/      # Reusable UI parts
+│   │   ├── pages/           # Different screens
+│   │   ├── hooks/           # Custom functionality
+│   │   ├── services/        # API connections
+│   │   └── contexts/        # Data sharing
+│   └── package.json
 └── README.md
-
-
+```
 ## API Endpoints
 
 ### For Users
