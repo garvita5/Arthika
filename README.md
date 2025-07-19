@@ -26,61 +26,52 @@ Arthika is your intelligent financial companion that understands your money ques
 ## Current Features
 
 ### Core Functionality
-✅ **AI-Powered Financial Advice** - Ask questions in natural language
-
-✅ **Personalized Roadmaps** - Step-by-step financial planning
-
-✅ **Voice Interaction** - Speak your questions, hear the answers
-
-✅ **Multilingual Support** - Available in multiple Indian languages
-
-✅ **Query History** - Keep track of all your financial conversations
-
-✅ **Government Schemes** - Access to relevant financial opportunities
-
-✅ **Responsive Design** - Works perfectly on phone, tablet, and computer
-
-✅ **Smart Sidebar** - Easy navigation with collapsible menu
-
-✅ **Feedback System** - Share your experience and suggestions
-
-✅ **Export Capabilities** - Download your financial reports
+✅ **AI-Powered Financial Advice** - Ask questions in natural language <br>
+✅ **Personalized Roadmaps** - Step-by-step financial planning <br>
+✅ **Voice Interaction** - Speak your questions, hear the answers<br>
+✅ **Multilingual Support** - Available in multiple Indian languages <br>
+✅ **Query History** - Keep track of all your financial conversations <br>
+✅ **Government Schemes** - Access to relevant financial opportunities <br>
+✅ **Responsive Design** - Works perfectly on phone, tablet, and computer <br>
+✅ **Smart Sidebar** - Easy navigation with collapsible menu <br>
+✅ **Feedback System** - Share your experience and suggestions <br>
+✅ **Export Capabilities** - Download your financial reports <br>
 
 ### User Experience
-✅ **Real-time Processing** - See live updates while getting advice
-✅ **Interactive Interface** - Beautiful, modern design that's easy to use
-✅ **Smart Notifications** - Get alerts for important financial decisions
-✅ **Mobile-Friendly** - Optimized for all screen sizes
-✅ **Fast Loading** - Quick responses to your queries
+✅ **Real-time Processing** - See live updates while getting advice <br>
+✅ **Interactive Interface** - Beautiful, modern design that's easy to use <br>
+✅ **Smart Notifications** - Get alerts for important financial decisions <br>
+✅ **Mobile-Friendly** - Optimized for all screen sizes <br>
+✅ **Fast Loading** - Quick responses to your queries <br>
 
 ## Upcoming Features (Coming Soon!)
 
 ### Enhanced AI Capabilities
-🚀 **Follow-up Questions** - AI will ask clarifying questions for better advice
-🚀 **Context Awareness** - Remember your previous conversations
-🚀 **Risk Assessment** - Automatic evaluation of financial risks
-🚀 **Exit Planning** - Special guidance when you mention debt or financial danger
+🚀 **Follow-up Questions** - AI will ask clarifying questions for better advice <br>
+🚀 **Context Awareness** - Remember your previous conversations <br>
+🚀 **Risk Assessment** - Automatic evaluation of financial risks<br>
+🚀 **Exit Planning** - Special guidance when you mention debt or financial danger <br>
 
 ### Communication Channels
-🚀 **WhatsApp Integration** - Get financial advice directly on WhatsApp
-🚀 **IVR System** - Call a number and get voice-based financial guidance
-🚀 **SMS Alerts** - Receive important financial reminders via text
-🚀 **Email Notifications** - Get detailed reports and updates via email
+🚀 **WhatsApp Integration** - Get financial advice directly on WhatsApp <br>
+🚀 **IVR System** - Call a number and get voice-based financial guidance <br>
+🚀 **SMS Alerts** - Receive important financial reminders via text <br>
+🚀 **Email Notifications** - Get detailed reports and updates via email <br>
 
 ### Advanced Features
-🚀 **Trust Score System** - Build your financial credibility score
-🚀 **Visual Roadmaps** - Interactive charts and graphs for your financial journey
-�� **NGO Partnerships** - Connect with financial literacy organizations
-🚀 **Updated Government Schemes** - Real-time access to latest schemes
-�� **Financial Health Dashboard** - Track your overall financial wellness
-🚀 **Goal Tracking** - Set financial goals and track your progress
-🚀 **Portfolio Management** - Monitor your investments in one place
+🚀 **Trust Score System** - Build your financial credibility score <br>
+🚀 **Visual Roadmaps** - Interactive charts and graphs for your financial journey <br>
+�� **NGO Partnerships** - Connect with financial literacy organizations <br>
+🚀 **Updated Government Schemes** - Real-time access to latest schemes <br>
+�� **Financial Health Dashboard** - Track your overall financial wellness <br>
+🚀 **Goal Tracking** - Set financial goals and track your progress <br>
+🚀 **Portfolio Management** - Monitor your investments in one place <br>
 
 ### Smart Alerts & Safety
-�� **Danger Detection** - Automatic warnings for risky financial decisions
-🚀 **Debt Alerts** - Get help when you're heading toward debt
-🚀 **Investment Warnings** - Alerts for potentially risky investments
-🚀 **Emergency Fund Reminders** - Stay prepared for financial emergencies
+�� **Danger Detection** - Automatic warnings for risky financial decisions <br>
+🚀 **Debt Alerts** - Get help when you're heading toward debt <br>
+🚀 **Investment Warnings** - Alerts for potentially risky investments <br>
+🚀 **Emergency Fund Reminders** - Stay prepared for financial emergencies <br>
 
 ## Tech Stack
 
@@ -110,7 +101,7 @@ Arthika is your intelligent financial companion that understands your money ques
 
 1. **Get the Code**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/garvita5/Arthika
    cd arthika
    ```
 
