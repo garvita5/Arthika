@@ -61,14 +61,14 @@ Arthika is your intelligent financial companion that understands your money ques
 ### Advanced Features
 🚀 **Trust Score System** - Build your financial credibility score <br>
 🚀 **Visual Roadmaps** - Interactive charts and graphs for your financial journey <br>
-�� **NGO Partnerships** - Connect with financial literacy organizations <br>
+🚀 **NGO Partnerships** - Connect with financial literacy organizations <br>
 🚀 **Updated Government Schemes** - Real-time access to latest schemes <br>
-�� **Financial Health Dashboard** - Track your overall financial wellness <br>
+🚀 **Financial Health Dashboard** - Track your overall financial wellness <br>
 🚀 **Goal Tracking** - Set financial goals and track your progress <br>
 🚀 **Portfolio Management** - Monitor your investments in one place <br>
 
 ### Smart Alerts & Safety
-�� **Danger Detection** - Automatic warnings for risky financial decisions <br>
+🚀 **Danger Detection** - Automatic warnings for risky financial decisions <br>
 🚀 **Debt Alerts** - Get help when you're heading toward debt <br>
 🚀 **Investment Warnings** - Alerts for potentially risky investments <br>
 🚀 **Emergency Fund Reminders** - Stay prepared for financial emergencies <br>
