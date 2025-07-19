@@ -36,6 +36,7 @@ Arthika is your intelligent financial companion that understands your money ques
 ✅ **Smart Sidebar** - Easy navigation with collapsible menu <br>
 ✅ **Feedback System** - Share your experience and suggestions <br>
 ✅ **Export Capabilities** - Download your financial reports <br>
+✅ **Exit Planning** - Special guidance when you mention debt or financial danger<br>
 
 ### User Experience
 ✅ **Real-time Processing** - See live updates while getting advice <br>
@@ -50,7 +51,6 @@ Arthika is your intelligent financial companion that understands your money ques
 🚀 **Follow-up Questions** - AI will ask clarifying questions for better advice <br>
 🚀 **Context Awareness** - Remember your previous conversations <br>
 🚀 **Risk Assessment** - Automatic evaluation of financial risks<br>
-🚀 **Exit Planning** - Special guidance when you mention debt or financial danger <br>
 
 ### Communication Channels
 🚀 **WhatsApp Integration** - Get financial advice directly on WhatsApp <br>
