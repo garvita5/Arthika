@@ -27,14 +27,23 @@ Arthika is your intelligent financial companion that understands your money ques
 
 ### Core Functionality
 ✅ **AI-Powered Financial Advice** - Ask questions in natural language
+
 ✅ **Personalized Roadmaps** - Step-by-step financial planning
+
 ✅ **Voice Interaction** - Speak your questions, hear the answers
+
 ✅ **Multilingual Support** - Available in multiple Indian languages
+
 ✅ **Query History** - Keep track of all your financial conversations
+
 ✅ **Government Schemes** - Access to relevant financial opportunities
+
 ✅ **Responsive Design** - Works perfectly on phone, tablet, and computer
+
 ✅ **Smart Sidebar** - Easy navigation with collapsible menu
+
 ✅ **Feedback System** - Share your experience and suggestions
+
 ✅ **Export Capabilities** - Download your financial reports
 
 ### User Experience
