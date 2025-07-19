@@ -4,7 +4,7 @@
 
 Arthika is your intelligent financial companion that understands your money questions and guides you toward better financial decisions. Whether you're planning to invest, save, or need help with debt, Arthika provides personalized advice in simple language.
 
-**Live Demo:** [arthika.onrender.com](https://arthika.onrender.com)
+**Live Demo:** [https://arthika.onrender.com](https://arthika.onrender.com)
 
 > **Note:** Since we're using Render's free hosting, the site might take a few moments to load. If you see "not found," try refreshing the page or opening it in an incognito/private browser window.
 
