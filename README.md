@@ -253,8 +253,7 @@ arthika/
 ## Support & Help
 
 ### Getting Help
-- **Email:** support@arthika.com
-- **Documentation:** [Link to detailed docs]
+- **Email:** support@arthika.com 
 - **Issues:** Report bugs on GitHub
 - **Feedback:** Use the feedback form in the app
 
