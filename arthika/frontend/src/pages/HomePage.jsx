@@ -4,6 +4,7 @@ import TranslatedText from '../components/TranslatedText';
 import apiService from '../services/apiService';
 import { useNavigate, Link } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function HomePage({
   language,
@@ -167,9 +168,7 @@ function HomePage({
           >
             <Mic size={24} />
             <span>
-              <TranslatedText language={language}>
-                Start Voice Query
-              </TranslatedText>
+              {getHomepageTranslation(language, 'hero', 'startButton')}
             </span>
           </button>
           <button
@@ -318,9 +317,7 @@ function HomePage({
             >
               <Mic size={20} />
               <span>
-                <TranslatedText language={language}>
-                  Voice
-                </TranslatedText>
+                {getHomepageTranslation(language, 'inputSection', 'voiceButton')}
               </span>
             </button>
             <button
@@ -332,9 +329,7 @@ function HomePage({
             >
               <MessageSquare size={20} />
               <span>
-                <TranslatedText language={language}>
-                  Text
-                </TranslatedText>
+                {getHomepageTranslation(language, 'inputSection', 'textButton')}
               </span>
             </button>
           </div>
@@ -355,9 +350,7 @@ function HomePage({
                     Processing your question...
                   </TranslatedText>
                 ) : isListening ? (
-                  <TranslatedText language={language}>
-                    Listening... Speak now!
-                  </TranslatedText>
+                  getHomepageTranslation(language, 'inputSection', 'listeningSpeak')
                 ) : (
                   <TranslatedText language={language}>
                     Click to start speaking
@@ -380,9 +373,7 @@ function HomePage({
                   {interimTranscript && (
                     <div>
                       <p className="text-sm text-gray-500 mb-1">
-                        <TranslatedText language={language}>
-                          Listening...
-                        </TranslatedText>
+                        {getHomepageTranslation(language, 'inputSection', 'listening')}
                       </p>
                       <p className="text-gray-600 italic">{interimTranscript}</p>
                     </div>

@@ -11,52 +11,73 @@ import {
   Shield
 } from 'lucide-react';
 import TranslatedText from '../components/TranslatedText';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function NGOPage({ language }) {
   const ngoPartners = [
     {
       id: 1,
       name: 'Financial Literacy Foundation',
+      nameHi: 'वित्तीय साक्षरता फाउंडेशन',
       description: 'Provides financial education and counseling services',
+      descriptionHi: 'वित्तीय शिक्षा और परामर्श सेवाएं प्रदान करता है',
       services: ['Financial Counseling', 'Debt Management', 'Savings Programs'],
+      servicesHi: ['वित्तीय परामर्श', 'ऋण प्रबंधन', 'बचत कार्यक्रम'],
       contact: '+91-98765-43210',
       email: 'info@flf.org.in',
       website: 'www.flf.org.in',
       location: 'Mumbai, Maharashtra',
-      hours: 'Mon-Fri: 9 AM - 6 PM'
+      locationHi: 'मुंबई, महाराष्ट्र',
+      hours: 'Mon-Fri: 9 AM - 6 PM',
+      hoursHi: 'सोम-शुक्र: सुबह 9 बजे - शाम 6 बजे'
     },
     {
       id: 2,
       name: 'Rural Development Trust',
+      nameHi: 'ग्रामीण विकास ट्रस्ट',
       description: 'Focuses on rural financial inclusion and microfinance',
+      descriptionHi: 'ग्रामीण वित्तीय समावेशन और माइक्रोफाइनेंस पर केंद्रित',
       services: ['Microfinance', 'Rural Banking', 'Agricultural Loans'],
+      servicesHi: ['माइक्रोफाइनेंस', 'ग्रामीण बैंकिंग', 'कृषि ऋण'],
       contact: '+91-98765-43211',
       email: 'contact@rdt.org.in',
       website: 'www.rdt.org.in',
       location: 'Bangalore, Karnataka',
-      hours: 'Mon-Sat: 8 AM - 7 PM'
+      locationHi: 'बेंगलुरु, कर्नाटक',
+      hours: 'Mon-Sat: 8 AM - 7 PM',
+      hoursHi: 'सोम-शनि: सुबह 8 बजे - शाम 7 बजे'
     },
     {
       id: 3,
       name: 'Women Empowerment Network',
+      nameHi: 'महिला सशक्तिकरण नेटवर्क',
       description: 'Empowers women through financial literacy and entrepreneurship',
-      services: ['Women\'s Banking', 'Entrepreneurship Training', 'Skill Development'],
+      descriptionHi: 'वित्तीय साक्षरता और उद्यमिता के माध्यम से महिलाओं को सशक्त बनाता है',
+      services: ["Women's Banking", 'Entrepreneurship Training', 'Skill Development'],
+      servicesHi: ['महिला बैंकिंग', 'उद्यमिता प्रशिक्षण', 'कौशल विकास'],
       contact: '+91-98765-43212',
       email: 'hello@wen.org.in',
       website: 'www.wen.org.in',
       location: 'Delhi, NCR',
-      hours: 'Mon-Fri: 10 AM - 5 PM'
+      locationHi: 'दिल्ली, एनसीआर',
+      hours: 'Mon-Fri: 10 AM - 5 PM',
+      hoursHi: 'सोम-शुक्र: सुबह 10 बजे - शाम 5 बजे'
     },
     {
       id: 4,
       name: 'Senior Citizens Financial Aid',
+      nameHi: 'वरिष्ठ नागरिक वित्तीय सहायता',
       description: 'Specialized services for senior citizens and pensioners',
+      descriptionHi: 'वरिष्ठ नागरिकों और पेंशनभोगियों के लिए विशेष सेवाएं',
       services: ['Pension Assistance', 'Investment Advice', 'Healthcare Financing'],
+      servicesHi: ['पेंशन सहायता', 'निवेश सलाह', 'स्वास्थ्य देखभाल वित्तपोषण'],
       contact: '+91-98765-43213',
       email: 'support@scfa.org.in',
       website: 'www.scfa.org.in',
       location: 'Chennai, Tamil Nadu',
-      hours: 'Mon-Fri: 9 AM - 4 PM'
+      locationHi: 'चेन्नई, तमिलनाडु',
+      hours: 'Mon-Fri: 9 AM - 4 PM',
+      hoursHi: 'सोम-शुक्र: सुबह 9 बजे - शाम 4 बजे'
     }
   ];
 
@@ -70,9 +91,7 @@ function NGOPage({ language }) {
         >
           <ArrowLeft size={22} />
           <span>
-            <TranslatedText language={language}>
-              Back to Home
-            </TranslatedText>
+            {getHomepageTranslation(language, 'ngo', 'backToHome')}
           </span>
         </Link>
       </div>
@@ -80,14 +99,10 @@ function NGOPage({ language }) {
       {/* Page Title */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          <TranslatedText language={language}>
-            NGO Access
-          </TranslatedText>
+          {getHomepageTranslation(language, 'ngo', 'title')}
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          <TranslatedText language={language}>
-            Connect with trusted NGO partners for personalized financial guidance and support.
-          </TranslatedText>
+          {getHomepageTranslation(language, 'ngo', 'subtitle')}
         </p>
       </div>
 
@@ -99,43 +114,37 @@ function NGOPage({ language }) {
           </div>
           <div>
             <h3 className="font-semibold text-blue-900 mb-2">
-              <TranslatedText language={language}>
-                Trusted Partners
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'trustedPartners.title')}
             </h3>
             <p className="text-blue-800 text-sm">
-              <TranslatedText language={language}>
-                All our NGO partners are verified and registered organizations with proven track records in financial literacy and community development.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'trustedPartners.description')}
             </p>
           </div>
         </div>
       </div>
 
       {/* NGO Partners Grid */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="grid md:grid-cols-2 gap-6 mb-12">
         {ngoPartners.map((ngo) => (
           <div key={ngo.id} className="card hover:shadow-lg transition-shadow">
             <div className="space-y-4">
               {/* Header */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {ngo.name}
+                  {language === 'hi' && ngo.nameHi ? ngo.nameHi : ngo.name}
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  {ngo.description}
+                  {language === 'hi' && ngo.descriptionHi ? ngo.descriptionHi : ngo.description}
                 </p>
               </div>
 
               {/* Services */}
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">
-                  <TranslatedText language={language}>
-                    Services:
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'ngo', 'services')}
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {ngo.services.map((service, index) => (
+                  {(language === 'hi' && ngo.servicesHi ? ngo.servicesHi : ngo.services).map((service, index) => (
                     <span
                       key={index}
                       className="px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-xs"
@@ -165,12 +174,12 @@ function NGOPage({ language }) {
                 
                 <div className="flex items-center space-x-2 text-sm">
                   <MapPin className="text-gray-400" size={16} />
-                  <span className="text-gray-700">{ngo.location}</span>
+                  <span className="text-gray-700">{language === 'hi' && ngo.locationHi ? ngo.locationHi : ngo.location}</span>
                 </div>
                 
                 <div className="flex items-center space-x-2 text-sm">
                   <Clock className="text-gray-400" size={16} />
-                  <span className="text-gray-700">{ngo.hours}</span>
+                  <span className="text-gray-700">{language === 'hi' && ngo.hoursHi ? ngo.hoursHi : ngo.hours}</span>
                 </div>
               </div>
 
@@ -179,9 +188,7 @@ function NGOPage({ language }) {
                 <button className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors text-sm">
                   <Phone size={14} />
                   <span>
-                    <TranslatedText language={language}>
-                      Call Now
-                    </TranslatedText>
+                    {getHomepageTranslation(language, 'ngo', 'callNow')}
                   </span>
                 </button>
                 <button className="flex items-center justify-center px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-sm">
@@ -194,11 +201,9 @@ function NGOPage({ language }) {
       </div>
 
       {/* How to Connect */}
-      <div className="card">
+      <div className="card mb-12">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          <TranslatedText language={language}>
-            How to Connect with NGOs
-          </TranslatedText>
+          {getHomepageTranslation(language, 'ngo', 'howToConnect.title')}
         </h2>
         
         <div className="grid md:grid-cols-3 gap-6">
@@ -207,14 +212,10 @@ function NGOPage({ language }) {
               <span className="text-primary-600 font-bold text-lg">1</span>
             </div>
             <h3 className="font-medium text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                Choose Your Partner
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step1.title')}
             </h3>
             <p className="text-sm text-gray-600">
-              <TranslatedText language={language}>
-                Browse our verified NGO partners and select one that matches your needs.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step1.description')}
             </p>
           </div>
           
@@ -223,14 +224,10 @@ function NGOPage({ language }) {
               <span className="text-primary-600 font-bold text-lg">2</span>
             </div>
             <h3 className="font-medium text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                Contact Directly
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step2.title')}
             </h3>
             <p className="text-sm text-gray-600">
-              <TranslatedText language={language}>
-                Call or email the NGO directly using the provided contact information.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step2.description')}
             </p>
           </div>
           
@@ -239,46 +236,34 @@ function NGOPage({ language }) {
               <span className="text-primary-600 font-bold text-lg">3</span>
             </div>
             <h3 className="font-medium text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                Get Support
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step3.title')}
             </h3>
             <p className="text-sm text-gray-600">
-              <TranslatedText language={language}>
-                Receive personalized guidance and support for your financial needs.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'howToConnect.step3.description')}
             </p>
           </div>
         </div>
       </div>
 
       {/* Additional Resources */}
-      <div className="card mt-8 bg-green-50 border-green-200">
+      <div className="card bg-green-50 border-green-200">
         <div className="flex items-start space-x-4">
           <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <Users className="text-green-600" size={20} />
           </div>
           <div>
             <h3 className="font-semibold text-green-900 mb-2">
-              <TranslatedText language={language}>
-                Additional Resources
-              </TranslatedText>
+              {getHomepageTranslation(language, 'ngo', 'additionalResources.title')}
             </h3>
             <div className="space-y-2 text-sm text-green-800">
               <p>
-                <TranslatedText language={language}>
-                  • Government helpline: 1800-XXX-XXXX
-                </TranslatedText>
+                {getHomepageTranslation(language, 'ngo', 'additionalResources.helpline')}
               </p>
               <p>
-                <TranslatedText language={language}>
-                  • Financial literacy workshops (free)
-                </TranslatedText>
+                {getHomepageTranslation(language, 'ngo', 'additionalResources.workshops')}
               </p>
               <p>
-                <TranslatedText language={language}>
-                  • Community support groups
-                </TranslatedText>
+                {getHomepageTranslation(language, 'ngo', 'additionalResources.supportGroups')}
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mic, MicOff, Loader2 } from 'lucide-react';
 import TranslatedText from './TranslatedText';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function SpeakStep({ 
   isListening, 
@@ -53,11 +54,9 @@ function SpeakStep({
                 <TranslatedText language={language}>
                   Processing your question...
                 </TranslatedText>
-              ) : isListening ? (
-                  <TranslatedText language={language}>
-                    Listening... Speak now!
-                  </TranslatedText>
-              ) : (
+                              ) : isListening ? (
+                  getHomepageTranslation(language, 'inputSection', 'listeningSpeak')
+                ) : (
                   <TranslatedText language={language}>
                     Click to start speaking
                   </TranslatedText>

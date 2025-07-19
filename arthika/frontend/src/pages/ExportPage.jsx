@@ -10,7 +10,7 @@ import {
   Mail,
   Smartphone
 } from 'lucide-react';
-import TranslatedText from '../components/TranslatedText';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function ExportPage({ language }) {
   const [isExporting, setIsExporting] = useState(false);
@@ -18,9 +18,24 @@ function ExportPage({ language }) {
   const [exportFormat, setExportFormat] = useState('pdf');
 
   const exportFormats = [
-    { id: 'pdf', label: 'PDF Document', icon: FileText, description: 'Best for printing and sharing' },
-    { id: 'json', label: 'JSON Data', icon: FileText, description: 'For technical analysis' },
-    { id: 'csv', label: 'CSV Spreadsheet', icon: FileText, description: 'For data analysis' }
+    { 
+      id: 'pdf', 
+      label: getHomepageTranslation(language, 'export', 'exportFormats.pdf.label'),
+      icon: FileText, 
+      description: getHomepageTranslation(language, 'export', 'exportFormats.pdf.description')
+    },
+    { 
+      id: 'json', 
+      label: getHomepageTranslation(language, 'export', 'exportFormats.json.label'),
+      icon: FileText, 
+      description: getHomepageTranslation(language, 'export', 'exportFormats.json.description')
+    },
+    { 
+      id: 'csv', 
+      label: getHomepageTranslation(language, 'export', 'exportFormats.csv.label'),
+      icon: FileText, 
+      description: getHomepageTranslation(language, 'export', 'exportFormats.csv.description')
+    }
   ];
 
   const handleExport = async () => {
@@ -66,18 +81,18 @@ function ExportPage({ language }) {
   const shareOptions = [
     {
       icon: Mail,
-      label: 'Email',
-      description: 'Send via email'
+      label: getHomepageTranslation(language, 'export', 'sharePlan.email.label'),
+      description: getHomepageTranslation(language, 'export', 'sharePlan.email.description')
     },
     {
       icon: Share2,
-      label: 'Share Link',
-      description: 'Generate shareable link'
+      label: getHomepageTranslation(language, 'export', 'sharePlan.shareLink.label'),
+      description: getHomepageTranslation(language, 'export', 'sharePlan.shareLink.description')
     },
     {
       icon: Smartphone,
-      label: 'WhatsApp',
-      description: 'Share via WhatsApp'
+      label: getHomepageTranslation(language, 'export', 'sharePlan.whatsapp.label'),
+      description: getHomepageTranslation(language, 'export', 'sharePlan.whatsapp.description')
     }
   ];
 
@@ -91,9 +106,7 @@ function ExportPage({ language }) {
         >
           <ArrowLeft size={22} />
           <span>
-            <TranslatedText language={language}>
-              Back to Home
-            </TranslatedText>
+            {getHomepageTranslation(language, 'export', 'backToHome')}
           </span>
         </Link>
       </div>
@@ -101,23 +114,17 @@ function ExportPage({ language }) {
       {/* Page Title */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          <TranslatedText language={language}>
-            Export Your Financial Plan
-          </TranslatedText>
+          {getHomepageTranslation(language, 'export', 'title')}
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          <TranslatedText language={language}>
-            Download your personalized financial plan and recommendations in your preferred format.
-          </TranslatedText>
+          {getHomepageTranslation(language, 'export', 'subtitle')}
         </p>
       </div>
 
       {/* Export Options */}
       <div className="card mb-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          <TranslatedText language={language}>
-            Choose Export Format
-          </TranslatedText>
+          {getHomepageTranslation(language, 'export', 'chooseFormat')}
         </h2>
         
         <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -159,18 +166,14 @@ function ExportPage({ language }) {
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               <span>
-                <TranslatedText language={language}>
-                  Exporting...
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'exporting')}
               </span>
             </>
           ) : (
             <>
               <Download size={24} />
               <span>
-                <TranslatedText language={language}>
-                  Download Your Financial Plan
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'downloadButton')}
               </span>
             </>
           )}
@@ -184,14 +187,10 @@ function ExportPage({ language }) {
             <CheckCircle className="text-green-600" size={24} />
             <div>
               <h3 className="font-semibold text-green-900">
-                <TranslatedText language={language}>
-                  Export Complete!
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'exportComplete')}
               </h3>
               <p className="text-green-800 text-sm">
-                <TranslatedText language={language}>
-                  Your financial plan has been downloaded successfully.
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'exportSuccess')}
               </p>
             </div>
           </div>
@@ -201,9 +200,7 @@ function ExportPage({ language }) {
       {/* What's Included */}
       <div className="card mb-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          <TranslatedText language={language}>
-            What's Included in Your Export
-          </TranslatedText>
+          {getHomepageTranslation(language, 'export', 'whatsIncluded.title')}
         </h2>
         
         <div className="grid md:grid-cols-2 gap-6">
@@ -214,14 +211,10 @@ function ExportPage({ language }) {
               </div>
               <div>
                 <h3 className="font-medium text-gray-900">
-                  <TranslatedText language={language}>
-                    Financial Summary
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.financialSummary.title')}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  <TranslatedText language={language}>
-                    Your current financial status, savings, and debt overview
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.financialSummary.description')}
                 </p>
               </div>
             </div>
@@ -232,14 +225,10 @@ function ExportPage({ language }) {
               </div>
               <div>
                 <h3 className="font-medium text-gray-900">
-                  <TranslatedText language={language}>
-                    Personalized Recommendations
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.recommendations.title')}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  <TranslatedText language={language}>
-                    AI-generated advice tailored to your financial situation
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.recommendations.description')}
                 </p>
               </div>
             </div>
@@ -252,14 +241,10 @@ function ExportPage({ language }) {
               </div>
               <div>
                 <h3 className="font-medium text-gray-900">
-                  <TranslatedText language={language}>
-                    Action Plan
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.actionPlan.title')}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  <TranslatedText language={language}>
-                    Step-by-step roadmap to achieve your financial goals
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.actionPlan.description')}
                 </p>
               </div>
             </div>
@@ -270,14 +255,10 @@ function ExportPage({ language }) {
               </div>
               <div>
                 <h3 className="font-medium text-gray-900">
-                  <TranslatedText language={language}>
-                    Government Schemes
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.governmentSchemes.title')}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  <TranslatedText language={language}>
-                    Relevant government benefits and how to apply
-                  </TranslatedText>
+                  {getHomepageTranslation(language, 'export', 'whatsIncluded.governmentSchemes.description')}
                 </p>
               </div>
             </div>
@@ -288,9 +269,7 @@ function ExportPage({ language }) {
       {/* Share Options */}
       <div className="card">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          <TranslatedText language={language}>
-            Share Your Plan
-          </TranslatedText>
+          {getHomepageTranslation(language, 'export', 'sharePlan.title')}
         </h2>
         
         <div className="grid md:grid-cols-3 gap-4">
@@ -324,25 +303,17 @@ function ExportPage({ language }) {
           </div>
           <div>
             <h3 className="font-semibold text-blue-900 mb-2">
-              <TranslatedText language={language}>
-                💡 Pro Tips
-              </TranslatedText>
+              {getHomepageTranslation(language, 'export', 'proTips.title')}
             </h3>
             <div className="space-y-2 text-sm text-blue-800">
               <p>
-                <TranslatedText language={language}>
-                  • Review your plan monthly and update as needed
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'proTips.tip1')}
               </p>
               <p>
-                <TranslatedText language={language}>
-                  • Share with family members for accountability
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'proTips.tip2')}
               </p>
               <p>
-                <TranslatedText language={language}>
-                  • Keep a printed copy for easy reference
-                </TranslatedText>
+                {getHomepageTranslation(language, 'export', 'proTips.tip3')}
               </p>
             </div>
           </div>

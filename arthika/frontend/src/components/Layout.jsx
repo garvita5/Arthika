@@ -16,6 +16,7 @@ import {
 import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import rupeeLogo from '../assets/rupee1.png';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 import {
   Chart as ChartJS,
   LineElement,
@@ -183,11 +184,9 @@ const Layout = ({
               className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl text-base font-semibold transition-colors duration-200 shadow-sm ${isListening ? 'bg-red-100 text-red-700 animate-pulse' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <MessageSquare size={20} />
-              <span>
-                <TranslatedText language={language}>
-                  {isListening ? 'Listening...' : 'Voice Query'}
-                </TranslatedText>
-              </span>
+                              <span>
+                  {isListening ? getHomepageTranslation(language, 'inputSection', 'listening') : getHomepageTranslation(language, 'inputSection', 'voiceQuery')}
+                </span>
             </button>
             <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
             {/* Logout button only for lg and up */}
@@ -211,7 +210,7 @@ const Layout = ({
         <main className="flex-1 px-2 sm:px-4 md:px-8 py-8 max-w-5xl mx-auto w-full">
           {children}
         </main>
-        <Footer />
+        <Footer language={language} />
       </div>
     </div>
   );
