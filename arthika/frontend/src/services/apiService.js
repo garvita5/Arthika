@@ -167,7 +167,7 @@ class ApiService {
     const params = { language };
     if (category) params.category = category;
     
-    const response = await apiClient.get('/legal/schemes', { params });
+    const response = await apiClient.get('/schemes', { params });
     return response.data;
   }
 

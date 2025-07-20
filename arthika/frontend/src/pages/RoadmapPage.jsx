@@ -10,8 +10,8 @@ import {
   Download,
   Share2
 } from 'lucide-react';
-import TranslatedText from '../components/TranslatedText';
 import { useQueryContext } from '../contexts/QueryContext';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 // Mock data moved outside component to prevent recreation on every render
 const mockRoadmapData = {
@@ -19,36 +19,48 @@ const mockRoadmapData = {
     {
       id: 1,
       title: 'Emergency Fund',
+      titleHi: 'आपातकालीन कोष',
       description: 'Save 3-6 months of expenses',
+      descriptionHi: '3-6 महीनों के खर्च बचाएं',
       status: 'completed',
       timeline: 'Month 1-3',
+      timelineHi: 'महीना 1-3',
       savings: 50000,
       debt: 0
     },
     {
       id: 2,
       title: 'High-Interest Debt',
+      titleHi: 'उच्च ब्याज ऋण',
       description: 'Pay off credit cards and personal loans',
+      descriptionHi: 'क्रेडिट कार्ड और व्यक्तिगत ऋण चुकाएं',
       status: 'in-progress',
       timeline: 'Month 4-8',
+      timelineHi: 'महीना 4-8',
       savings: 30000,
       debt: -75000
     },
     {
       id: 3,
       title: 'Investment Portfolio',
+      titleHi: 'निवेश पोर्टफोलियो',
       description: 'Start SIP in mutual funds',
+      descriptionHi: 'म्यूचुअल फंड में SIP शुरू करें',
       status: 'pending',
       timeline: 'Month 9-12',
+      timelineHi: 'महीना 9-12',
       savings: 100000,
       debt: 0
     },
     {
       id: 4,
       title: 'Home Down Payment',
+      titleHi: 'घर के लिए डाउन पेमेंट',
       description: 'Save for property purchase',
+      descriptionHi: 'संपत्ति खरीदने के लिए बचत करें',
       status: 'pending',
       timeline: 'Month 13-24',
+      timelineHi: 'महीना 13-24',
       savings: 300000,
       debt: 0
     }
@@ -57,7 +69,8 @@ const mockRoadmapData = {
     totalSavings: 480000,
     totalDebt: -75000,
     netWorth: 405000,
-    timeline: '24 months'
+    timeline: '24 months',
+    timelineHi: '24 महीने'
   }
 };
 
@@ -137,14 +150,10 @@ function RoadmapPage({ language }) {
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-900">
-              <TranslatedText language={language}>
-                No Roadmap Available
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'noRoadmapAvailable')}
             </h2>
             <p className="text-gray-600 max-w-md mx-auto">
-              <TranslatedText language={language}>
-                You need to ask a financial question first to generate your personalized roadmap.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'noRoadmapDescription')}
             </p>
           </div>
           <Link 
@@ -153,9 +162,7 @@ function RoadmapPage({ language }) {
           >
             <ArrowLeft size={22} />
             <span>
-              <TranslatedText language={language}>
-                Ask a Question
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'askQuestion')}
             </span>
           </Link>
         </div>
@@ -263,9 +270,7 @@ function RoadmapPage({ language }) {
         >
           <ArrowLeft size={22} />
           <span>
-            <TranslatedText language={language}>
-              Back to Home
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'backToHome')}
           </span>
         </Link>
         
@@ -273,17 +278,13 @@ function RoadmapPage({ language }) {
           <button className="btn-secondary flex items-center space-x-2 px-6 py-3 text-base">
             <Share2 size={16} />
             <span>
-              <TranslatedText language={language}>
-                Share
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'share')}
             </span>
           </button>
           <button className="btn-primary flex items-center space-x-2 px-6 py-3 text-base">
             <Download size={16} />
             <span>
-              <TranslatedText language={language}>
-                Export
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'export')}
             </span>
           </button>
         </div>
@@ -296,9 +297,7 @@ function RoadmapPage({ language }) {
             {formatCurrency(data?.summary?.totalSavings || 0)}
           </div>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Total Savings
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'summaryCards.totalSavings')}
           </p>
         </div>
         
@@ -307,9 +306,7 @@ function RoadmapPage({ language }) {
             {formatCurrency(Math.abs(data?.summary?.totalDebt || 0))}
           </div>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Total Debt
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'summaryCards.totalDebt')}
           </p>
         </div>
         
@@ -318,20 +315,16 @@ function RoadmapPage({ language }) {
             {formatCurrency(data?.summary?.netWorth || 0)}
           </div>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Net Worth
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'summaryCards.netWorth')}
           </p>
         </div>
         
         <div className="card text-center">
           <div className="text-2xl font-bold text-purple-600 mb-2">
-            {data?.summary?.timeline || '12 months'}
+            {language === 'hi' && data?.summary?.timelineHi ? data.summary.timelineHi : (data?.summary?.timeline || '12 months')}
           </div>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Timeline
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'summaryCards.timeline')}
           </p>
         </div>
       </div>
@@ -340,9 +333,7 @@ function RoadmapPage({ language }) {
       <div className="card mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">
-            <TranslatedText language={language}>
-              Financial Roadmap
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'financialRoadmap')}
           </h2>
           
           <div className="flex space-x-2">
@@ -384,14 +375,10 @@ function RoadmapPage({ language }) {
           <div className="space-y-4">
             <TrendingUp className="text-gray-400 mx-auto" size={48} />
             <h3 className="text-lg font-medium text-gray-600">
-              <TranslatedText language={language}>
-                Chart Visualization
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'chartVisualization')}
             </h3>
             <p className="text-sm text-gray-500">
-              <TranslatedText language={language}>
-                Estimated Savings vs Estimated Debt over {selectedPeriod === '6months' ? '6' : selectedPeriod === '12months' ? '12' : '24'} months
-              </TranslatedText>
+              {getHomepageTranslation(language, 'roadmap', 'estimatedSavingsVsDebt')} {selectedPeriod === '6months' ? '6' : selectedPeriod === '12months' ? '12' : '24'} {getHomepageTranslation(language, 'roadmap', 'months')}
             </p>
             
             {/* Simple bar representation */}
@@ -426,9 +413,7 @@ function RoadmapPage({ language }) {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">
-            <TranslatedText language={language}>
-              Your Financial Journey
-            </TranslatedText>
+            {getHomepageTranslation(language, 'roadmap', 'yourFinancialJourney')}
           </h2>
           
           {/* Dynamic Roadmap Indicator */}
@@ -436,13 +421,11 @@ function RoadmapPage({ language }) {
             <div className="flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
               <span className="text-sm text-blue-700 font-medium">
-                <TranslatedText language={language}>
-                  {data.type === 'debt_management' ? 'Debt Management' :
-                   data.type === 'home_purchase' ? 'Home Purchase' :
-                   data.type === 'savings' ? 'Savings Plan' :
-                   data.type === 'retirement' ? 'Retirement Planning' :
-                   'Investment Strategy'}
-                </TranslatedText>
+                {data.type === 'debt_management' ? getHomepageTranslation(language, 'roadmap', 'roadmapTypes.debtManagement') :
+                 data.type === 'home_purchase' ? getHomepageTranslation(language, 'roadmap', 'roadmapTypes.homePurchase') :
+                 data.type === 'savings' ? getHomepageTranslation(language, 'roadmap', 'roadmapTypes.savingsPlan') :
+                 data.type === 'retirement' ? getHomepageTranslation(language, 'roadmap', 'roadmapTypes.retirementPlanning') :
+                 getHomepageTranslation(language, 'roadmap', 'roadmapTypes.investmentStrategy')}
               </span>
             </div>
           )}
@@ -458,11 +441,17 @@ function RoadmapPage({ language }) {
                 
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
-                    <span className="text-sm text-gray-500">{step.timeline}</span>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {language === 'hi' && step.titleHi ? step.titleHi : step.title}
+                    </h3>
+                    <span className="text-sm text-gray-500">
+                      {language === 'hi' && step.timelineHi ? step.timelineHi : step.timeline}
+                    </span>
                   </div>
                   
-                  <p className="text-gray-600 mb-3">{step.description}</p>
+                  <p className="text-gray-600 mb-3">
+                    {language === 'hi' && step.descriptionHi ? step.descriptionHi : step.description}
+                  </p>
                   
                   <div className="flex items-center space-x-6 text-sm">
                     <div className="flex items-center space-x-2">

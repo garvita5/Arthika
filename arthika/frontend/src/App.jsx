@@ -151,7 +151,7 @@ function AppWithVoiceFlow({ language, onLanguageChange, navigate }) {
         />
         <Route 
           path="/all-queries" 
-          element={<AllQueriesPage />} 
+          element={<AllQueriesPage language={language} />} 
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

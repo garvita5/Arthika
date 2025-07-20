@@ -8,6 +8,10 @@ const roadmapRoutes = require("./roadmapRoutes");
 const trustScoreRoutes = require("./trustScoreRoutes");
 const legalRoutes = require("./legalRoutes");
 const feedbackRoutes = require("./feedbackRoutes");
+const LegalController = require("../controllers/legalController");
+
+// Instantiate controllers
+const legalController = new LegalController();
 
 // Mount routes
 router.use("/query", queryRoutes);
@@ -17,6 +21,9 @@ router.use("/user", roadmapRoutes);
 router.use("/score", trustScoreRoutes);
 router.use("/legal", legalRoutes);
 router.use("/feedback", feedbackRoutes);
+
+// Direct schemes endpoint (alternative to /legal/schemes)
+router.get("/schemes", legalController.getGovernmentSchemes.bind(legalController));
 
 // Feedback endpoint
 router.post('/feedback', (req, res) => {

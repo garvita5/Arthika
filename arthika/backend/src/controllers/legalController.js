@@ -112,7 +112,7 @@ class LegalController {
         {
           id: 'pradhan-mantri-awas-yojana',
           title: 'Pradhan Mantri Awas Yojana',
-          description: 'Housing for All by 2022',
+          description: 'Housing for All by 2024',
           category: 'housing',
           benefits: ['Interest subsidy on home loans', 'Affordable housing', 'Urban and rural coverage'],
           eligibility: 'Economically weaker sections, low and middle income groups',
@@ -124,7 +124,7 @@ class LegalController {
           title: 'Sukanya Samriddhi Yojana',
           description: 'Girl child welfare scheme',
           category: 'savings',
-          benefits: ['High interest rate', 'Tax benefits', 'Long-term savings'],
+          benefits: ['High interest rate (8.2%)', 'Tax benefits under Section 80C', 'Long-term savings'],
           eligibility: 'Girl child below 10 years',
           applicationProcess: 'Open account in post office or bank',
           website: 'https://nsiindia.gov.in'
@@ -138,6 +138,106 @@ class LegalController {
           eligibility: 'Age 18-40 years, unorganized sector workers',
           applicationProcess: 'Apply through bank or post office',
           website: 'https://npscra.nsdl.co.in'
+        },
+        {
+          id: 'pradhan-mantri-kisan-samman-nidhi',
+          title: 'Pradhan Mantri Kisan Samman Nidhi',
+          description: 'Income support for farmers',
+          category: 'agriculture',
+          benefits: ['₹6,000 annually', 'Direct bank transfer', 'Three equal installments'],
+          eligibility: 'Small and marginal farmers',
+          applicationProcess: 'Apply at Common Service Centres',
+          website: 'https://pmkisan.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-kisan-maandhan-yojana',
+          title: 'Pradhan Mantri Kisan Maandhan Yojana',
+          description: 'Pension scheme for small and marginal farmers',
+          category: 'pension',
+          benefits: ['₹3,000 monthly pension', 'Government contribution', 'Life insurance cover'],
+          eligibility: 'Farmers aged 18-40 years',
+          applicationProcess: 'Apply through Common Service Centres',
+          website: 'https://pmkmy.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-shram-yogi-maandhan',
+          title: 'Pradhan Mantri Shram Yogi Maandhan',
+          description: 'Pension scheme for unorganized workers',
+          category: 'pension',
+          benefits: ['₹3,000 monthly pension', 'Government contribution', 'Life insurance cover'],
+          eligibility: 'Unorganized workers aged 18-40 years',
+          applicationProcess: 'Apply through Common Service Centres',
+          website: 'https://maandhan.in'
+        },
+        {
+          id: 'pradhan-mantri-jeevan-jyoti-bima-yojana',
+          title: 'Pradhan Mantri Jeevan Jyoti Bima Yojana',
+          description: 'Life insurance scheme',
+          category: 'insurance',
+          benefits: ['₹2 lakh life cover', 'Low premium', 'Auto-debit facility'],
+          eligibility: 'Age 18-50 years with bank account',
+          applicationProcess: 'Apply through bank branch',
+          website: 'https://jansuraksha.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-suraksha-bima-yojana',
+          title: 'Pradhan Mantri Suraksha Bima Yojana',
+          description: 'Accident insurance scheme',
+          category: 'insurance',
+          benefits: ['₹2 lakh accident cover', 'Low premium', 'Auto-debit facility'],
+          eligibility: 'Age 18-70 years with bank account',
+          applicationProcess: 'Apply through bank branch',
+          website: 'https://jansuraksha.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-garib-kalyan-anna-yojana',
+          title: 'Pradhan Mantri Garib Kalyan Anna Yojana',
+          description: 'Free food grains for poor families',
+          category: 'food',
+          benefits: ['5 kg free rice/wheat', '1 kg free pulses', 'Extended till December 2024'],
+          eligibility: 'Antyodaya Anna Yojana and Priority Households',
+          applicationProcess: 'Automatic through PDS',
+          website: 'https://nfsa.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-ujjwala-yojana',
+          title: 'Pradhan Mantri Ujjwala Yojana',
+          description: 'Free LPG connection for poor women',
+          category: 'energy',
+          benefits: ['Free LPG connection', 'EMI facility for stove', 'Safety training'],
+          eligibility: 'BPL women households',
+          applicationProcess: 'Apply through LPG distributors',
+          website: 'https://pmuy.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-saubhagya-yojana',
+          title: 'Pradhan Mantri Saubhagya Yojana',
+          description: 'Electricity for all households',
+          category: 'energy',
+          benefits: ['Free electricity connection', 'LED bulbs', 'Mobile app for complaints'],
+          eligibility: 'Rural and urban households without electricity',
+          applicationProcess: 'Apply through electricity department',
+          website: 'https://saubhagya.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-digital-india',
+          title: 'Pradhan Mantri Digital India',
+          description: 'Digital infrastructure and services',
+          category: 'technology',
+          benefits: ['Digital payments', 'E-governance services', 'Internet connectivity'],
+          eligibility: 'All citizens',
+          applicationProcess: 'Access through government portals',
+          website: 'https://digitalindia.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-ayushman-bharat',
+          title: 'Pradhan Mantri Ayushman Bharat',
+          description: 'Health insurance for poor families',
+          category: 'health',
+          benefits: ['₹5 lakh health cover', 'Cashless treatment', 'Coverage for 10.74 crore families'],
+          eligibility: 'Socio-Economic Caste Census (SECC) beneficiaries',
+          applicationProcess: 'Automatic enrollment',
+          website: 'https://pmjay.gov.in'
         }
       ],
       hi: [
@@ -150,6 +250,146 @@ class LegalController {
           eligibility: 'सभी भारतीय नागरिक',
           applicationProcess: 'आईडी प्रूफ के साथ किसी भी बैंक शाखा में जाएं',
           website: 'https://pmjdy.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-fasal-bima-yojana',
+          title: 'प्रधानमंत्री फसल बीमा योजना',
+          description: 'किसानों के लिए फसल बीमा योजना',
+          category: 'agriculture',
+          benefits: ['फसल क्षति कवरेज', 'मौसम जोखिम सुरक्षा', 'त्वरित दावा निपटान'],
+          eligibility: 'सभी किसान जो अधिसूचित फसलें उगाते हैं',
+          applicationProcess: 'बैंक या बीमा कंपनी के माध्यम से आवेदन करें',
+          website: 'https://pmfby.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-awas-yojana',
+          title: 'प्रधानमंत्री आवास योजना',
+          description: '2024 तक सभी के लिए आवास',
+          category: 'housing',
+          benefits: ['घर के लोन पर ब्याज सब्सिडी', 'सस्ता आवास', 'शहरी और ग्रामीण कवरेज'],
+          eligibility: 'आर्थिक रूप से कमजोर वर्ग, निम्न और मध्यम आय समूह',
+          applicationProcess: 'आवास वित्त कंपनियों के माध्यम से आवेदन करें',
+          website: 'https://pmay.gov.in'
+        },
+        {
+          id: 'sukanya-samriddhi-yojana',
+          title: 'सुकन्या समृद्धि योजना',
+          description: 'बालिका कल्याण योजना',
+          category: 'savings',
+          benefits: ['उच्च ब्याज दर (8.2%)', 'धारा 80C के तहत कर लाभ', 'दीर्घकालिक बचत'],
+          eligibility: '10 वर्ष से कम आयु की बालिका',
+          applicationProcess: 'डाकघर या बैंक में खाता खोलें',
+          website: 'https://nsiindia.gov.in'
+        },
+        {
+          id: 'atal-pension-yojana',
+          title: 'अटल पेंशन योजना',
+          description: 'असंगठित क्षेत्र के लिए पेंशन योजना',
+          category: 'pension',
+          benefits: ['गारंटीड पेंशन', 'सरकारी सह-योगदान', 'लचीला योगदान'],
+          eligibility: '18-40 वर्ष की आयु, असंगठित क्षेत्र के कर्मचारी',
+          applicationProcess: 'बैंक या डाकघर के माध्यम से आवेदन करें',
+          website: 'https://npscra.nsdl.co.in'
+        },
+        {
+          id: 'pradhan-mantri-kisan-samman-nidhi',
+          title: 'प्रधानमंत्री किसान सम्मान निधि',
+          description: 'किसानों के लिए आय सहायता',
+          category: 'agriculture',
+          benefits: ['वार्षिक ₹6,000', 'सीधा बैंक ट्रांसफर', 'तीन समान किस्तें'],
+          eligibility: 'छोटे और सीमांत किसान',
+          applicationProcess: 'सामान्य सेवा केंद्रों में आवेदन करें',
+          website: 'https://pmkisan.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-kisan-maandhan-yojana',
+          title: 'प्रधानमंत्री किसान मांधन योजना',
+          description: 'छोटे और सीमांत किसानों के लिए पेंशन योजना',
+          category: 'pension',
+          benefits: ['मासिक ₹3,000 पेंशन', 'सरकारी योगदान', 'जीवन बीमा कवर'],
+          eligibility: '18-40 वर्ष की आयु के किसान',
+          applicationProcess: 'सामान्य सेवा केंद्रों में आवेदन करें',
+          website: 'https://pmkmy.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-shram-yogi-maandhan',
+          title: 'प्रधानमंत्री श्रम योगी मांधन',
+          description: 'असंगठित श्रमिकों के लिए पेंशन योजना',
+          category: 'pension',
+          benefits: ['मासिक ₹3,000 पेंशन', 'सरकारी योगदान', 'जीवन बीमा कवर'],
+          eligibility: '18-40 वर्ष की आयु के असंगठित श्रमिक',
+          applicationProcess: 'सामान्य सेवा केंद्रों में आवेदन करें',
+          website: 'https://maandhan.in'
+        },
+        {
+          id: 'pradhan-mantri-jeevan-jyoti-bima-yojana',
+          title: 'प्रधानमंत्री जीवन ज्योति बीमा योजना',
+          description: 'जीवन बीमा योजना',
+          category: 'insurance',
+          benefits: ['₹2 लाख जीवन कवर', 'कम प्रीमियम', 'ऑटो-डेबिट सुविधा'],
+          eligibility: 'बैंक खाते के साथ 18-50 वर्ष की आयु',
+          applicationProcess: 'बैंक शाखा के माध्यम से आवेदन करें',
+          website: 'https://jansuraksha.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-suraksha-bima-yojana',
+          title: 'प्रधानमंत्री सुरक्षा बीमा योजना',
+          description: 'दुर्घटना बीमा योजना',
+          category: 'insurance',
+          benefits: ['₹2 लाख दुर्घटना कवर', 'कम प्रीमियम', 'ऑटो-डेबिट सुविधा'],
+          eligibility: 'बैंक खाते के साथ 18-70 वर्ष की आयु',
+          applicationProcess: 'बैंक शाखा के माध्यम से आवेदन करें',
+          website: 'https://jansuraksha.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-garib-kalyan-anna-yojana',
+          title: 'प्रधानमंत्री गरीब कल्याण अन्न योजना',
+          description: 'गरीब परिवारों के लिए मुफ्त खाद्यान्न',
+          category: 'food',
+          benefits: ['5 किलो मुफ्त चावल/गेहूं', '1 किलो मुफ्त दाल', 'दिसंबर 2024 तक विस्तारित'],
+          eligibility: 'अंत्योदय अन्न योजना और प्राथमिकता वाले परिवार',
+          applicationProcess: 'पीडीएस के माध्यम से स्वचालित',
+          website: 'https://nfsa.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-ujjwala-yojana',
+          title: 'प्रधानमंत्री उज्ज्वला योजना',
+          description: 'गरीब महिलाओं के लिए मुफ्त एलपीजी कनेक्शन',
+          category: 'energy',
+          benefits: ['मुफ्त एलपीजी कनेक्शन', 'स्टोव के लिए ईएमआई सुविधा', 'सुरक्षा प्रशिक्षण'],
+          eligibility: 'बीपीएल महिला परिवार',
+          applicationProcess: 'एलपीजी वितरकों के माध्यम से आवेदन करें',
+          website: 'https://pmuy.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-saubhagya-yojana',
+          title: 'प्रधानमंत्री सौभाग्य योजना',
+          description: 'सभी परिवारों के लिए बिजली',
+          category: 'energy',
+          benefits: ['मुफ्त बिजली कनेक्शन', 'एलईडी बल्ब', 'शिकायतों के लिए मोबाइल ऐप'],
+          eligibility: 'बिजली के बिना ग्रामीण और शहरी परिवार',
+          applicationProcess: 'बिजली विभाग के माध्यम से आवेदन करें',
+          website: 'https://saubhagya.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-digital-india',
+          title: 'प्रधानमंत्री डिजिटल इंडिया',
+          description: 'डिजिटल बुनियादी ढांचा और सेवाएं',
+          category: 'technology',
+          benefits: ['डिजिटल भुगतान', 'ई-गवर्नेंस सेवाएं', 'इंटरनेट कनेक्टिविटी'],
+          eligibility: 'सभी नागरिक',
+          applicationProcess: 'सरकारी पोर्टलों के माध्यम से पहुंच',
+          website: 'https://digitalindia.gov.in'
+        },
+        {
+          id: 'pradhan-mantri-ayushman-bharat',
+          title: 'प्रधानमंत्री आयुष्मान भारत',
+          description: 'गरीब परिवारों के लिए स्वास्थ्य बीमा',
+          category: 'health',
+          benefits: ['₹5 लाख स्वास्थ्य कवर', 'नकद रहित उपचार', '10.74 करोड़ परिवारों का कवरेज'],
+          eligibility: 'सामाजिक-आर्थिक जाति जनगणना (एसईसीसी) लाभार्थी',
+          applicationProcess: 'स्वचालित नामांकन',
+          website: 'https://pmjay.gov.in'
         }
       ]
     };
@@ -273,4 +513,4 @@ class LegalController {
   }
 }
 
-module.exports = new LegalController(); 
+module.exports = LegalController; 

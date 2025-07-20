@@ -18,6 +18,8 @@ import {
 import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import rupeeLogo from '../assets/rupee1.png';
+import { getHomepageTranslation } from '../config/homepageTranslations';
+import { getHeaderTranslation } from '../config/headerTranslations';
 import {
   Chart as ChartJS,
   LineElement,
@@ -222,7 +224,9 @@ const Layout = ({
               <img src={rupeeLogo} alt="Arthika Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
               <div className="flex flex-col ml-2">
                 <span className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">Arthika</span>
-                <span className="text-xs sm:text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>StoriesThatThink. AdviceThatFits.</span>
+                <span className="text-xs sm:text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>
+                  {getHeaderTranslation(language, 'tagline')}
+                </span>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 ml-auto flex-shrink-0 mt-4 sm:mt-0">
@@ -233,9 +237,7 @@ const Layout = ({
               >
                 <MessageSquare size={20} />
                 <span>
-                  <TranslatedText language={language}>
-                    {isListening ? 'Listening...' : 'Voice Query'}
-                  </TranslatedText>
+                  {isListening ? getHeaderTranslation(language, 'listening') : getHeaderTranslation(language, 'voiceQuery')}
                 </span>
               </button>
               <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
@@ -260,7 +262,7 @@ const Layout = ({
           </main>
         </div>
       </div>
-      <Footer />
+      <Footer language={language} />
       {/* Scroll to Top Arrow (bottom left, responsive) */}
       {showScrollTop && (
         <button

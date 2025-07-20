@@ -4,6 +4,8 @@ import TranslatedText from '../components/TranslatedText';
 import apiService from '../services/apiService';
 import { useNavigate, Link } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
+import { getHomepageTranslation } from '../config/homepageTranslations';
+import { getSmartTranslation } from '../config/smartTranslations';
 
 function HomePage({
   language,
@@ -27,49 +29,49 @@ function HomePage({
   const useCases = [
     {
       icon: '💍',
-      title: 'Gold Loan Decision',
-      description: 'Will I lose my jewellery?'
+      title: getHomepageTranslation(language, 'useCases', 'title', 0),
+      description: getHomepageTranslation(language, 'useCases', 'description', 0)
     },
     {
       icon: '🏥',
-      title: 'Medical Emergency',
-      description: 'How do I pay hospital bills?'
+      title: getHomepageTranslation(language, 'useCases', 'title', 1),
+      description: getHomepageTranslation(language, 'useCases', 'description', 1)
     },
     {
       icon: '🎓',
-      title: 'Saving for Education',
-      description: 'Plan for child\'s fees'
+      title: getHomepageTranslation(language, 'useCases', 'title', 2),
+      description: getHomepageTranslation(language, 'useCases', 'description', 2)
     },
     {
       icon: '👩‍⚖️',
-      title: 'Know Your Rights',
-      description: 'What lenders can\'t do legally'
+      title: getHomepageTranslation(language, 'useCases', 'title', 3),
+      description: getHomepageTranslation(language, 'useCases', 'description', 3)
     }
   ];
 
   const quickActions = [
     {
       icon: TrendingUp,
-      title: 'View Roadmap',
-      description: 'See your financial journey',
+      title: getHomepageTranslation(language, 'quickActions', 'viewRoadmap.title'),
+      description: getHomepageTranslation(language, 'quickActions', 'viewRoadmap.description'),
       path: '/roadmap'
     },
     {
       icon: Shield,
-      title: 'Trust Score',
-      description: 'Check your financial health',
+      title: getHomepageTranslation(language, 'quickActions', 'trustScore.title'),
+      description: getHomepageTranslation(language, 'quickActions', 'trustScore.description'),
       path: '/score'
     },
     {
       icon: FileText,
-      title: 'Government Schemes',
-      description: 'Find available benefits',
+      title: getHomepageTranslation(language, 'quickActions', 'governmentSchemes.title'),
+      description: getHomepageTranslation(language, 'quickActions', 'governmentSchemes.description'),
       path: '/schemes'
     },
     {
       icon: Download,
-      title: 'Export Plan',
-      description: 'Download your financial plan',
+      title: getHomepageTranslation(language, 'quickActions', 'exportPlan.title'),
+      description: getHomepageTranslation(language, 'quickActions', 'exportPlan.description'),
       path: '/export'
     }
   ];
@@ -141,14 +143,10 @@ function HomePage({
           <div className="flex flex-col items-center">
             <div className="w-30 h-6 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 mb-6 animate-fade-in flex items-center justify-center" />
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight drop-shadow-lg tracking-tight mb-4 animate-fade-in">
-              <TranslatedText language={language}>
-                Understand your money in your language
-              </TranslatedText>
+              {getSmartTranslation(language, 'hero', 'title')}
             </h1>
             <p className="text-xl md:text-2xl text-cyan-900/90 max-w-2xl mx-auto leading-relaxed font-medium animate-fade-in">
-              <TranslatedText language={language}>
-                Get clear, simple advice on loans, savings, and more — no jargon, just stories.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'hero', 'subtitle')}
             </p>
           </div>
         </div>
@@ -167,18 +165,14 @@ function HomePage({
           >
             <Mic size={24} />
             <span>
-              <TranslatedText language={language}>
-                Start Voice Query
-              </TranslatedText>
+              {getHomepageTranslation(language, 'hero', 'startButton')}
             </span>
           </button>
           <button
             onClick={() => setShowHowItWorks(!showHowItWorks)}
             className="bg-white/80 border border-blue-200 text-blue-700 text-lg px-8 py-4 rounded-full shadow hover:bg-blue-50 transition-all duration-200"
           >
-            <TranslatedText language={language}>
-              How It Works
-            </TranslatedText>
+            {getHomepageTranslation(language, 'hero', 'howItWorksButton')}
           </button>
         </div>
       </div>
@@ -187,9 +181,7 @@ function HomePage({
       {showHowItWorks && (
         <div className="bg-white/80 rounded-2xl shadow-xl p-8 mb-12 animate-fade-in border border-blue-100">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            <TranslatedText language={language}>
-              How Arthika Works
-            </TranslatedText>
+            {getHomepageTranslation(language, 'howItWorks', 'title')}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -197,14 +189,10 @@ function HomePage({
                 <Mic className="text-cyan-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
-                <TranslatedText language={language}>
-                  1. Ask Your Question
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step1.title')}
               </h3>
               <p className="text-gray-600">
-                <TranslatedText language={language}>
-                  Speak or type your financial question in your preferred language.
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step1.description')}
               </p>
             </div>
             <div className="text-center">
@@ -212,14 +200,10 @@ function HomePage({
                 <Play className="text-green-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
-                <TranslatedText language={language}>
-                  2. Get AI Analysis
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step2.title')}
               </h3>
               <p className="text-gray-600">
-                <TranslatedText language={language}>
-                  Our AI provides personalized financial advice with clear explanations.
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step2.description')}
               </p>
             </div>
             <div className="text-center">
@@ -227,14 +211,10 @@ function HomePage({
                 <Volume2 className="text-purple-600" size={24} />
               </div>
               <h3 className="font-semibold text-lg mb-2">
-                <TranslatedText language={language}>
-                  3. View Your Roadmap
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step3.title')}
               </h3>
               <p className="text-gray-600">
-                <TranslatedText language={language}>
-                  See your financial roadmap with actionable recommendations.
-                </TranslatedText>
+                {getHomepageTranslation(language, 'howItWorks', 'step3.description')}
               </p>
             </div>
           </div>
@@ -249,20 +229,16 @@ function HomePage({
             <Link
               key={index}
               to={action.path}
-              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
+              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[280px] max-w-[380px] min-h-[220px]"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
                 <Icon className="text-cyan-600" size={36} />
               </div>
-              <h3 className="font-semibold text-xl text-gray-900 mb-2">
-                <TranslatedText language={language}>
-                  {action.title}
-                </TranslatedText>
+              <h3 className="font-semibold text-xl text-gray-900 mb-2 text-center leading-tight">
+                {action.title}
               </h3>
-              <p className="text-gray-600 text-base">
-                <TranslatedText language={language}>
-                  {action.description}
-                </TranslatedText>
+              <p className="text-gray-600 text-base text-center leading-relaxed">
+                {action.description}
               </p>
             </Link>
           );
@@ -272,20 +248,16 @@ function HomePage({
       {/* Use Case Tiles */}
       <div className="flex flex-wrap justify-center gap-12 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
+          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[280px] max-w-[380px] min-h-[220px]"
             onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
             style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
           >
             <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
-            <h3 className="font-semibold text-xl text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                {useCase.title}
-              </TranslatedText>
+            <h3 className="font-semibold text-xl text-gray-900 mb-2 text-center leading-tight">
+              {useCase.title}
             </h3>
-            <p className="text-gray-600 text-base">
-              <TranslatedText language={language}>
-                {useCase.description}
-              </TranslatedText>
+            <p className="text-gray-600 text-base text-center leading-relaxed">
+              {useCase.description}
             </p>
           </div>
         ))}
@@ -296,14 +268,10 @@ function HomePage({
         <div className="space-y-6">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              <TranslatedText language={language}>
-                Ask Your Question
-              </TranslatedText>
+              {getHomepageTranslation(language, 'inputSection', 'title')}
             </h2>
             <p className="text-gray-600">
-              <TranslatedText language={language}>
-                Choose how you want to ask your financial question
-              </TranslatedText>
+              {getHomepageTranslation(language, 'inputSection', 'subtitle')}
             </p>
           </div>
 
@@ -312,29 +280,25 @@ function HomePage({
             <button
               onClick={() => setInputMethod('voice')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'voice'
-                  ? 'bg-cyan-100 text-cyan-700'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-cyan-100 text-cyan-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
             >
               <Mic size={20} />
               <span>
-                <TranslatedText language={language}>
-                  Voice
-                </TranslatedText>
+                {getHomepageTranslation(language, 'inputSection', 'voiceButton')}
               </span>
             </button>
             <button
               onClick={() => setInputMethod('text')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'text'
-                  ? 'bg-cyan-100 text-cyan-700'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-cyan-100 text-cyan-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
             >
               <MessageSquare size={20} />
               <span>
-                <TranslatedText language={language}>
-                  Text
-                </TranslatedText>
+                {getHomepageTranslation(language, 'inputSection', 'textButton')}
               </span>
             </button>
           </div>
@@ -351,17 +315,11 @@ function HomePage({
               </button>
               <p className="text-lg font-medium text-gray-700">
                 {isProcessing ? (
-                  <TranslatedText language={language}>
-                    Processing your question...
-                  </TranslatedText>
+                  getHomepageTranslation(language, 'voiceInput', 'processing')
                 ) : isListening ? (
-                  <TranslatedText language={language}>
-                    Listening... Speak now!
-                  </TranslatedText>
+                  getHomepageTranslation(language, 'inputSection', 'listeningSpeak')
                 ) : (
-                  <TranslatedText language={language}>
-                    Click to start speaking
-                  </TranslatedText>
+                  getHomepageTranslation(language, 'voiceInput', 'clickToStart')
                 )}
               </p>
               {/* Real-time transcript display */}
@@ -370,9 +328,7 @@ function HomePage({
                   {transcript && (
                     <div className="mb-2">
                       <p className="text-sm text-gray-500 mb-1">
-                        <TranslatedText language={language}>
-                          Final transcript:
-                        </TranslatedText>
+                        {getHomepageTranslation(language, 'voiceInput', 'finalTranscript')}
                       </p>
                       <p className="text-gray-700 font-medium">{transcript}</p>
                     </div>
@@ -380,9 +336,7 @@ function HomePage({
                   {interimTranscript && (
                     <div>
                       <p className="text-sm text-gray-500 mb-1">
-                        <TranslatedText language={language}>
-                          Listening...
-                        </TranslatedText>
+                        {getHomepageTranslation(language, 'inputSection', 'listening')}
                       </p>
                       <p className="text-gray-600 italic">{interimTranscript}</p>
                     </div>
@@ -395,7 +349,7 @@ function HomePage({
               <textarea
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
-                placeholder="Type your question here..."
+                placeholder={getHomepageTranslation(language, 'inputSection', 'textPlaceholder')}
                 className="input-field h-32 resize-none bg-white/80 border border-blue-200 rounded-xl shadow focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                 disabled={isProcessing}
               />
@@ -408,24 +362,18 @@ function HomePage({
                   <div className="flex items-center justify-center space-x-2">
                     <Loader2 className="animate-spin" size={20} />
                     <span>
-                      <TranslatedText language={language}>
-                        Processing your query...
-                      </TranslatedText>
+                      {getHomepageTranslation(language, 'voiceInput', 'processingQuery')}
                     </span>
                   </div>
                 ) : (
-                  <TranslatedText language={language}>
-                    Ask Question
-                  </TranslatedText>
+                  getHomepageTranslation(language, 'voiceInput', 'askQuestion')
                 )}
               </button>
             </form>
           )}
 
           <div className="text-sm text-gray-500 text-center mt-2">
-            <TranslatedText language={language}>
-              Try asking: "What if I take a gold loan?" or "How should I invest my money?"
-            </TranslatedText>
+            {getHomepageTranslation(language, 'voiceInput', 'tryAsking')}
           </div>
         </div>
       </div>

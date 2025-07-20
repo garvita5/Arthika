@@ -11,7 +11,7 @@ import {
   Calendar,
   DollarSign
 } from 'lucide-react';
-import TranslatedText from '../components/TranslatedText';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function TrustScorePage({ language, trustScore = 85 }) {
   const [score, setScore] = useState(trustScore);
@@ -28,14 +28,10 @@ function TrustScorePage({ language, trustScore = 85 }) {
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-900">
-              <TranslatedText language={language}>
-                No Trust Score Available
-              </TranslatedText>
+              {getHomepageTranslation(language, 'trustScore', 'noTrustScoreAvailable')}
             </h2>
             <p className="text-gray-600 max-w-md mx-auto">
-              <TranslatedText language={language}>
-                You need to ask a financial question first to calculate your trust score.
-              </TranslatedText>
+              {getHomepageTranslation(language, 'trustScore', 'noTrustScoreDescription')}
             </p>
           </div>
           <Link 
@@ -44,9 +40,7 @@ function TrustScorePage({ language, trustScore = 85 }) {
           >
             <ArrowLeft size={22} />
             <span>
-              <TranslatedText language={language}>
-                Ask a Question
-              </TranslatedText>
+              {getHomepageTranslation(language, 'trustScore', 'askQuestion')}
             </span>
           </Link>
         </div>
@@ -54,37 +48,45 @@ function TrustScorePage({ language, trustScore = 85 }) {
     );
   }
 
-  // Mock reminders data
+  // Mock reminders data with Hindi translations
   const mockReminders = [
     {
       id: 1,
       type: 'positive',
-      title: 'Excellent Emergency Fund',
-      description: 'You have saved 6 months of expenses. Great job!',
+      title: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.excellentEmergencyFund.title'),
+      titleHi: 'उत्कृष्ट आपातकालीन कोष',
+      description: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.excellentEmergencyFund.description'),
+      descriptionHi: 'आपने 6 महीनों के खर्च बचाए हैं। बहुत अच्छा काम!',
       icon: CheckCircle,
       color: 'text-green-600 bg-green-100'
     },
     {
       id: 2,
       type: 'warning',
-      title: 'High Credit Card Usage',
-      description: 'Your credit utilization is 75%. Try to keep it under 30%.',
+      title: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.highCreditCardUsage.title'),
+      titleHi: 'उच्च क्रेडिट कार्ड उपयोग',
+      description: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.highCreditCardUsage.description'),
+      descriptionHi: 'आपका क्रेडिट उपयोग 75% है। इसे 30% से कम रखने का प्रयास करें।',
       icon: AlertTriangle,
       color: 'text-orange-600 bg-orange-100'
     },
     {
       id: 3,
       type: 'info',
-      title: 'Investment Opportunity',
-      description: 'Consider starting a SIP in index funds for long-term growth.',
+      title: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.investmentOpportunity.title'),
+      titleHi: 'निवेश का अवसर',
+      description: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.investmentOpportunity.description'),
+      descriptionHi: 'दीर्घकालिक विकास के लिए इंडेक्स फंड में SIP शुरू करने पर विचार करें।',
       icon: TrendingUp,
       color: 'text-blue-600 bg-blue-100'
     },
     {
       id: 4,
       type: 'positive',
-      title: 'Good Debt Management',
-      description: 'You\'re making regular payments on your loans. Keep it up!',
+      title: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.goodDebtManagement.title'),
+      titleHi: 'अच्छा ऋण प्रबंधन',
+      description: getHomepageTranslation(language, 'trustScore', 'aiReminders.reminders.goodDebtManagement.description'),
+      descriptionHi: 'आप अपने ऋणों पर नियमित भुगतान कर रहे हैं। इसे जारी रखें!',
       icon: CheckCircle,
       color: 'text-green-600 bg-green-100'
     }
@@ -107,15 +109,15 @@ function TrustScorePage({ language, trustScore = 85 }) {
   };
 
   const getScoreStatus = (score) => {
-    if (score >= 80) return 'Excellent';
-    if (score >= 60) return 'Good';
-    return 'Needs Attention';
+    if (score >= 80) return getHomepageTranslation(language, 'trustScore', 'scoreStatus.excellent');
+    if (score >= 60) return getHomepageTranslation(language, 'trustScore', 'scoreStatus.good');
+    return getHomepageTranslation(language, 'trustScore', 'scoreStatus.needsAttention');
   };
 
   const getScoreDescription = (score) => {
-    if (score >= 80) return 'Your financial health is excellent! Keep up the good work.';
-    if (score >= 60) return 'Your financial standing is good with room for improvement.';
-    return 'Consider reviewing your financial decisions and seeking guidance.';
+    if (score >= 80) return getHomepageTranslation(language, 'trustScore', 'scoreDescriptions.excellent');
+    if (score >= 60) return getHomepageTranslation(language, 'trustScore', 'scoreDescriptions.good');
+    return getHomepageTranslation(language, 'trustScore', 'scoreDescriptions.needsAttention');
   };
 
   const recalculateScore = async () => {
@@ -147,9 +149,7 @@ function TrustScorePage({ language, trustScore = 85 }) {
         >
           <ArrowLeft size={22} />
           <span>
-            <TranslatedText language={language}>
-              Back to Home
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'backToHome')}
           </span>
         </Link>
         
@@ -160,9 +160,7 @@ function TrustScorePage({ language, trustScore = 85 }) {
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           <span>
-            <TranslatedText language={language}>
-              {isLoading ? 'Recalculating...' : 'Recalculate'}
-            </TranslatedText>
+            {isLoading ? getHomepageTranslation(language, 'trustScore', 'recalculating') : getHomepageTranslation(language, 'trustScore', 'recalculate')}
           </span>
         </button>
       </div>
@@ -180,29 +178,21 @@ function TrustScorePage({ language, trustScore = 85 }) {
         </h1>
         
         <h2 className={`text-xl font-semibold mb-2 ${getScoreColor(score)}`}>
-          <TranslatedText language={language}>
-            {getScoreStatus(score)}
-          </TranslatedText>
+          {getScoreStatus(score)}
         </h2>
         
         <p className="text-gray-600 max-w-md mx-auto">
-          <TranslatedText language={language}>
-            {getScoreDescription(score)}
-          </TranslatedText>
+          {getScoreDescription(score)}
         </p>
         
         {/* Progress Bar */}
         <div className="mt-6">
           <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
             <span>
-              <TranslatedText language={language}>
-                Poor
-              </TranslatedText>
+              {getHomepageTranslation(language, 'trustScore', 'scoreStatus.poor')}
             </span>
             <span>
-              <TranslatedText language={language}>
-                Excellent
-              </TranslatedText>
+              {getHomepageTranslation(language, 'trustScore', 'scoreStatus.excellent')}
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -224,15 +214,11 @@ function TrustScorePage({ language, trustScore = 85 }) {
             <DollarSign className="text-green-600" size={24} />
           </div>
           <h3 className="font-semibold text-gray-900 mb-1">
-            <TranslatedText language={language}>
-              Savings Rate
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreBreakdown.savingsRate')}
           </h3>
           <p className="text-2xl font-bold text-green-600">85%</p>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Excellent
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreStatus.excellent')}
           </p>
         </div>
         
@@ -241,15 +227,11 @@ function TrustScorePage({ language, trustScore = 85 }) {
             <Target className="text-blue-600" size={24} />
           </div>
           <h3 className="font-semibold text-gray-900 mb-1">
-            <TranslatedText language={language}>
-              Debt Management
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreBreakdown.debtManagement')}
           </h3>
           <p className="text-2xl font-bold text-blue-600">72%</p>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Good
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreStatus.good')}
           </p>
         </div>
         
@@ -258,15 +240,11 @@ function TrustScorePage({ language, trustScore = 85 }) {
             <Calendar className="text-purple-600" size={24} />
           </div>
           <h3 className="font-semibold text-gray-900 mb-1">
-            <TranslatedText language={language}>
-              Payment History
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreBreakdown.paymentHistory')}
           </h3>
           <p className="text-2xl font-bold text-purple-600">95%</p>
           <p className="text-sm text-gray-600">
-            <TranslatedText language={language}>
-              Excellent
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'scoreStatus.excellent')}
           </p>
         </div>
       </div>
@@ -275,14 +253,10 @@ function TrustScorePage({ language, trustScore = 85 }) {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">
-            <TranslatedText language={language}>
-              AI-Generated Reminders
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'aiReminders.title')}
           </h2>
           <span className="text-sm text-gray-500">
-            <TranslatedText language={language}>
-              Updated daily
-            </TranslatedText>
+            {getHomepageTranslation(language, 'trustScore', 'aiReminders.updatedDaily')}
           </span>
         </div>
         
@@ -298,10 +272,10 @@ function TrustScorePage({ language, trustScore = 85 }) {
                   
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900 mb-1">
-                      {reminder.title}
+                      {language === 'hi' && reminder.titleHi ? reminder.titleHi : reminder.title}
                     </h3>
                     <p className="text-gray-600 text-sm">
-                      {reminder.description}
+                      {language === 'hi' && reminder.descriptionHi ? reminder.descriptionHi : reminder.description}
                     </p>
                   </div>
                 </div>
@@ -323,14 +297,10 @@ function TrustScorePage({ language, trustScore = 85 }) {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">
-                <TranslatedText language={language}>
-                  View Roadmap
-                </TranslatedText>
+                {getHomepageTranslation(language, 'trustScore', 'actionCards.viewRoadmap.title')}
               </h3>
               <p className="text-sm text-gray-600">
-                <TranslatedText language={language}>
-                  See your financial journey
-                </TranslatedText>
+                {getHomepageTranslation(language, 'trustScore', 'actionCards.viewRoadmap.description')}
               </p>
             </div>
           </div>
@@ -346,14 +316,10 @@ function TrustScorePage({ language, trustScore = 85 }) {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">
-                <TranslatedText language={language}>
-                  Government Schemes
-                </TranslatedText>
+                {getHomepageTranslation(language, 'trustScore', 'actionCards.governmentSchemes.title')}
               </h3>
               <p className="text-sm text-gray-600">
-                <TranslatedText language={language}>
-                  Find available benefits
-                </TranslatedText>
+                {getHomepageTranslation(language, 'trustScore', 'actionCards.governmentSchemes.description')}
               </p>
             </div>
           </div>
