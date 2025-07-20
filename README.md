@@ -286,3 +286,24 @@ Arthika is built by a team passionate about making financial advice accessible t
 **Arthika** - Stories That Think. Advice That Fits.
 
 *Your journey to financial wisdom starts here.*
+
+---
+
+##  Explore More Features
+
+###  English Home Page
+![English Home](./assets/screenshots/englishHome1.png)
+
+###  Language Selection Options
+![Language Options](./assets/screenshots/languages1.png)
+
+###  Voice Query in Action
+![Voice Query](./assets/screenshots/voiceQuery1.png)
+
+### Hindi Home Page
+![Hindi Home](./assets/screenshots/hindiHome1.png)
+
+---
+
+🔗 **[Explore More Features Live →](https://arthika.onrender.com)**
+
