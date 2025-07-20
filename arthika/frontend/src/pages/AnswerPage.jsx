@@ -17,6 +17,7 @@ function RoadmapFlowchart({ steps }) {
   if (!steps || steps.length === 0) return null;
   return (
     <div className="flex flex-col items-center w-full mb-8">
+
       <div className="flex flex-col sm:flex-row items-center w-full gap-4 py-4 overflow-x-auto">
         {steps.map((step, idx) => (
           <React.Fragment key={step.id || idx}>
