@@ -46,6 +46,16 @@ ChartJS.register(
   Filler
 );
 
+const navigationItems = [
+  { path: '/', label: 'Home', icon: Home },
+  { path: '/all-queries', label: 'All Queries', icon: MessageSquare },
+  { path: '/schemes', label: 'Schemes', icon: FileText },
+  { path: '/ngos', label: 'NGO Access', icon: Users },
+  { path: '/export', label: 'Export', icon: Download },
+  { path: '/roadmap', label: 'Roadmap', icon: TrendingUp },
+  { path: '/score', label: 'Trust Score', icon: Shield },
+];
+
 const Layout = ({
   children,
   language,
@@ -77,16 +87,6 @@ const Layout = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigationItems = [
-    { path: '/', label: getHeaderTranslation(language, 'home'), icon: Home },
-    { path: '/all-queries', label: getHeaderTranslation(language, 'allQueries'), icon: MessageSquare },
-    { path: '/schemes', label: getHeaderTranslation(language, 'schemes'), icon: FileText },
-    { path: '/ngos', label: getHeaderTranslation(language, 'ngoAccess'), icon: Users },
-    { path: '/export', label: getHeaderTranslation(language, 'export'), icon: Download },
-    { path: '/roadmap', label: getHeaderTranslation(language, 'roadmap'), icon: TrendingUp },
-    { path: '/score', label: getHeaderTranslation(language, 'trustScore'), icon: Shield },
-  ];
-
   const handleVoiceQuery = () => {
     if (isListening) {
       stopListening();
@@ -106,6 +106,7 @@ const Layout = ({
             transition: 'width 0.3s cubic-bezier(.4,0,.2,1)',
             marginTop: 32,
             marginLeft: 'max(2vw, 32px)',
+            // Removed maxHeight and overflowY
           }}
           onMouseEnter={() => setSidebarHovered(true)}
           onMouseLeave={() => setSidebarHovered(false)}
@@ -129,7 +130,7 @@ const Layout = ({
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center w-full px-2 py-2 rounded-full transition-all duration-200 my-0.5 ${isActive ? 'bg-white/80 text-primary-700 shadow-lg ring-2 ring-blue-200' : 'text-gray-700 hover:text-primary-700 hover:bg-white/60 hover:shadow-md'} ${!sidebarHovered ? 'justify-center' : ''}`}
+                    className={`flex items-center w-full px-2 py-2 rounded-full transition-all duration-200 my-0.5 ${isActive ? 'bg-whiteインスト/80 text-primary-700 shadow-lg ring-2 ring-blue-200' : 'text-gray-700 hover:text-primary-700 hover:bg-white/60 hover:shadow-md'} ${!sidebarHovered ? 'justify-center' : ''}`}
                     style={{ minWidth: 0 }}
                   >
                     <span className={`${!sidebarHovered ? 'mx-auto' : ''} transition-all duration-300`}><Icon size={22} /></span>
@@ -169,7 +170,6 @@ const Layout = ({
             </button>
           </div>
         </aside>
-        
         {/* Sidebar Overlay for md and below */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" onClick={() => setSidebarOpen(false)} />
@@ -211,7 +211,6 @@ const Layout = ({
             <span><TranslatedText language={language}>Log Out</TranslatedText></span>
           </button>
         </aside>
-        
         {/* Main Content Area */}
         <div
           className="flex-1 flex flex-col min-h-screen"
@@ -226,7 +225,7 @@ const Layout = ({
               <div className="flex flex-col ml-2">
                 <span className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">Arthika</span>
                 <span className="text-xs sm:text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>
-                  {language === 'hi' ? getHeaderTranslation(language, 'tagline') : 'StoriesThatThink. AdviceThatFits.'}
+                  {getHeaderTranslation(language, 'tagline')}
                 </span>
               </div>
             </div>
@@ -238,9 +237,7 @@ const Layout = ({
               >
                 <MessageSquare size={20} />
                 <span>
-                  <TranslatedText language={language}>
-                    {isListening ? 'Listening...' : 'Voice Query'}
-                  </TranslatedText>
+                  {isListening ? getHeaderTranslation(language, 'listening') : getHeaderTranslation(language, 'voiceQuery')}
                 </span>
               </button>
               <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
@@ -265,7 +262,7 @@ const Layout = ({
           </main>
         </div>
       </div>
-      <Footer />
+      <Footer language={language} />
       {/* Scroll to Top Arrow (bottom left, responsive) */}
       {showScrollTop && (
         <button

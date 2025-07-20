@@ -202,10 +202,10 @@ function AnswerPage({ language = 'en' }) {
           </div>
           {roadmap.summary && (
             <div className="mb-6 text-gray-700 text-base flex flex-wrap gap-4 justify-center">
-              <span><b>Net Worth:</b> ₹{roadmap.summary.netWorth}</span>
-              <span><b>Total Savings:</b> ₹{roadmap.summary.totalSavings}</span>
-              <span><b>Total Debt:</b> ₹{roadmap.summary.totalDebt}</span>
-              <span><b>Timeline:</b> {roadmap.summary.timeline}</span>
+              <span><b>{getHomepageTranslation(language, 'answerPage', 'netWorth')}:</b> ₹{roadmap.summary.netWorth}</span>
+              <span><b>{getHomepageTranslation(language, 'answerPage', 'totalSavings')}:</b> ₹{roadmap.summary.totalSavings}</span>
+              <span><b>{getHomepageTranslation(language, 'answerPage', 'totalDebt')}:</b> ₹{roadmap.summary.totalDebt}</span>
+              <span><b>{getHomepageTranslation(language, 'answerPage', 'timeline')}:</b> {roadmap.summary.timeline}</span>
             </div>
           )}
           <RoadmapFlowchart steps={steps} />
@@ -215,7 +215,7 @@ function AnswerPage({ language = 'en' }) {
       {/* Summary Card for Additional Info */}
       {(saferAlternatives && saferAlternatives.length > 0) && (
         <div className="bg-yellow-50 rounded-3xl shadow-lg p-8 border border-yellow-200">
-          <h3 className="text-lg font-semibold text-yellow-900 mb-4 flex items-center gap-2">🛡️ Safer Alternatives</h3>
+          <h3 className="text-lg font-semibold text-yellow-900 mb-4 flex items-center gap-2">🛡️ {getHomepageTranslation(language, 'answerPage', 'saferAlternatives')}</h3>
           <div className="space-y-2 text-yellow-900 text-base">
             <div>{saferAlternatives.join('; ')}</div>
           </div>

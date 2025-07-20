@@ -104,6 +104,11 @@ export const homepageTranslations = {
       governmentSchemes: 'Government Schemes for You',
       learnMore: 'Learn more',
       financialRoadmap: 'Your Financial Roadmap',
+      saferAlternatives: 'Safer Alternatives',
+      netWorth: 'Net Worth',
+      totalSavings: 'Total Savings',
+      totalDebt: 'Total Debt',
+      timeline: 'Timeline',
       loading: 'Loading...',
       error: 'Failed to fetch answer. Please try again.'
     },
@@ -427,6 +432,11 @@ export const homepageTranslations = {
       governmentSchemes: 'आपके लिए सरकारी योजनाएं',
       learnMore: 'और जानें',
       financialRoadmap: 'आपका वित्तीय मार्गचित्र',
+      saferAlternatives: 'सुरक्षित विकल्प',
+      netWorth: 'कुल संपत्ति',
+      totalSavings: 'कुल बचत',
+      totalDebt: 'कुल ऋण',
+      timeline: 'समय सीमा',
       loading: 'लोड हो रहा है...',
       error: 'उत्तर प्राप्त करने में विफल। कृपया पुनः प्रयास करें।'
     },

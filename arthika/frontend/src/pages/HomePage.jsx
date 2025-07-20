@@ -229,15 +229,15 @@ function HomePage({
             <Link
               key={index}
               to={action.path}
-              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
+              className="bg-gradient-to-br from-cyan-50 to-blue-100/70 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 group cursor-pointer min-w-[280px] max-w-[380px] min-h-[220px]"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow group-hover:from-cyan-300 group-hover:to-blue-300">
                 <Icon className="text-cyan-600" size={36} />
               </div>
-              <h3 className="font-semibold text-xl text-gray-900 mb-2">
+              <h3 className="font-semibold text-xl text-gray-900 mb-2 text-center leading-tight">
                 {action.title}
               </h3>
-              <p className="text-gray-600 text-base">
+              <p className="text-gray-600 text-base text-center leading-relaxed">
                 {action.description}
               </p>
             </Link>
@@ -248,15 +248,15 @@ function HomePage({
       {/* Use Case Tiles */}
       <div className="flex flex-wrap justify-center gap-12 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[260px] max-w-[320px] min-h-[210px]"
+          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[280px] max-w-[380px] min-h-[220px]"
             onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
             style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
           >
             <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
-            <h3 className="font-semibold text-xl text-gray-900 mb-2">
+            <h3 className="font-semibold text-xl text-gray-900 mb-2 text-center leading-tight">
               {useCase.title}
             </h3>
-            <p className="text-gray-600 text-base">
+            <p className="text-gray-600 text-base text-center leading-relaxed">
               {useCase.description}
             </p>
           </div>
@@ -280,8 +280,8 @@ function HomePage({
             <button
               onClick={() => setInputMethod('voice')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'voice'
-                  ? 'bg-cyan-100 text-cyan-700'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-cyan-100 text-cyan-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
             >
               <Mic size={20} />
@@ -292,8 +292,8 @@ function HomePage({
             <button
               onClick={() => setInputMethod('text')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${inputMethod === 'text'
-                  ? 'bg-cyan-100 text-cyan-700'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-cyan-100 text-cyan-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
             >
               <MessageSquare size={20} />
