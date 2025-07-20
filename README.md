@@ -292,16 +292,16 @@ Arthika is built by a team passionate about making financial advice accessible t
 ##  Explore More Features
 
 ###  English Home Page
-![English Home](./assets/screenshots/englishHome1.png)
+![English Home](arthika/frontend/src/assets/screenshots/englishHome1.png)
 
 ###  Language Selection Options
-![Language Options](./assets/screenshots/languages1.png)
+![Language Options](arthika/frontend/src/assets/screenshots/language1.png)
 
 ###  Voice Query in Action
-![Voice Query](./assets/screenshots/voiceQuery1.png)
+![Voice Query](arthika/frontend/src/assets/screenshots/voiceQuery1.png)
 
 ### Hindi Home Page
-![Hindi Home](./assets/screenshots/hindiHome1.png)
+![Hindi Home](arthika/frontend/src/assets/screenshots/hindiHome1.png)
 
 ---
 
