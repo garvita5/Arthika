@@ -109,6 +109,14 @@ export const homepageTranslations = {
       totalSavings: 'Total Savings',
       totalDebt: 'Total Debt',
       timeline: 'Timeline',
+      exitPlanner: 'Exit Planner',
+      exitPlannerSteps: [
+        'Review your current investments and identify assets to liquidate.',
+        'Check for any penalties or lock-in periods before exiting.',
+        'Plan the timing of your exit to minimize taxes and maximize returns.',
+        'Reinvest proceeds in safer instruments or as per your new goals.',
+        'Consult a financial advisor for a personalized exit strategy.'
+      ],
       loading: 'Loading...',
       error: 'Failed to fetch answer. Please try again.'
     },
@@ -437,6 +445,14 @@ export const homepageTranslations = {
       totalSavings: 'कुल बचत',
       totalDebt: 'कुल ऋण',
       timeline: 'समय सीमा',
+      exitPlanner: 'बाहर जाने का योजनाशय',
+      exitPlannerSteps: [
+        'अपने वर्तमान निवेश और अवशोषित संपत्तियों की पहचान करें।',
+        'निर्गमन से पहले कोई शुल्क या लॉक-इन अवधि जांचें।',
+        'निर्गमन के समय को कम करने के लिए टैक्स और रिटर्न को अधिकतम करें।',
+        'पुनर्निवेश के लिए पुनर्निवेश करें या अपने नए लक्ष्यों के अनुसार करें।',
+        'एक व्यक्तिगत निर्गमन रणनीति के लिए एक वित्तीय सलाहकार सलाह लें।'
+      ],
       loading: 'लोड हो रहा है...',
       error: 'उत्तर प्राप्त करने में विफल। कृपया पुनः प्रयास करें।'
     },
