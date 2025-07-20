@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
 import apiService from '../services/apiService';
 import { CheckCircle, ArrowRight, AlertCircle, Flag } from 'lucide-react';
+import { getHomepageTranslation } from '../config/homepageTranslations';
 
 function useQueryParam(name) {
   const { search } = useLocation();
@@ -65,7 +66,7 @@ function AnswerPage({ language = 'en' }) {
           setResponse({ question, ...resp });
         }
       } catch (err) {
-        setError('Failed to fetch answer. Please try again.');
+        setError(getHomepageTranslation(language, 'answerPage', 'error'));
         console.error('Error fetching answer:', err);
       } finally {
         setLoading(false);
@@ -112,7 +113,7 @@ function AnswerPage({ language = 'en' }) {
     speakAnswer();
   };
 
-  if (loading) return <div className="p-12 text-center text-lg">Loading...</div>;
+  if (loading) return <div className="p-12 text-center text-lg">{getHomepageTranslation(language, 'answerPage', 'loading')}</div>;
   if (error) return <div className="p-12 text-center text-red-600">{error}</div>;
 
   const story = response?.data?.storyResponse;
@@ -140,21 +141,21 @@ function AnswerPage({ language = 'en' }) {
       <div className="bg-gradient-to-br from-blue-50 to-cyan-100 rounded-3xl shadow-lg p-8 flex flex-col items-center border border-blue-100">
         <div className="flex items-center gap-3 mb-4">
           <Flag className="text-blue-400" size={28} />
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Arthika's Answer</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{getHomepageTranslation(language, 'answerPage', 'arthikaAnswer')}</h2>
         </div>
         <div className="text-lg md:text-xl text-gray-800 text-center leading-relaxed whitespace-pre-line mb-2">
-          {story || <span className="text-gray-400">No answer available.</span>}
+          {story || <span className="text-gray-400">{getHomepageTranslation(language, 'answerPage', 'noAnswerAvailable')}</span>}
         </div>
         {/* Speech Controls */}
         {story && (
           <div className="flex gap-3 mt-4">
             {!isSpeaking && (
-              <button onClick={speakAnswer} className="px-4 py-2 rounded-lg bg-cyan-100 text-cyan-700 font-semibold hover:bg-cyan-200 transition">Listen</button>
+              <button onClick={speakAnswer} className="px-4 py-2 rounded-lg bg-cyan-100 text-cyan-700 font-semibold hover:bg-cyan-200 transition">{getHomepageTranslation(language, 'answerPage', 'listen')}</button>
             )}
             {isSpeaking && (
-              <button onClick={stopSpeaking} className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">Stop</button>
+              <button onClick={stopSpeaking} className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">{getHomepageTranslation(language, 'answerPage', 'stop')}</button>
             )}
-            <button onClick={replaySpeaking} className="px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition">Replay</button>
+            <button onClick={replaySpeaking} className="px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition">{getHomepageTranslation(language, 'answerPage', 'replay')}</button>
           </div>
         )}
       </div>
@@ -164,7 +165,7 @@ function AnswerPage({ language = 'en' }) {
         <div className="bg-blue-50 rounded-3xl shadow-lg p-8 border border-blue-100">
           <div className="flex items-center gap-3 mb-4">
             <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-blue-500"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h6" /></svg>
-            <h3 className="text-xl md:text-2xl font-semibold text-blue-800">Government Schemes for You</h3>
+            <h3 className="text-xl md:text-2xl font-semibold text-blue-800">{getHomepageTranslation(language, 'answerPage', 'governmentSchemes')}</h3>
           </div>
           <div className="space-y-4">
             {schemes.map((scheme, idx) => {
@@ -180,7 +181,7 @@ function AnswerPage({ language = 'en' }) {
                     <div className="font-semibold text-blue-700 text-lg mb-1">{scheme.name || scheme.title}</div>
                     {scheme.description && <div className="text-gray-700 mb-1">{scheme.description}</div>}
                     {scheme.link && (
-                      <a href={scheme.link} target="_blank" rel="noopener noreferrer" className="text-cyan-700 underline text-sm">Learn more</a>
+                      <a href={scheme.link} target="_blank" rel="noopener noreferrer" className="text-cyan-700 underline text-sm">{getHomepageTranslation(language, 'answerPage', 'learnMore')}</a>
                     )}
                   </div>
                 );
@@ -197,7 +198,7 @@ function AnswerPage({ language = 'en' }) {
         <div className="bg-white rounded-3xl shadow-lg p-8 border border-green-100">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUpIcon />
-            <h3 className="text-xl md:text-2xl font-semibold text-green-800">Your Financial Roadmap</h3>
+            <h3 className="text-xl md:text-2xl font-semibold text-green-800">{getHomepageTranslation(language, 'answerPage', 'financialRoadmap')}</h3>
           </div>
           {roadmap.summary && (
             <div className="mb-6 text-gray-700 text-base flex flex-wrap gap-4 justify-center">

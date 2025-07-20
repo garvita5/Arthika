@@ -20,18 +20,42 @@ function SchemesPage({ language }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
 
+  // Hindi translations for categories
+  const categoryTranslations = {
+    en: {
+      all: 'All Schemes',
+      agriculture: 'Agriculture',
+      education: 'Education',
+      healthcare: 'Healthcare',
+      housing: 'Housing',
+      employment: 'Employment',
+      women: 'Women Empowerment',
+      senior: 'Senior Citizens'
+    },
+    hi: {
+      all: 'सभी योजनाएं',
+      agriculture: 'कृषि',
+      education: 'शिक्षा',
+      healthcare: 'स्वास्थ्य देखभाल',
+      housing: 'आवास',
+      employment: 'रोजगार',
+      women: 'महिला सशक्तिकरण',
+      senior: 'वरिष्ठ नागरिक'
+    }
+  };
+
   const categories = [
-    { id: 'all', label: 'All Schemes' },
-    { id: 'agriculture', label: 'Agriculture' },
-    { id: 'education', label: 'Education' },
-    { id: 'healthcare', label: 'Healthcare' },
-    { id: 'housing', label: 'Housing' },
-    { id: 'employment', label: 'Employment' },
-    { id: 'women', label: 'Women Empowerment' },
-    { id: 'senior', label: 'Senior Citizens' }
+    { id: 'all', label: categoryTranslations[language]?.all || categoryTranslations.en.all },
+    { id: 'agriculture', label: categoryTranslations[language]?.agriculture || categoryTranslations.en.agriculture },
+    { id: 'education', label: categoryTranslations[language]?.education || categoryTranslations.en.education },
+    { id: 'healthcare', label: categoryTranslations[language]?.healthcare || categoryTranslations.en.healthcare },
+    { id: 'housing', label: categoryTranslations[language]?.housing || categoryTranslations.en.housing },
+    { id: 'employment', label: categoryTranslations[language]?.employment || categoryTranslations.en.employment },
+    { id: 'women', label: categoryTranslations[language]?.women || categoryTranslations.en.women },
+    { id: 'senior', label: categoryTranslations[language]?.senior || categoryTranslations.en.senior }
   ];
 
-  // Current 2025 Government Schemes Data
+  // Current 2025 Government Schemes Data with complete Hindi translations
   const mockSchemes = [
     {
       id: 1,
@@ -144,11 +168,16 @@ function SchemesPage({ language }) {
     {
       id: 7,
       title: 'PM Shram Yogi Maan Dhan',
+      titleHi: 'पीएम श्रम योगी मान धन',
       description: 'Pension scheme for unorganized sector workers providing social security and financial stability.',
+      descriptionHi: 'असंगठित क्षेत्र के कर्मचारियों के लिए सामाजिक सुरक्षा और वित्तीय स्थिरता प्रदान करने वाली पेंशन योजना।',
       category: 'employment',
       eligibility: 'Unorganized sector workers aged 18-40 years with monthly income up to ₹15,000',
+      eligibilityHi: '18-40 वर्ष के असंगठित क्षेत्र के कर्मचारी जिनकी मासिक आय ₹15,000 तक है',
       benefits: 'Monthly pension of ₹3,000 after attaining 60 years of age',
+      benefitsHi: '60 वर्ष की आयु प्राप्त करने के बाद ₹3,000 का मासिक पेंशन',
       deadline: 'Ongoing',
+      deadlineHi: 'चल रहा है',
       status: 'active',
       icon: '👷',
       applyLink: 'https://maandhan.in/',
@@ -157,11 +186,16 @@ function SchemesPage({ language }) {
     {
       id: 8,
       title: 'PM SVANidhi',
+      titleHi: 'पीएम स्वनिधि',
       description: 'Micro credit facility for street vendors to help them resume their livelihoods post COVID-19.',
+      descriptionHi: 'सड़क विक्रेताओं के लिए COVID-19 के बाद अपनी आजीविका फिर से शुरू करने में मदद के लिए सूक्ष्म ऋण सुविधा।',
       category: 'employment',
       eligibility: 'Street vendors, hawkers, and other small traders',
+      eligibilityHi: 'सड़क विक्रेता, फेरीवाले और अन्य छोटे व्यापारी',
       benefits: 'Working capital loan up to ₹10,000, ₹20,000, and ₹50,000 in three phases',
+      benefitsHi: 'तीन चरणों में ₹10,000, ₹20,000 और ₹50,000 तक का कार्यशील पूंजी ऋण',
       deadline: 'Ongoing',
+      deadlineHi: 'चल रहा है',
       status: 'active',
       icon: '🛒',
       applyLink: 'https://pmsvanidhi.mohua.gov.in/',
@@ -170,11 +204,16 @@ function SchemesPage({ language }) {
     {
       id: 9,
       title: 'PM Garib Kalyan Anna Yojana',
+      titleHi: 'पीएम गरीब कल्याण अन्न योजना',
       description: 'Free food grains distribution to 80 crore beneficiaries under National Food Security Act.',
+      descriptionHi: 'राष्ट्रीय खाद्य सुरक्षा अधिनियम के तहत 80 करोड़ लाभार्थियों को मुफ्त खाद्यान्न वितरण।',
       category: 'employment',
       eligibility: 'All NFSA beneficiaries including Antyodaya Anna Yojana and Priority Households',
+      eligibilityHi: 'सभी NFSA लाभार्थी जिसमें अंत्योदय अन्न योजना और प्राथमिकता वाले परिवार शामिल हैं',
       benefits: '5 kg free food grains per person per month',
+      benefitsHi: 'प्रति व्यक्ति प्रति माह 5 किलोग्राम मुफ्त खाद्यान्न',
       deadline: 'December 2024',
+      deadlineHi: 'दिसंबर 2024',
       status: 'active',
       icon: '🍚',
       applyLink: 'https://nfsa.gov.in/',
@@ -183,11 +222,16 @@ function SchemesPage({ language }) {
     {
       id: 10,
       title: 'PM Kisan Urja Suraksha evam Utthaan Mahabhiyan (KUSUM)',
+      titleHi: 'पीएम किसान ऊर्जा सुरक्षा एवं उत्थान महाभियान (कुसुम)',
       description: 'Solar power scheme for farmers to reduce dependency on grid power and increase income.',
+      descriptionHi: 'किसानों के लिए ग्रिड बिजली पर निर्भरता कम करने और आय बढ़ाने के लिए सौर ऊर्जा योजना।',
       category: 'agriculture',
       eligibility: 'Individual farmers, cooperatives, panchayats, and farmer producer organizations',
+      eligibilityHi: 'व्यक्तिगत किसान, सहकारी समितियां, पंचायतें और किसान उत्पादक संगठन',
       benefits: 'Subsidy up to 60% for solar pumps, 30% for solar power plants',
+      benefitsHi: 'सौर पंपों के लिए 60% तक और सौर बिजली संयंत्रों के लिए 30% तक का सब्सिडी',
       deadline: 'Ongoing',
+      deadlineHi: 'चल रहा है',
       status: 'active',
       icon: '☀️',
       applyLink: 'https://kusum.gov.in/',
@@ -196,11 +240,16 @@ function SchemesPage({ language }) {
     {
       id: 11,
       title: 'PM Gati Shakti',
+      titleHi: 'पीएम गति शक्ति',
       description: 'National Master Plan for multi-modal connectivity to reduce logistics costs and improve efficiency.',
+      descriptionHi: 'लॉजिस्टिक्स लागत कम करने और दक्षता बढ़ाने के लिए बहु-मोडल कनेक्टिविटी का राष्ट्रीय मास्टर प्लान।',
       category: 'employment',
       eligibility: 'Infrastructure projects, logistics companies, and businesses',
+      eligibilityHi: 'बुनियादी ढांचा परियोजनाएं, लॉजिस्टिक्स कंपनियां और व्यवसाय',
       benefits: 'Improved infrastructure, reduced logistics costs, better connectivity',
+      benefitsHi: 'बेहतर बुनियादी ढांचा, कम लॉजिस्टिक्स लागत, बेहतर कनेक्टिविटी',
       deadline: 'Ongoing',
+      deadlineHi: 'चल रहा है',
       status: 'active',
       icon: '🚚',
       applyLink: 'https://gatishakti.gov.in/',
@@ -209,11 +258,16 @@ function SchemesPage({ language }) {
     {
       id: 12,
       title: 'PM e-VIDYA',
+      titleHi: 'पीएम ई-विद्या',
       description: 'Digital education initiative to provide quality education through digital platforms.',
+      descriptionHi: 'डिजिटल प्लेटफॉर्म के माध्यम से गुणवत्तापूर्ण शिक्षा प्रदान करने के लिए डिजिटल शिक्षा पहल।',
       category: 'education',
       eligibility: 'Students from Class 1 to 12, teachers, and educational institutions',
+      eligibilityHi: 'कक्षा 1 से 12 तक के छात्र, शिक्षक और शैक्षिक संस्थान',
       benefits: 'Free access to digital learning content, online classes, and educational resources',
+      benefitsHi: 'डिजिटल शिक्षण सामग्री, ऑनलाइन कक्षाएं और शैक्षिक संसाधनों तक मुफ्त पहुंच',
       deadline: 'Ongoing',
+      deadlineHi: 'चल रहा है',
       status: 'active',
       icon: '💻',
       applyLink: 'https://diksha.gov.in/',
@@ -235,10 +289,15 @@ function SchemesPage({ language }) {
     let filtered = schemes;
     
     if (searchTerm) {
-      filtered = filtered.filter(scheme => 
-        scheme.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        scheme.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter(scheme => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          scheme.title.toLowerCase().includes(searchLower) ||
+          scheme.description.toLowerCase().includes(searchLower) ||
+          (scheme.titleHi && scheme.titleHi.toLowerCase().includes(searchLower)) ||
+          (scheme.descriptionHi && scheme.descriptionHi.toLowerCase().includes(searchLower))
+        );
+      });
     }
     
     if (selectedCategory !== 'all') {
@@ -267,9 +326,7 @@ function SchemesPage({ language }) {
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
           <p className="text-gray-600">
-            <TranslatedText language={language}>
-              Loading government schemes...
-            </TranslatedText>
+            {language === 'hi' ? 'सरकारी योजनाएं लोड हो रही हैं...' : 'Loading government schemes...'}
           </p>
         </div>
       </div>
@@ -286,9 +343,7 @@ function SchemesPage({ language }) {
         >
           <ArrowLeft size={22} />
           <span>
-            <TranslatedText language={language}>
-              Back to Home
-            </TranslatedText>
+            {language === 'hi' ? 'होम पर वापस जाएं' : 'Back to Home'}
           </span>
         </Link>
       </div>
@@ -296,14 +351,10 @@ function SchemesPage({ language }) {
       {/* Page Title */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          <TranslatedText language={language}>
-            Government Schemes
-          </TranslatedText>
+          {language === 'hi' ? 'सरकारी योजनाएं' : 'Government Schemes'}
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          <TranslatedText language={language}>
-            Find government schemes and benefits available for you. Apply online and track your applications.
-          </TranslatedText>
+          {language === 'hi' ? 'अपने लिए उपलब्ध सरकारी योजनाएं और लाभ खोजें। ऑनलाइन आवेदन करें और अपने आवेदनों को ट्रैक करें।' : 'Find government schemes and benefits available for you. Apply online and track your applications.'}
         </p>
       </div>
 
@@ -315,7 +366,7 @@ function SchemesPage({ language }) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Search schemes..."
+              placeholder={language === 'hi' ? "योजनाएं खोजें..." : "Search schemes..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -334,9 +385,7 @@ function SchemesPage({ language }) {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <TranslatedText language={language}>
-                  {category.label}
-                </TranslatedText>
+                {category.label}
               </button>
             ))}
           </div>
@@ -346,9 +395,9 @@ function SchemesPage({ language }) {
       {/* Results Count */}
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-600">
-          <TranslatedText language={language}>
-            {`Showing ${filteredSchemes.length} of ${schemes.length} schemes`}
-          </TranslatedText>
+          {language === 'hi' 
+            ? `${schemes.length} में से ${filteredSchemes.length} योजनाएं दिखा रहा है` 
+            : `Showing ${filteredSchemes.length} of ${schemes.length} schemes`}
         </p>
       </div>
 
@@ -366,9 +415,7 @@ function SchemesPage({ language }) {
                       {language === 'hi' && scheme.titleHi ? scheme.titleHi : scheme.title}
                     </h3>
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(scheme.category)}`}>
-                      <TranslatedText language={language}>
-                        {categories.find(c => c.id === scheme.category)?.label}
-                      </TranslatedText>
+                      {categories.find(c => c.id === scheme.category)?.label}
                     </span>
                   </div>
                 </div>
@@ -386,9 +433,7 @@ function SchemesPage({ language }) {
                   <Users className="text-gray-400 mt-0.5" size={16} />
                   <div>
                     <p className="text-xs text-gray-500 font-medium">
-                      <TranslatedText language={language}>
-                        Eligibility:
-                      </TranslatedText>
+                      {language === 'hi' ? 'पात्रता:' : 'Eligibility:'}
                     </p>
                     <p className="text-sm text-gray-700">{language === 'hi' && scheme.eligibilityHi ? scheme.eligibilityHi : scheme.eligibility}</p>
                   </div>
@@ -398,9 +443,7 @@ function SchemesPage({ language }) {
                   <DollarSign className="text-gray-400 mt-0.5" size={16} />
                   <div>
                     <p className="text-xs text-gray-500 font-medium">
-                      <TranslatedText language={language}>
-                        Benefits:
-                      </TranslatedText>
+                      {language === 'hi' ? 'लाभ:' : 'Benefits:'}
                     </p>
                     <p className="text-sm text-gray-700">{language === 'hi' && scheme.benefitsHi ? scheme.benefitsHi : scheme.benefits}</p>
                   </div>
@@ -410,9 +453,7 @@ function SchemesPage({ language }) {
                   <Calendar className="text-gray-400 mt-0.5" size={16} />
                   <div>
                     <p className="text-xs text-gray-500 font-medium">
-                      <TranslatedText language={language}>
-                        Deadline:
-                      </TranslatedText>
+                      {language === 'hi' ? 'अंतिम तिथि:' : 'Deadline:'}
                     </p>
                     <p className="text-sm text-gray-700">{language === 'hi' && scheme.deadlineHi ? scheme.deadlineHi : scheme.deadline}</p>
                   </div>
@@ -429,9 +470,7 @@ function SchemesPage({ language }) {
                 >
                   <ExternalLink size={14} />
                   <span>
-                    <TranslatedText language={language}>
-                      Apply Now
-                    </TranslatedText>
+                    {language === 'hi' ? 'अभी आवेदन करें' : 'Apply Now'}
                   </span>
                 </a>
                 <a 
@@ -454,14 +493,10 @@ function SchemesPage({ language }) {
         <div className="text-center py-12">
           <FileText className="text-gray-400 mx-auto mb-4" size={48} />
           <h3 className="text-lg font-medium text-gray-600 mb-2">
-            <TranslatedText language={language}>
-              No schemes found
-            </TranslatedText>
+            {language === 'hi' ? 'कोई योजना नहीं मिली' : 'No schemes found'}
           </h3>
           <p className="text-gray-500">
-            <TranslatedText language={language}>
-              Try adjusting your search or filter criteria.
-            </TranslatedText>
+            {language === 'hi' ? 'अपनी खोज या फ़िल्टर मानदंड को समायोजित करने का प्रयास करें।' : 'Try adjusting your search or filter criteria.'}
           </p>
         </div>
       )}
@@ -474,25 +509,17 @@ function SchemesPage({ language }) {
           </div>
           <div>
             <h3 className="font-semibold text-blue-900 mb-2">
-              <TranslatedText language={language}>
-                Need Help?
-              </TranslatedText>
+              {language === 'hi' ? 'सहायता चाहिए?' : 'Need Help?'}
             </h3>
             <p className="text-blue-800 text-sm mb-3">
-              <TranslatedText language={language}>
-                Visit your nearest Common Service Center (CSC) or contact the helpline for assistance with scheme applications.
-              </TranslatedText>
+              {language === 'hi' ? 'योजना आवेदनों में सहायता के लिए अपने निकटतम कॉमन सर्विस सेंटर (CSC) पर जाएं या हेल्पलाइन से संपर्क करें।' : 'Visit your nearest Common Service Center (CSC) or contact the helpline for assistance with scheme applications.'}
             </p>
             <div className="flex items-center space-x-4 text-sm">
               <span className="text-blue-700">
-                <TranslatedText language={language}>
-                  Helpline: 1800-XXX-XXXX
-                </TranslatedText>
+                {language === 'hi' ? 'हेल्पलाइन: 1800-XXX-XXXX' : 'Helpline: 1800-XXX-XXXX'}
               </span>
               <span className="text-blue-700">
-                <TranslatedText language={language}>
-                  Email: schemes@arthika.gov.in
-                </TranslatedText>
+                {language === 'hi' ? 'ईमेल: schemes@arthika.gov.in' : 'Email: schemes@arthika.gov.in'}
               </span>
             </div>
           </div>

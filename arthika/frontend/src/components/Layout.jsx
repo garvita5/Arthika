@@ -17,6 +17,7 @@ import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import rupeeLogo from '../assets/rupee1.png';
 import { getHomepageTranslation } from '../config/homepageTranslations';
+import { getHeaderTranslation } from '../config/headerTranslations';
 import {
   Chart as ChartJS,
   LineElement,
@@ -43,18 +44,6 @@ ChartJS.register(
   Filler
 );
 
-const navigationItems = [
-  { path: '/', label: 'Home', icon: Home },
-  { path: '/all-queries', label: 'All Queries', icon: MessageSquare },
-  { path: '/schemes', label: 'Schemes', icon: FileText },
-  { path: '/ngos', label: 'NGO Access', icon: Users },
-  { path: '/export', label: 'Export', icon: Download },
-
-  { path: '/roadmap', label: 'Roadmap', icon: TrendingUp },
-  { path: '/score', label: 'Trust Score', icon: Shield },
-  // About removed from sidebar
-];
-
 const Layout = ({
   children,
   language,
@@ -70,6 +59,16 @@ const Layout = ({
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile
   const sidebarWidthCollapsed = 52; // px (was 65)
   const sidebarWidthExpanded = 170; // px (was 220)
+
+  const navigationItems = [
+    { path: '/', label: getHeaderTranslation(language, 'home'), icon: Home },
+    { path: '/all-queries', label: getHeaderTranslation(language, 'allQueries'), icon: MessageSquare },
+    { path: '/schemes', label: getHeaderTranslation(language, 'schemes'), icon: FileText },
+    { path: '/ngos', label: getHeaderTranslation(language, 'ngoAccess'), icon: Users },
+    { path: '/export', label: getHeaderTranslation(language, 'export'), icon: Download },
+    { path: '/roadmap', label: getHeaderTranslation(language, 'roadmap'), icon: TrendingUp },
+    { path: '/score', label: getHeaderTranslation(language, 'trustScore'), icon: Shield },
+  ];
 
   const handleVoiceQuery = () => {
     if (isListening) {
@@ -110,7 +109,7 @@ const Layout = ({
                   className={`ml-3 whitespace-nowrap font-medium text-sm transition-all duration-200 ${!sidebarHovered ? 'opacity-0 ml-0 pointer-events-none' : 'opacity-100 ml-3 pointer-events-auto'}`}
                   style={{ minWidth: !sidebarHovered ? 0 : 70, maxWidth: !sidebarHovered ? 0 : 140 }}
                 >
-                  <TranslatedText language={language}>{item.label}</TranslatedText>
+                  {item.label}
                 </span>
               </Link>
             );
@@ -156,7 +155,7 @@ const Layout = ({
           className="flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700 transition-colors w-11/12 mb-8 mt-4"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
-          <span><TranslatedText language={language}>Log Out</TranslatedText></span>
+          <span>{getHeaderTranslation(language, 'logOut')}</span>
         </button>
       </aside>
       {/* Main Content Area */}
@@ -174,7 +173,9 @@ const Layout = ({
             <img src={rupeeLogo} alt="Arthika Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
             <div className="flex flex-col ml-2">
               <span className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">Arthika</span>
-              <span className="text-xs sm:text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>StoriesThatThink. AdviceThatFits.</span>
+              <span className="text-xs sm:text-xs font-semibold text-cyan-600 tracking-wide mt-0.5" style={{ letterSpacing: '0.04em' }}>
+                {language === 'hi' ? getHeaderTranslation(language, 'tagline') : 'StoriesThatThink. AdviceThatFits.'}
+              </span>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 ml-auto flex-shrink-0 mt-4 sm:mt-0">
@@ -199,9 +200,7 @@ const Layout = ({
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
               <span>
-                <TranslatedText language={language}>
-                  Log Out
-                </TranslatedText>
+                {getHeaderTranslation(language, 'logOut')}
               </span>
             </button>
           </div>

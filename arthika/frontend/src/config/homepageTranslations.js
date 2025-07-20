@@ -61,6 +61,52 @@ export const homepageTranslations = {
       listening: 'Listening...',
       listeningSpeak: 'Listening... Speak now!'
     },
+    quickActions: {
+      viewRoadmap: {
+        title: 'View Roadmap',
+        description: 'See your financial journey'
+      },
+      trustScore: {
+        title: 'Trust Score',
+        description: 'Check your financial health'
+      },
+      governmentSchemes: {
+        title: 'Government Schemes',
+        description: 'Find available benefits'
+      },
+      exportPlan: {
+        title: 'Export Plan',
+        description: 'Download your financial plan'
+      }
+    },
+    voiceInput: {
+      processing: 'Processing your question...',
+      clickToStart: 'Click to start speaking',
+      finalTranscript: 'Final transcript:',
+      askQuestion: 'Ask Question',
+      processingQuery: 'Processing your query...',
+      tryAsking: 'Try asking: "What if I take a gold loan?" or "How should I invest my money?"'
+    },
+    allQueries: {
+      title: 'All Queries',
+      backToHome: 'Back to Home',
+      loading: 'Loading...',
+      noQueriesFound: 'No past queries found.',
+      showFullPreview: 'Show Full Preview',
+      errorLoading: 'Could not load past queries'
+    },
+    answerPage: {
+      arthikaAnswer: 'Arthika\'s Answer',
+      noAnswerAvailable: 'No answer available.',
+      listen: 'Listen',
+      stop: 'Stop',
+      replay: 'Replay',
+      governmentSchemes: 'Government Schemes for You',
+      learnMore: 'Learn more',
+      financialRoadmap: 'Your Financial Roadmap',
+      loading: 'Loading...',
+      error: 'Failed to fetch answer. Please try again.'
+    },
     footer: {
       title: 'Arthika',
       subtitle: 'Financial guidance in your language',
@@ -337,6 +383,52 @@ export const homepageTranslations = {
       voiceQuery: 'बोलकर प्रश्न पूछें',
       listening: 'सुना जा रहा है...',
       listeningSpeak: 'सुना जा रहा है... अब बोलिए!'
+    },
+    quickActions: {
+      viewRoadmap: {
+        title: 'मार्गचित्र देखें',
+        description: 'अपनी वित्तीय यात्रा देखें'
+      },
+      trustScore: {
+        title: 'विश्वास स्कोर',
+        description: 'अपनी वित्तीय सेहत जांचें'
+      },
+      governmentSchemes: {
+        title: 'सरकारी योजनाएं',
+        description: 'उपलब्ध लाभ खोजें'
+      },
+      exportPlan: {
+        title: 'योजना निर्यात करें',
+        description: 'अपनी वित्तीय योजना डाउनलोड करें'
+      }
+    },
+    voiceInput: {
+      processing: 'आपका प्रश्न प्रोसेस हो रहा है...',
+      clickToStart: 'बोलना शुरू करने के लिए क्लिक करें',
+      finalTranscript: 'अंतिम प्रतिलेख:',
+      askQuestion: 'प्रश्न पूछें',
+      processingQuery: 'आपका प्रश्न प्रोसेस हो रहा है...',
+      tryAsking: 'पूछने का प्रयास करें: "अगर मैं सोने का लोन लूं तो क्या होगा?" या "मुझे अपना पैसा कैसे निवेश करना चाहिए?"'
+    },
+    allQueries: {
+      title: 'सभी प्रश्न',
+      backToHome: 'मुखपृष्ठ पर वापस जाएं',
+      loading: 'लोड हो रहा है...',
+      noQueriesFound: 'कोई पिछला प्रश्न नहीं मिला।',
+      showFullPreview: 'पूरा पूर्वावलोकन दिखाएं',
+      errorLoading: 'पिछले प्रश्न लोड नहीं हो सके'
+    },
+    answerPage: {
+      arthikaAnswer: 'अर्थिका का उत्तर',
+      noAnswerAvailable: 'कोई उत्तर उपलब्ध नहीं है।',
+      listen: 'सुनें',
+      stop: 'रोकें',
+      replay: 'दोबारा सुनें',
+      governmentSchemes: 'आपके लिए सरकारी योजनाएं',
+      learnMore: 'और जानें',
+      financialRoadmap: 'आपका वित्तीय मार्गचित्र',
+      loading: 'लोड हो रहा है...',
+      error: 'उत्तर प्राप्त करने में विफल। कृपया पुनः प्रयास करें।'
     },
     footer: {
       title: 'अर्थिका',

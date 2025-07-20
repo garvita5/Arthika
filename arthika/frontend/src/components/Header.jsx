@@ -4,6 +4,7 @@ import LanguageSelector from './LanguageSelector';
 import TranslatedText from './TranslatedText';
 import { useTranslationContext } from '../contexts/TranslationContext';
 import rupeeLogo from '../assets/rupee1.png';
+import { getHeaderTranslation } from '../config/headerTranslations';
 
 function Header({ currentStep, language, onLanguageChange }) {
   const { translationError } = useTranslationContext();
@@ -27,7 +28,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                   <Wifi size={14} className="text-green-500" />
                 )}
                 <span className="text-xs text-gray-500">
-                  {translationError ? 'Offline' : 'Online'}
+                  {translationError ? getHeaderTranslation(language, 'offline') : getHeaderTranslation(language, 'online')}
                 </span>
               </div>
             )}
@@ -42,9 +43,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                 {currentStep > 1 ? <CheckCircle size={16} /> : '1'}
               </div>
               <span className="text-sm font-medium text-gray-700">
-                <TranslatedText language={language}>
-                  Speak
-                </TranslatedText>
+                {getHeaderTranslation(language, 'speak')}
               </span>
             </div>
             <ArrowRight size={16} className="text-gray-400" />
@@ -55,9 +54,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                 {currentStep > 2 ? <CheckCircle size={16} /> : '2'}
               </div>
               <span className="text-sm font-medium text-gray-700">
-                <TranslatedText language={language}>
-                  Analyze
-                </TranslatedText>
+                {getHeaderTranslation(language, 'analyze')}
               </span>
             </div>
             <ArrowRight size={16} className="text-gray-400" />
@@ -68,9 +65,7 @@ function Header({ currentStep, language, onLanguageChange }) {
                 {currentStep >= 3 ? <CheckCircle size={16} /> : '3'}
               </div>
               <span className="text-sm font-medium text-gray-700">
-                <TranslatedText language={language}>
-                  Roadmap
-                </TranslatedText>
+                {getHeaderTranslation(language, 'roadmap')}
               </span>
             </div>
           </div>
