@@ -122,10 +122,15 @@ function AnswerPage({ language = 'en' }) {
   // const tags = response?.data?.tags;
   // Expanded keywords for distress/negative situations
   const distressKeywords = [
+    // English keywords
     'exit plan', 'exit strategy', 'abuse', 'abusive', 'harassed', 'harassment', 'debt trap',
     'depression', 'suicide', 'distress', 'help', 'trouble', 'threat', 'violence', 'unsafe',
     'danger', 'blackmail', 'coercion', 'pressure', 'mental health', 'crisis', 'overwhelmed',
-    'hopeless', 'helpless', 'lost', 'fear', 'scared', 'panic', 'anxiety', 'stress', 'emergency'
+    'hopeless', 'helpless', 'lost', 'fear', 'scared', 'panic', 'anxiety', 'stress', 'emergency',
+    // Hindi keywords
+    'मुसीबत', 'तंगी', 'कर्ज', 'ऋण', 'दबाव', 'धमकी', 'हिंसा', 'खतरा', 'डर', 'चिंता',
+    'तनाव', 'आपातकाल', 'बेबस', 'निराश', 'भय', 'दहशत', 'अत्याचार', 'शोषण', 'ब्लैकमेल',
+    'जबरदस्ती', 'मानसिक स्वास्थ्य', 'संकट', 'परेशानी', 'मदद', 'बाहर निकलना', 'छोड़ना'
   ];
   const showExitPlanner = distressKeywords.some(word => (question || '').toLowerCase().includes(word));
   const schemes = response?.data?.schemes || response?.data?.governmentSchemes;
@@ -227,14 +232,12 @@ function AnswerPage({ language = 'en' }) {
         <div className="bg-yellow-50 border border-yellow-200 rounded-3xl shadow-lg p-8">
           <div className="flex items-center gap-3 mb-4">
             <AlertCircle className="text-yellow-500" size={28} />
-            <h3 className="text-xl md:text-2xl font-semibold text-yellow-800">Exit Planner</h3>
+            <h3 className="text-xl md:text-2xl font-semibold text-yellow-800">{getHomepageTranslation(language, 'answerPage', 'exitPlanner')}</h3>
           </div>
           <ul className="list-decimal pl-6 text-gray-700 space-y-2 text-base">
-            <li>Review your current investments and identify assets to liquidate.</li>
-            <li>Check for any penalties or lock-in periods before exiting.</li>
-            <li>Plan the timing of your exit to minimize taxes and maximize returns.</li>
-            <li>Reinvest proceeds in safer instruments or as per your new goals.</li>
-            <li>Consult a financial advisor for a personalized exit strategy.</li>
+            {getHomepageTranslation(language, 'answerPage', 'exitPlannerSteps').map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
           </ul>
         </div>
       )}
