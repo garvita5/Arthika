@@ -246,17 +246,19 @@ function HomePage({
       </div>
 
       {/* Use Case Tiles */}
-      <div className="flex flex-wrap justify-center gap-12 mb-12">
+      <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-12">
         {useCases.map((useCase, index) => (
-          <div key={index} className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer min-w-[280px] max-w-[380px] min-h-[220px]"
+          <div
+            key={index}
+            className="bg-gradient-to-br from-white/80 to-blue-50/60 backdrop-blur-md border border-blue-100 rounded-3xl p-8 sm:p-10 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer w-full max-w-xs sm:max-w-[320px] min-h-[200px] sm:min-h-[220px]"
             onClick={() => handlePresetCommand(useCase.title + (useCase.description ? (': ' + useCase.description) : ''))}
             style={{ opacity: loadingPreset ? 0.6 : 1, pointerEvents: loadingPreset ? 'none' : 'auto' }}
           >
-            <div className="text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
-            <h3 className="font-semibold text-xl text-gray-900 mb-2 text-center leading-tight">
+            <div className="text-5xl sm:text-6xl mb-6 drop-shadow-sm">{useCase.icon}</div>
+            <h3 className="font-semibold text-lg sm:text-xl text-gray-900 mb-2 text-center leading-tight break-words">
               {useCase.title}
             </h3>
-            <p className="text-gray-600 text-base text-center leading-relaxed">
+            <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed break-words">
               {useCase.description}
             </p>
           </div>
