@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQueryContext } from '../contexts/QueryContext';
-import { getQueriesByEmail } from '../services/apiService';
+import { getQueriesByUserId } from '../services/apiService';
 import { MessageSquare, ArrowLeft } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getHomepageTranslation } from '../config/homepageTranslations';
@@ -17,11 +17,13 @@ function AllQueriesPage({ language = 'en' }) {
       setLoading(true);
       setError(null);
       try {
-        const results = await getQueriesByEmail(userEmail);
+        const normalizedUserId = userEmail ? userEmail.toLowerCase() : '';
+        console.log('userId used for query:', normalizedUserId);
+        const results = await getQueriesByUserId(normalizedUserId);
         // Sort by createdAt descending (most recent first)
         const sorted = (results || []).sort((a, b) => {
-          const aTime = a.createdAt?.seconds ? a.createdAt.seconds : new Date(a.createdAt).getTime()/1000;
-          const bTime = b.createdAt?.seconds ? b.createdAt.seconds : new Date(b.createdAt).getTime()/1000;
+          const aTime = a.createdAt?.seconds ? a.createdAt.seconds : new Date(a.createdAt).getTime() / 1000;
+          const bTime = b.createdAt?.seconds ? b.createdAt.seconds : new Date(b.createdAt).getTime() / 1000;
           return bTime - aTime;
         });
         setQueries(sorted);
@@ -55,7 +57,7 @@ function AllQueriesPage({ language = 'en' }) {
         <MessageSquare className="text-primary-600" size={28} />
         {getHomepageTranslation(language, 'allQueries', 'title')}
       </h1>
-      
+
       {loading ? (
         <div className="text-center py-12 text-gray-500">
           {getHomepageTranslation(language, 'allQueries', 'loading')}

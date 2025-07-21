@@ -74,6 +74,23 @@ export async function getQueriesByEmail(email) {
   }
 }
 
+export async function getQueriesByUserId(userId) {
+  try {
+    console.log('FIRESTORE QUERY: userId ==', userId);
+    const q = query(collection(db, 'queries'), where('userId', '==', userId));
+    const querySnapshot = await getDocs(q);
+    const results = [];
+    querySnapshot.forEach((doc) => {
+      results.push({ id: doc.id, ...doc.data() });
+    });
+    console.log('FIRESTORE RESULTS:', results);
+    return results;
+  } catch (error) {
+    console.error('Error fetching queries by userId:', error);
+    throw error;
+  }
+}
+
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
