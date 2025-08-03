@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useQueryContext } from '../contexts/QueryContext';
 import { getHomepageTranslation } from '../config/homepageTranslations';
 import { getSmartTranslation } from '../config/smartTranslations';
+import { toast } from 'react-toastify';
 
 function HomePage({
   language,
@@ -24,6 +25,7 @@ function HomePage({
   const micSectionRef = useRef(null);
   const navigate = useNavigate();
   const [loadingPreset, setLoadingPreset] = useState(false);
+  const [loadingTextQuery, setLoadingTextQuery] = useState(false);
   const { setQueryResult, resetQueryResult, userEmail } = useQueryContext();
 
   const useCases = [
@@ -100,14 +102,23 @@ function HomePage({
   const handleTextSubmit = async (e) => {
     e.preventDefault();
     if (textInput.trim()) {
+      setLoadingTextQuery(true);
       resetQueryResult();
-      const response = await apiService.submitFinancialQuery(textInput, language, userEmail);
-      if (response) {
-        setQueryResult({ question: textInput, ...response });
-        if (typeof setTranscript === 'function') setTranscript(); // Clear transcript
-        navigate(`/answer?question=${encodeURIComponent(textInput.trim())}`);
-      } else {
-        alert('No data received from backend.');
+      
+      try {
+        const response = await apiService.submitFinancialQuery(textInput, language, userEmail);
+        if (response) {
+          setQueryResult({ question: textInput, ...response });
+          if (typeof setTranscript === 'function') setTranscript(); // Clear transcript
+          navigate(`/answer?question=${encodeURIComponent(textInput.trim())}`);
+        } else {
+          toast.error('No data received from backend. Please try again.');
+        }
+      } catch (error) {
+        console.error('Text query error:', error);
+        toast.error('Failed to process your question. Please try again.');
+      } finally {
+        setLoadingTextQuery(false);
       }
     }
   };
@@ -125,10 +136,10 @@ function HomePage({
         if (typeof setTranscript === 'function') setTranscript(); // Clear transcript
         navigate(`/answer?question=${encodeURIComponent(presetText.trim())}`);
       } else {
-        alert('No data received from backend.');
+        toast.error('No data received from backend. Please try again.');
       }
     } catch (error) {
-      alert('Failed to get response. Please try again.');
+      toast.error('Failed to get response. Please try again.');
       console.error('API error:', error);
     } finally {
       setLoadingPreset(false);
@@ -357,10 +368,10 @@ function HomePage({
               />
               <button
                 type="submit"
-                disabled={!textInput.trim() || isProcessing}
+                disabled={!textInput.trim() || isProcessing || loadingTextQuery}
                 className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white btn-primary w-full rounded-full py-3 text-lg font-semibold shadow-lg hover:from-cyan-500 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessing ? (
+                {isProcessing || loadingTextQuery ? (
                   <div className="flex items-center justify-center space-x-2">
                     <Loader2 className="animate-spin" size={20} />
                     <span>

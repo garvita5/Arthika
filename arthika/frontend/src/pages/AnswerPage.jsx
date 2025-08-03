@@ -4,6 +4,7 @@ import { useQueryContext } from '../contexts/QueryContext';
 import apiService from '../services/apiService';
 import { CheckCircle, ArrowRight, AlertCircle, Flag } from 'lucide-react';
 import { getHomepageTranslation } from '../config/homepageTranslations';
+import { toast } from 'react-toastify';
 
 function useQueryParam(name) {
   const { search } = useLocation();
@@ -67,7 +68,9 @@ function AnswerPage({ language = 'en' }) {
           setResponse({ question, ...resp });
         }
       } catch (err) {
-        setError(getHomepageTranslation(language, 'answerPage', 'error'));
+        const errorMessage = getHomepageTranslation(language, 'answerPage', 'error');
+        setError(errorMessage);
+        toast.error(errorMessage);
         console.error('Error fetching answer:', err);
       } finally {
         setLoading(false);
@@ -78,7 +81,14 @@ function AnswerPage({ language = 'en' }) {
 
   // Auto-speak answer after it loads
   useEffect(() => {
+    console.log('Auto-speak useEffect triggered:', {
+      hasStoryResponse: !!response?.data?.storyResponse,
+      hasSpoken,
+      response: response
+    });
+    
     if (response?.data?.storyResponse && !hasSpoken) {
+      console.log('Attempting to speak answer:', response.data.storyResponse);
       speakAnswer();
       setHasSpoken(true);
     }
@@ -90,17 +100,35 @@ function AnswerPage({ language = 'en' }) {
   }, [response?.data?.storyResponse]);
 
   const speakAnswer = () => {
+    console.log('speakAnswer called:', {
+      hasSpeechSynthesis: 'speechSynthesis' in window,
+      hasStoryResponse: !!response?.data?.storyResponse,
+      storyResponse: response?.data?.storyResponse
+    });
+    
     if ('speechSynthesis' in window && response?.data?.storyResponse) {
       stopSpeaking();
       const utterance = new window.SpeechSynthesisUtterance(response.data.storyResponse);
       utterance.lang = language === 'en' ? 'en-US' : `${language}-IN`;
       utterance.rate = 0.95;
       utterance.pitch = 1;
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+      utterance.onstart = () => {
+        console.log('Speech started');
+        setIsSpeaking(true);
+      };
+      utterance.onend = () => {
+        console.log('Speech ended');
+        setIsSpeaking(false);
+      };
+      utterance.onerror = (error) => {
+        console.error('Speech error:', error);
+        setIsSpeaking(false);
+      };
       utteranceRef.current = utterance;
       window.speechSynthesis.speak(utterance);
+      console.log('Speech synthesis initiated');
+    } else {
+      console.log('Speech synthesis not available or no story response');
     }
   };
   const stopSpeaking = () => {
