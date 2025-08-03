@@ -4,6 +4,7 @@ import { Play, Pause, Download, TrendingUp, ArrowLeft, CheckCircle, AlertCircle,
 import TranslatedText from '../components/TranslatedText';
 import apiService from '../services/apiService';
 import { useQueryContext } from '../contexts/QueryContext';
+import { toast } from 'react-toastify';
 
 function useQueryParam(name) {
   const { search } = useLocation();
@@ -39,10 +40,14 @@ function QueryResultPage({ language, resetFlow }) {
         } else if (resp && resp.data && resp.data.storyResponse) {
           setQueryResult(resp.data);
         } else {
-          setError('No data received from backend.');
+          const errorMsg = 'No data received from backend.';
+          setError(errorMsg);
+          toast.error(errorMsg);
         }
       } catch (err) {
-        setError('Failed to fetch result.');
+        const errorMsg = 'Failed to fetch result.';
+        setError(errorMsg);
+        toast.error(errorMsg);
       } finally {
         setLoading(false);
       }
@@ -59,7 +64,9 @@ function QueryResultPage({ language, resetFlow }) {
         const results = await apiService.getQueriesByEmail(userEmail);
         setPastQueries(results || []);
       } catch (err) {
-        setErrorPast('Could not load past queries');
+        const errorMsg = 'Could not load past queries';
+        setErrorPast(errorMsg);
+        toast.error(errorMsg);
       } finally {
         setLoadingPast(false);
       }
